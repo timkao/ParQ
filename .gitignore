@@ -1,0 +1,6 @@
+node_modules
+public/locations.CSV
+public/signs.CSV
+.DS_Store
+npm-debug.log
+dist/
