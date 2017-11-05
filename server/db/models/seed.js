@@ -12,9 +12,9 @@ const users = [
 ];
 
 const streetspots = [
-  { lat: 1234, long: 12412 },
-  { lat: 5334, long: 8797987 },
-  { lat: 98098, long: 987879 },
+  { latitude: 1234, longitude: 12412 },
+  { latitude: 5334, longitude: 8797987 },
+  { latitude: 98098, longitude: 987879 },
 ]
 
 //Export
