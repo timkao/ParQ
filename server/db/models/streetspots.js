@@ -26,6 +26,5 @@ const Streetspots = db.define('streetspots', {
 module.exports = Streetspots
 
 Streetspots.prototype.getTimer = function(){
-  console.log('this',this)
   return this.createdAt
 }

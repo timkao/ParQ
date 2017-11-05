@@ -1,3 +1,4 @@
+const chalk = require('chalk')
 /*
 Note to Tim:
   Built this seed file to do some model testing. Please
@@ -35,7 +36,7 @@ module.exports = (User, Streetspots) => {
       _lot2.setUser(user1),
       _lot3.setUser(user1),
     ])
-  .then(() => console.log('DB is synced and seeded'));
+  .then(() => console.log(chalk.green('DB is synced and seeded')));
   })
   .catch((err) => {
     console.log('seed error:')
