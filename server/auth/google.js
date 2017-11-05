@@ -4,11 +4,6 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 const {User} = require('../db/models')
 module.exports = router
 
-process.env.GOOGLE_CLIENT_ID = '245607851786-avf64n5ggl28j3mufa626rc3h3v0kurq.apps.googleusercontent.com';
-process.env.GOOGLE_CLIENT_SECRET = 'jS7o0e7WquT5BYxt1bMcSGr7';
-process.env.GOOGLE_CALLBACK = '/auth/google/callback';
-
-
 const googleConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
