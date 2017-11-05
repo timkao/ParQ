@@ -37,6 +37,7 @@ export class UserHome extends Component{
       },
       trackUserLocation: true
     }));
+    this.map.scrollZoom.disable();
     //getUserLocation may take a few seconds...
     getUserLocation()
       .then((position) => {
