@@ -24,7 +24,7 @@ export class UserHome extends Component{
 
   }
   componentDidMount(){
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ21lZGluYTIyOSIsImEiOiJjajlscHRhbXY0a2s4MzNxbXUxejBmY3ZqIn0.nAyOpUGA9NDN6tDGg_i6PQ';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ21lZGluYTIyOSIsImEiOiJjajlscHRhbXY0a2s4MzNxbXUxejBmY3ZqIn0.nAyOpUGA9NDN6tDGg_i6PQ'
     this.map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v9',

@@ -4,3 +4,4 @@ public/signs.CSV
 .DS_Store
 npm-debug.log
 dist/
+secrets.js
