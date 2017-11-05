@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { Streetspots } = require('../db/models')
 module.exports = router
+const moment = require('moment')
 
 //GET all spots
 router.get('/', (req, res, next) => {
