@@ -3,14 +3,21 @@ const db = require('../db')
 
 const Streetspots = db.define('streetspots', {
   latitude: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     allowNull: true,
     defaultValue: null,
   },
   longitude: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     allowNull: true,
     defaultValue: null,
+  },
+  status: {
+    type: Sequelize.STRING,
+    defaultValue: 'open'
+  },
+  size: {
+    type: Sequelize.STRING
   }
 },
 {
