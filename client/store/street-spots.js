@@ -8,22 +8,34 @@ import axios from 'axios'
  /**
  * INITIAL STATE
  */
-const defaultSpots = {}
+const defaultSpots = []
 
 /**
  * ACTION CREATORS
  */
-const getSpots = spots => ({type: GET_SPOTS})
+const getSpots = spots => ({type: GET_SPOTS, spots})
 
 /**
  * THUNK CREATORS
  */
 
-export const fetchSpotsFromServer = () =>
+export const fetchSpots = () =>
   dispatch =>
     axios.get('/api/streetspots')
       .then( res =>
         dispatch(getSpots(res.data || defaultSpots)))
+      .catch(err => console.log(err))
+
+export const addSpot = (spot, userId) =>
+  dispatch =>
+    axios.post(`/api/streetspots/${ userId }`, spot)
+      .then( () => dispatch(fetchSpots()))
+      .catch(err => console.log(err))
+
+export const deleteSpot = (spotId) =>
+  dispatch =>
+    axios.delete(`/api/streetspots/${ spotId }`)
+      .then( () => dispatch(fetchSpots()))
       .catch(err => console.log(err))
 
 /**

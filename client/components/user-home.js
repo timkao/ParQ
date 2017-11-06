@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import mapboxgl from 'mapbox-gl';
-import { fetchMap } from '../store';
+import { fetchMap, fetchSpots } from '../store';
 
 export class UserHome extends Component {
 
@@ -16,6 +16,7 @@ export class UserHome extends Component {
 
   componentDidMount(){
     this.props.getMap(this);
+    this.props.getSpots();
   }
 
   render(){
@@ -40,6 +41,9 @@ const mapDispatch = (dispatch) => {
     getMap(component) {
       const thunk = fetchMap(component);
       dispatch(thunk);
+    },
+    getSpots() {
+      dispatch(fetchSpots())
     }
   }
 }
