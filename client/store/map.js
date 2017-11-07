@@ -8,7 +8,7 @@ const getUserLocation = function (options) {
 
 export const fetchMap = (component) => {
   return function (dispatch) {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ21lZGluYTIyOSIsImEiOiJjajlscHRhbXY0a2s4MzNxbXUxejBmY3ZqIn0.nAyOpUGA9NDN6tDGg_i6PQ';
+    mapboxgl.accessToken = process.env.mapboxKey;
 
     getUserLocation()
       .then((position) => {
