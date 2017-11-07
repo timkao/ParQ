@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
+const User = require('./user')
 
+//Model Definition
 const Streetspots = db.define('streetspots', {
   latitude: {
     type: Sequelize.FLOAT,
@@ -30,8 +32,17 @@ const Streetspots = db.define('streetspots', {
   }
 });
 
-module.exports = Streetspots
 
-Streetspots.prototype.getTimer = function(){
-  return this.createdAt
+//Class Methods
+Streetspots.addSpotOnServer = function (spot, id){
+  let newSpot;
+  return Streetspots.create(spot)
+    .then((_spot) => {
+      newSpot = _spot
+      return User.findOne({where: {id}})
+    })
+    .then((user) => newSpot.setUser(user))
 }
+
+//Export
+module.exports = Streetspots
