@@ -1,9 +1,12 @@
 const User = require('./user')
 const Streetspots = require('./streetspots')
+const Reward = require('./reward');
 
 /* Associations ================================== */
 Streetspots.belongsTo(User)
 User.hasMany(Streetspots)
+Reward.belongsTo(User);
+
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -13,5 +16,6 @@ User.hasMany(Streetspots)
  */
 module.exports = {
   User,
-  Streetspots
+  Streetspots,
+  Reward
 }
