@@ -1,4 +1,5 @@
 import mapboxgl from 'mapbox-gl';
+import '../../secrets';
 
 const getUserLocation = function (options) {
   return new Promise(function (resolve, reject) {
