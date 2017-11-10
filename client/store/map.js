@@ -19,11 +19,6 @@ export const mapDirection = new MapboxDirections({
 
 export const fetchMap = (component) => {
   return function (dispatch) {
-<<<<<<< HEAD
-    mapboxgl.accessToken = process.env.mapboxKey;
-    // mapboxgl.accessToken = 'pk.eyJ1IjoiZ21lZGluYTIyOSIsImEiOiJjajlscHRhbXY0a2s4MzNxbXUxejBmY3ZqIn0.nAyOpUGA9NDN6tDGg_i6PQ';
-=======
->>>>>>> a9fa7763e89f2a9446b0a1c39fb23030a4b2ca16
 
     getUserLocation()
       .then((position) => {
