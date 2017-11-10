@@ -1,30 +1,32 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import mapboxgl from 'mapbox-gl';
+import { connect } from 'react-redux';
 import { fetchMap, fetchSpots } from '../store';
+import Loader from 'react-loader';
 
 export class UserHome extends Component {
 
-  constructor(){
+  constructor() {
     super();
     this.state = {
       currentLong: 0,
-      currentLat: 0
+      currentLat: 0,
+      loaded: false
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.getMap(this);
     this.props.getSpots();
   }
 
-  render(){
-    const {email} = this.props;
+  render() {
+    const { email } = this.props;
     return (
       <div>
-      <h3>Welcome, {email}</h3>
-      <div id="map"></div>
+        <h3>Welcome, {email}</h3>
+        <Loader loaded={this.state.loaded} className="loader" />
+        <div id="map"></div>
       </div>
     );
   }
