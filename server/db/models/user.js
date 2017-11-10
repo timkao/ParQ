@@ -1,6 +1,6 @@
-const crypto = require('crypto')
-const Sequelize = require('sequelize')
-const db = require('../db')
+const crypto = require('crypto');
+const Sequelize = require('sequelize');
+const db = require('../db');
 
 const User = db.define('user', {
   email: {
@@ -19,10 +19,20 @@ const User = db.define('user', {
   },
   registeredVehicle: {
     type: Sequelize.STRING
+  },
+  socketId: {
+    type: Sequelize.STRING
+  },
+  notifications: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    defaultValue: []
+  },
+  headingTo: {
+    type: Sequelize.JSON
   }
-})
+});
 
-module.exports = User
+module.exports = User;
 
 User.prototype.produceSalt = function() {
 	return crypto.randomBytes(16).toString('base64');
@@ -46,5 +56,6 @@ function setSaltAndPassword(user) {
 	}
 }
 
-User.beforeCreate(setSaltAndPassword)
-User.beforeUpdate(setSaltAndPassword)
+User.beforeCreate(setSaltAndPassword);
+User.beforeUpdate(setSaltAndPassword);
+
