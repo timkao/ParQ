@@ -1,4 +1,5 @@
 import mapboxgl from 'mapbox-gl';
+import '../../secrets';
 
 const getUserLocation = function (options) {
   return new Promise(function (resolve, reject) {
@@ -8,8 +9,8 @@ const getUserLocation = function (options) {
 
 export const fetchMap = (component) => {
   return function (dispatch) {
-    // mapboxgl.accessToken = process.env.mapboxKey;
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ21lZGluYTIyOSIsImEiOiJjajlscHRhbXY0a2s4MzNxbXUxejBmY3ZqIn0.nAyOpUGA9NDN6tDGg_i6PQ';
+    mapboxgl.accessToken = process.env.mapboxKey;
+    // mapboxgl.accessToken = 'pk.eyJ1IjoiZ21lZGluYTIyOSIsImEiOiJjajlscHRhbXY0a2s4MzNxbXUxejBmY3ZqIn0.nAyOpUGA9NDN6tDGg_i6PQ';
 
     getUserLocation()
       .then((position) => {

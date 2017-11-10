@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 const _Profile = (props)=>{
-   console.log("CHECK");
+   console.log("CHECK Profile component");
    return (
      <center>
-        <img src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432" name="aboutme" style ={{border:"1px solid"}} className="img-circle image-responsive"/>
+        <img src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432" name="aboutme" style ={{ width: "50%", border:"1px solid"}} className="img-circle image-responsive"/>
         <h3 className="media-heading">Abraham</h3>
         <span><strong>Rewards: </strong></span>
         <span className="label label-success">20</span>
