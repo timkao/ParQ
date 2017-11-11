@@ -12,6 +12,7 @@ mapboxgl.accessToken = process.env.mapboxKey;
 
 export const mapDirection = new MapboxDirections({
   accessToken: mapboxgl.accessToken,
+  interactive: false,
   profile: 'driving',
   controls: {
     profileSwitcher: false
@@ -53,7 +54,6 @@ export const fetchMap = (component) => {
 
         // add mapDirection
         map.addControl(mapDirection, 'top-right');
-        mapDirection.setOrigin([longitude, latitude]);
 
         map.on('load', function () {
           // source of search marker
@@ -122,13 +122,16 @@ export const fetchMap = (component) => {
             .setHTML(e.features[0].properties.description)
             .addTo(map);
           component.setState({ headingTo: e.features[0].properties.id });
+          mapDirection.setOrigin([longitude, latitude]);
+          mapDirection.setDestination(e.features[0].geometry.coordinates);
         });
 
-        // event listener to change cursor (not working when mapDiretion is added)
+        // event listener to change cursor
         map.on('mouseenter', 'places', function () {
           map.getCanvas().style.cursor = 'pointer';
         });
-        // event listener to change cursor (not working when mapDiretion is added)
+
+        // event listener to change cursor
         map.on('mouseleave', 'places', function () {
           map.getCanvas().style.cursor = '';
         });
