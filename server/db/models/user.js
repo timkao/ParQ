@@ -27,8 +27,9 @@ const User = db.define('user', {
     type: Sequelize.ARRAY(Sequelize.STRING),
     defaultValue: []
   },
-  headingTo: {
-    type: Sequelize.JSON
+  spotsTaken: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 });
 

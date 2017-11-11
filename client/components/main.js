@@ -21,8 +21,11 @@ const Main = (props) => {
         {
           isLoggedIn
             ? <div>
-              {/* The navbar will show these links after you log in */}
+              {/* The navbar will show these NavLinks after you log in */}
               <Link to='/home'>Home</Link>
+              {/* For easier socket.io testing */}
+              <Link to='/login'>Login</Link>
+              <Link to='/signup'>Sign Up</Link>
               <a href='#' onClick={handleClick}>Logout</a>
             </div>
             : <div>

@@ -43,7 +43,6 @@ export const fetchMap = (component) => {
 
         map.addControl(mapDirection);
         mapDirection.setOrigin([longitude, latitude]);
-        //mapDirection.setDestination([-73.9947929, 40.7408902]);
 
         map.on('load', function () {
           map.addLayer({
@@ -105,12 +104,11 @@ export const fetchMap = (component) => {
         })
 
         map.on('click', 'places', function (e) {
-          console.log(e);
           new mapboxgl.Popup()
             .setLngLat(e.features[0].geometry.coordinates)
             .setHTML(e.features[0].properties.description)
             .addTo(map);
-          component.setState({ headingTo: e.features[0].properties.id});
+          component.setState({ headingTo: e.features[0].properties.id });
         });
 
         map.on('mouseenter', 'places', function () {
@@ -121,9 +119,16 @@ export const fetchMap = (component) => {
           map.getCanvas().style.cursor = '';
         });
 
-        // remove profile
+        // remove profile and direction panel
         document.getElementsByClassName('mapbox-directions-clearfix')[0].remove();
+        document.getElementsByClassName('mapbox-directions-component-keyline')[0].remove();
+
+        // stop loading icon when everything is done
         component.setState({ loaded: true });
+
+        // use store to access notifications
+        // show notifications
+        // hide notifications after 4 seconds.
 
       })
       .catch((err) => {

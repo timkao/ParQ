@@ -15,8 +15,8 @@ const defaultUser = {}
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
-const removeUser = () => ({type: REMOVE_USER})
+const getUser = user => ({ type: GET_USER, user })
+const removeUser = () => ({ type: REMOVE_USER })
 
 /**
  * THUNK CREATORS
@@ -26,7 +26,6 @@ export const me = () =>
     axios.get('/auth/me')
       .then(res => {
         dispatch(getUser(res.data || defaultUser))
-        console.log(res.data);
         socket.emit('user-login', res.data.id);
       })
       .catch(err => console.log(err))
@@ -35,18 +34,17 @@ export const auth = (email, password, method, history) =>
   dispatch =>
     axios.post(`/auth/${method}`, { email, password })
       .then(res => {
-        dispatch(getUser(res.data))
+        dispatch(me());
         history.push('/home')
       })
       .catch(error =>
-        dispatch(getUser({error})))
+        dispatch(getUser({ error })))
 
 export const logout = (history) =>
   dispatch =>
     axios.post('/auth/logout')
       .then(res => {
         dispatch(removeUser())
-        // should we remove socketId at this step? maybe not...
         history.push('/login')
       })
       .catch(err => console.log(err))

@@ -10,10 +10,11 @@ export class UserHome extends Component {
   constructor() {
     super();
     this.state = {
-      currentLong: 0,
-      currentLat: 0,
+      currentLong: 0,  // this two might not be neccessary
+      currentLat: 0,   // this might not be neccessary
       loaded: false,
-      headingTo: 0
+      headingTo: 0,
+      showNotification: {isShow: false, message: ''}
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
   }
@@ -22,8 +23,9 @@ export class UserHome extends Component {
     this.props.getSpots();
     this.props.getMap(this);
     socket.on('notifications', message => {
-      console.log(message);
-    })
+      this.setState({showNotification: {isShow: true, message: message}});
+      setTimeout(() => { this.setState({ showNotification: {isShow: false, message: ''}})}, 4000);
+    });
   }
 
   handleSpotTaken() {
@@ -35,11 +37,16 @@ export class UserHome extends Component {
   render() {
     const { email } = this.props;
     const { handleSpotTaken } = this;
+    const { showNotification } = this.state;
+
     return (
       <div>
         <h3>Welcome, {email}</h3>
         <button onClick={handleSpotTaken}>Spot is taken!</button>
         <button>Found Another Spot</button>
+        {
+          showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
+        }
         <Loader loaded={this.state.loaded} className="loader" />
         <div id="map"></div>
       </div>
@@ -50,7 +57,8 @@ export class UserHome extends Component {
 const mapState = (state) => {
   return {
     email: state.user.email,
-    spots: state.streetspots
+    spots: state.streetspots,
+    spotsTaken: state.user.spotsTaken
   };
 };
 

@@ -18,16 +18,19 @@ module.exports = (io, User) => {
     })
 
     socket.on('spot-taken-online', socketId => {
-      console.log('online------------------');
-      socket.broadcast.to(socketId).emit('notifications', 'Thank you! The spot you reported is taken!')
+      console.log('--------------------on');
+      socket.broadcast.to(socketId).emit('notifications', 'Thank you! A spot you reported is taken! You earned 100 point!');
     })
 
     socket.on('spot-taken-offline', reporterId => {
+      console.log('--------------------off');
       User.findById(reporterId)
       .then( user => {
-        console.log('not online ---------------------');
-        user.notifications.push(`Thank you! The spot you reported is taken!`)
+        user.spotsTaken += 1;
         return user.save();
+      })
+      .then( user => {
+        console.log(user);
       })
       .catch( err => console.log(err));
     })
