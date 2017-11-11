@@ -11,3 +11,13 @@ router.get('/', (req, res, next) => {
     .then(users => res.json(users))
     .catch(next)
 })
+
+router.put('/updateSpotsTaken', (req, res, next) => {
+  User.findById(req.user.id)
+  .then( user => {
+    user.spotsTaken = 0;
+    return user.save();
+  })
+  .then( user => res.send(user))
+  .catch(err => console.log(err));
+})

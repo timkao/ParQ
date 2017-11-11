@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
-import store, { fetchSpots } from './';
+import store, { updateSpotsTaken } from './';
 
 const getUserLocation = function (options) {
   return new Promise(function (resolve, reject) {
@@ -18,13 +18,16 @@ export const mapDirection = new MapboxDirections({
   }
 })  // MapboxDirections Objecr is from index.html
 
+export const mapGeocoder = new MapboxGeocoder({
+  accessToken: mapboxgl.accessToken
+})  // MapboxGeocoder Objecr is from index.html
+
 export const fetchMap = (component) => {
   return function (dispatch) {
     getUserLocation()
       .then((position) => {
         const { longitude, latitude } = position.coords;
         component.setState({ currentLat: longitude, currentLong: latitude });
-        console.log(store.getState().streetspots);
         const currentSpots = store.getState().streetspots;
         const map = new mapboxgl.Map({
           container: 'map',
@@ -39,12 +42,41 @@ export const fetchMap = (component) => {
           },
           trackUserLocation: true
         }));
-        // map.scrollZoom.disable();
 
-        map.addControl(mapDirection);
+        // add search box
+        map.addControl(mapGeocoder, 'top-left');
+
+        // place a marker when the search result comes out and remove the previous one if any
+        mapGeocoder.on('result', (ev) => {
+          map.getSource('single-point').setData(ev.result.geometry);
+        })
+
+        // add mapDirection
+        map.addControl(mapDirection, 'top-right');
         mapDirection.setOrigin([longitude, latitude]);
 
         map.on('load', function () {
+          // source of search marker
+          map.addSource('single-point', {
+            "type": "geojson",
+            "data": {
+              "type": "FeatureCollection",
+              "features": []
+            }
+          });
+
+          // draw point to search result
+          map.addLayer({
+            "id": "point",
+            "source": "single-point",
+            "type": "circle",
+            "paint": {
+              "circle-radius": 10,
+              "circle-color": "#007cbf"
+            }
+          });
+
+          // example I use to test "notification"
           map.addLayer({
             "id": "places",
             "type": "symbol",
@@ -53,26 +85,6 @@ export const fetchMap = (component) => {
               "data": {
                 "type": "FeatureCollection",
                 "features": [{
-                  "type": "Feature",
-                  "properties": {
-                    "description": "<strong>Make it Mount Pleasant</strong><p><a href=\"http://www.mtpleasantdc.com/makeitmtpleasant\" target=\"_blank\" title=\"Opens in a new window\">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>",
-                    "icon": "theatre"
-                  },
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": [-74.01153299999999, 40.7152989]
-                  }
-                }, {
-                  "type": "Feature",
-                  "properties": {
-                    "description": "<strong>Muhsinah</strong><p>Jazz-influenced hip hop artist <a href=\"http://www.muhsinah.com\" target=\"_blank\" title=\"Opens in a new window\">Muhsinah</a> plays the <a href=\"http://www.blackcatdc.com\">Black Cat</a> (1811 14th Street NW) tonight with <a href=\"http://www.exitclov.com\" target=\"_blank\" title=\"Opens in a new window\">Exit Clov</a> and <a href=\"http://godsilla.bandcamp.com\" target=\"_blank\" title=\"Opens in a new window\">Gods’illa</a>. 9:00 p.m. $12.</p>",
-                    "icon": "music"
-                  },
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": [-73.98670679999998, 40.73336740000001]
-                  }
-                }, {
                   "type": "Feature",
                   "properties": {
                     "description": "<strong>A Little Night Music</strong><p>The Arlington Players' production of Stephen Sondheim's  <a href=\"http://www.thearlingtonplayers.org/drupal-6.20/node/4661/show\" target=\"_blank\" title=\"Opens in a new window\"><em>A Little Night Music</em></a> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>",
@@ -103,6 +115,7 @@ export const fetchMap = (component) => {
           });
         })
 
+        // onclick and change the "headingTo" target
         map.on('click', 'places', function (e) {
           new mapboxgl.Popup()
             .setLngLat(e.features[0].geometry.coordinates)
@@ -111,10 +124,11 @@ export const fetchMap = (component) => {
           component.setState({ headingTo: e.features[0].properties.id });
         });
 
+        // event listener to change cursor (not working when mapDiretion is added)
         map.on('mouseenter', 'places', function () {
           map.getCanvas().style.cursor = 'pointer';
         });
-
+        // event listener to change cursor (not working when mapDiretion is added)
         map.on('mouseleave', 'places', function () {
           map.getCanvas().style.cursor = '';
         });
@@ -126,9 +140,17 @@ export const fetchMap = (component) => {
         // stop loading icon when everything is done
         component.setState({ loaded: true });
 
-        // use store to access notifications
-        // show notifications
-        // hide notifications after 4 seconds.
+        // show notification for 4 seconds and then remove it
+        const spotsTaken = store.getState().user.spotsTaken;
+        if (spotsTaken) {
+          component.setState({
+            showNotification: { isShow: true, message: `${spotsTaken} spot${spotsTaken > 1 ? 's' : ''} you reported ${spotsTaken > 1 ? 'are' : 'is'} taken! You earned ${spotsTaken * 100} points` }
+          });
+          setTimeout(() => {
+            component.setState({ showNotification: { isShow: false, message: '' } });
+            dispatch(updateSpotsTaken());
+          }, 4000);
+        }
 
       })
       .catch((err) => {

@@ -49,6 +49,16 @@ export const logout = (history) =>
       })
       .catch(err => console.log(err))
 
+export const updateSpotsTaken = () =>
+  dispatch =>
+    axios.put('/api/users/updateSpotsTaken')
+    .then(result => result.data)
+    .then( user => {
+      dispatch(getUser(user));
+    })
+    .catch(err => console.log(err));
+
+
 /**
  * REDUCER
  */

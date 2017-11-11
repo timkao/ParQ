@@ -29,9 +29,6 @@ module.exports = (io, User) => {
         user.spotsTaken += 1;
         return user.save();
       })
-      .then( user => {
-        console.log(user);
-      })
       .catch( err => console.log(err));
     })
 
