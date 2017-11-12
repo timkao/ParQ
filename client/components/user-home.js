@@ -67,8 +67,8 @@ const mapDispatch = (dispatch) => {
       const thunk = fetchMap(component);
       dispatch(thunk);
     },
-    getSpots() {
-      dispatch(fetchSpots())
+    getSpots(map) {
+      dispatch(fetchSpots(map))
     },
     occupySpot(id) {
       const thunk = takeSpot(id);
