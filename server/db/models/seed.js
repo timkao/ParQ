@@ -7,16 +7,16 @@ const users = [
 ];
 
 const streetspots = [
-  { latitude: 40.7152989, longitude: -74.01153299999999 },
-  { latitude: 40.73336740000001, longitude: -73.98670679999998},
-  { latitude: 40.750955, longitude: -73.999572 },
-  { latitude: 40.75220700000001, longitude: -73.992729 },
-  { latitude: 40.7408902, longitude: -73.9947929 },
-  { latitude: 40.75486175810943, longitude: -73.99149451085543 },
-  { latitude: 40.75603844785587, longitude: -73.99112189192192 },
-  { latitude: 40.75809432300878, longitude: -73.99005119893565 },
-  { latitude: 40.754736989431535, longitude: -73.99348737644738 },
-  { latitude: 40.75262442297549, longitude: -73.99049939597558 }
+  { latitude: 40.7152989, longitude: -74.01153299999999, size: 'compact car' },
+  { latitude: 40.73336740000001, longitude: -73.98670679999998, size: 'mid-size car'},
+  { latitude: 40.750955, longitude: -73.999572, size: 'full-size car' },
+  { latitude: 40.75220700000001, longitude: -73.992729, size: 'full-size SUV' },
+  { latitude: 40.7408902, longitude: -73.9947929, size: 'full-size SUV' },
+  { latitude: 40.75486175810943, longitude: -73.99149451085543, size: 'full-size car' },
+  { latitude: 40.75603844785587, longitude: -73.99112189192192, size: 'mid-size car' },
+  { latitude: 40.75809432300878, longitude: -73.99005119893565, size: 'mid-size car' },
+  { latitude: 40.754736989431535, longitude: -73.99348737644738, size: 'compact car' },
+  { latitude: 40.75262442297549, longitude: -73.99049939597558, size: 'full-size SUV' }
 ];
 
 //Export

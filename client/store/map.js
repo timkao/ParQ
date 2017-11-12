@@ -1,12 +1,16 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
-import store, { updateSpotsTaken } from './';
+import store, { updateSpotsTaken, fetchSpots } from './';
 
 const getUserLocation = function (options) {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 };
+const GET_MAP = 'GET_MAP';
+
+const getMap = map => ({type: GET_MAP, map});
+
 
 mapboxgl.accessToken = process.env.mapboxKey;
 
@@ -17,7 +21,7 @@ export const mapDirection = new MapboxDirections({
   controls: {
     profileSwitcher: false
   }
-})  // MapboxDirections Objecr is from index.html
+});// MapboxDirections Object is from index.html
 
 export const mapGeocoder = new MapboxGeocoder({
   accessToken: mapboxgl.accessToken
@@ -29,20 +33,27 @@ export const fetchMap = (component) => {
       .then((position) => {
         const { longitude, latitude } = position.coords;
         component.setState({ currentLat: longitude, currentLong: latitude });
+
         const currentSpots = store.getState().streetspots;
-        const map = new mapboxgl.Map({
+        component.map = new mapboxgl.Map({
           container: 'map',
           style: 'mapbox://styles/mapbox/streets-v9',
           center: [longitude, latitude],
           zoom: 15
         });
 
-        map.addControl(new mapboxgl.GeolocateControl({
+        component.map.addControl(new mapboxgl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true
           },
           trackUserLocation: true
         }));
+        component.map.scrollZoom.disable();
+        component.map.addControl(new mapboxgl.NavigationControl());
+        dispatch(getMap(component.map));
+      })
+      .then( () => {
+        dispatch(fetchSpots(component.map));
 
         // add search box
         map.addControl(mapGeocoder, 'top-left');
@@ -159,5 +170,14 @@ export const fetchMap = (component) => {
       .catch((err) => {
         console.error(err.message);
       });
+  };
+};
+
+export default function (state = {}, action) {
+  switch (action.type) {
+    case GET_MAP:
+      return action.map;
+    default:
+      return state;
   }
 }
