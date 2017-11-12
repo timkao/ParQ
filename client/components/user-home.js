@@ -16,7 +16,7 @@ export class UserHome extends Component {
 
   componentDidMount(){
     this.props.getMap(this);
-    this.props.getSpots();
+    // this.props.getSpots(this);
   }
 
   render(){
@@ -41,12 +41,12 @@ const mapDispatch = (dispatch) => {
     getMap(component) {
       const thunk = fetchMap(component);
       dispatch(thunk);
-    },
-    getSpots() {
-      dispatch(fetchSpots())
     }
-  }
-}
+    // getSpots(component) {
+    //   dispatch(fetchSpots(component));
+    // }
+  };
+};
 
 export default connect(mapState, mapDispatch)(UserHome);
 

@@ -7,12 +7,12 @@ const users = [
 ];
 
 const streetspots = [
-  { latitude: 40.7152989, longitude: -74.01153299999999 },
-  { latitude: 40.73336740000001, longitude: -73.98670679999998},
-  { latitude: 40.750955, longitude: -73.999572 },
-  { latitude: 40.75220700000001, longitude: -73.992729 },
-  { latitude: 40.7408902, longitude: -73.9947929 }
-]
+  { latitude: 40.7152989, longitude: -74.01153299999999, size: 'compact car' },
+  { latitude: 40.73336740000001, longitude: -73.98670679999998, size: 'mid-size car'},
+  { latitude: 40.750955, longitude: -73.999572, size: 'full-size car' },
+  { latitude: 40.75220700000001, longitude: -73.992729, size: 'full-size SUV' },
+  { latitude: 40.7408902, longitude: -73.9947929, size: 'full-size SUV' }
+];
 
 //Export
 module.exports = (User, Streetspots) => {

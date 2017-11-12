@@ -1,3 +1,11 @@
 html, body, #map {
   height: 100vh;
 }
+
+.marker {
+  background-image: url('/public/images/car.png');
+  background-size: cover;
+  width: 40px;
+  height: 20px;
+  cursor: pointer;
+}

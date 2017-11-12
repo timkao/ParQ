@@ -1,11 +1,16 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
+import { fetchSpots } from './index';
 
 const getUserLocation = function (options) {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 };
+const GET_MAP = 'GET_MAP';
+
+const getMap = map => ({type: GET_MAP, map});
+
 
 export const fetchMap = (component) => {
   return function (dispatch) {
@@ -29,10 +34,23 @@ export const fetchMap = (component) => {
           trackUserLocation: true
         }));
         component.map.scrollZoom.disable();
-
+        component.map.addControl(new mapboxgl.NavigationControl());
+        dispatch(getMap(component.map));
+      })
+      .then( () => {
+        dispatch(fetchSpots(component.map));
       })
       .catch((err) => {
         console.error(err.message);
       });
+  };
+};
+
+export default function (state = {}, action) {
+  switch (action.type) {
+    case GET_MAP:
+      return action.map;
+    default:
+      return state;
   }
 }
