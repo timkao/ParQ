@@ -31,11 +31,16 @@ export const fetchSpots = (map) =>
       })
       .then(spots => {
         spots.features.forEach(function(marker) {
+            // create the marker
             var el = document.createElement('div');
             el.className = 'marker';
+            // create the popup
+            var popup = new mapboxgl.Popup()
+                .setText(`Size: ${ spot.properties.size }`);
 
             new mapboxgl.Marker(el)
-            .setLngLat(marker.geometry.coordinates)
+            .setLngLat(spot.geometry.coordinates)
+            .setPopup(popup) // sets a popup on this marker
             .addTo(map);
           });
         dispatch(getSpots(spots || defaultSpots));
