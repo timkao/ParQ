@@ -52,10 +52,9 @@ export const fetchMap = (component) => {
           component.map.addControl(new mapboxgl.NavigationControl());
           dispatch(getMap(component.map));
           dispatch(fetchSpots(component.map));
-      //   })
-      // .then(() => {
-        // const currentSpots = store.getState().streetspots;
-        // console.log(currentSpots);
+        })
+      .then(() => {
+
         // add search box
         component.map.addControl(mapGeocoder, 'top-left');
 
@@ -88,7 +87,7 @@ export const fetchMap = (component) => {
             }
           });
 
-          // example I use to test "notification"
+          /*** example I use to test "notification" ****/
           // component.map.addLayer({
           //   "id": "places",
           //   "type": "symbol",
@@ -128,8 +127,7 @@ export const fetchMap = (component) => {
         })
 
         // onclick and change the "headingTo" target
-        component.map.on('click', 'marker', function (e) {
-          console.log('--------------')
+        component.map.on('click', 'places', function (e) {
           console.log(e);
           new mapboxgl.Popup()
             .setLngLat(e.features[0].geometry.coordinates)
