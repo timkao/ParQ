@@ -1,11 +1,11 @@
 const router = require('express').Router()
-const { Streetspots } = require('../db/models')
+const { Streetspots, User } = require('../db/models')
 module.exports = router
 // const moment = require('moment')
 
 //GET all spots
 router.get('/', (req, res, next) => {
-  Streetspots.findAll()
+  Streetspots.findAll({where: {status: 'open'}})
   .then((spots) => res.send(spots))
   .catch(next)
 })
@@ -28,5 +28,16 @@ router.post('/:userId', (req, res, next) => {
 router.delete('/:spotId', (req, res, next) => {
   Streetspots.destroy({ where: { id: req.params.spotId }})
   .then(() => res.sendStatus(200))
+  .catch(next)
+})
+
+//UPDATE Spot status from "open" to "occupied"
+router.put('/:spotId', (req, res, next) => {
+  Streetspots.findById(req.params.spotId, {include: [User]})
+  .then( spot => {
+    spot.status = 'occupied'
+    return spot.save()
+  })
+  .then( spot => { res.send(spot.user) })
   .catch(next)
 })

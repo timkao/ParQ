@@ -1,6 +1,7 @@
 import axios from 'axios';
 import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
+import socket from '../socket';
 
 /**
  * ACTION TYPES
@@ -52,6 +53,21 @@ export const deleteSpot = (spotId) =>
     axios.delete(`/api/streetspots/${ spotId }`)
       .then( () => dispatch(fetchSpots()))
       .catch(err => console.log(err));
+
+export const takeSpot = (id) =>
+  dispatch =>
+    axios.put(`/api/streetspots/${ id }`)
+    .then(result => result.data)
+    .then( reporter => {
+      dispatch(fetchSpots())
+      console.log(reporter);
+      if (reporter.socketId) {
+        socket.emit('spot-taken-online', reporter.socketId);
+      } else {
+        socket.emit('spot-taken-offline', reporter.id);
+      }
+    })
+    .catch( err => console.log(err))
 
 /**
  * REDUCER
