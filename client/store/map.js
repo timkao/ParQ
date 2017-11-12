@@ -29,14 +29,14 @@ export const fetchMap = (component) => {
       .then((position) => {
         const { longitude, latitude } = position.coords;
         component.setState({ currentLat: longitude, currentLong: latitude });
-        const map = new mapboxgl.Map({
+        component.map = new mapboxgl.Map({
           container: 'map',
           style: 'mapbox://styles/mapbox/streets-v9',
           center: [longitude, latitude],
           zoom: 15
         });
 
-        map.addControl(new mapboxgl.GeolocateControl({
+        component.map.addControl(new mapboxgl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true
           },
@@ -44,13 +44,13 @@ export const fetchMap = (component) => {
         }));
         component.map.scrollZoom.disable();
         component.map.addControl(new mapboxgl.NavigationControl());
+        component.map.addControl(mapDirection);
+        mapDirection.setOrigin([longitude, latitude]);
+        mapDirection.setDestination([-73.9947929, 40.7408902]);
         dispatch(getMap(component.map));
       })
       .then( () => {
         dispatch(fetchSpots(component.map));
-        component.map.addControl(mapDirection);
-        mapDirection.setOrigin([longitude, latitude]);
-        mapDirection.setDestination([-73.9947929, 40.7408902]);
 
         // map.on('load', function () {
         //   map.addLayer({
