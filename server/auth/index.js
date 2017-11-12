@@ -29,12 +29,25 @@ router.post('/signup', (req, res, next) => {
 })
 
 router.post('/logout', (req, res) => {
-  req.logout()
-  res.redirect('/')
+  User.findById(req.user.id)
+  .then( user => {
+    user.socketId = null;
+    return user.save();
+  })
+  .then( () => {
+    req.logout()
+    res.redirect('/')
+  })
+  .catch( err => console.log(err));
 })
 
 router.get('/me', (req, res) => {
-  res.json(req.user)
+  if (req.user) {
+    User.findById(req.user.id)
+    .then( user => res.json(user));
+  } else {
+    res.send(204);
+  }
 })
 
 router.use('/google', require('./google'))
