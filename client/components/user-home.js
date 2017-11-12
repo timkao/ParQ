@@ -20,6 +20,7 @@ export class UserHome extends Component {
   }
 
   componentDidMount() {
+    //this.props.getSpots(this);
     this.props.getMap(this);
     socket.on('notifications', message => {
       this.setState({showNotification: {isShow: true, message: message}});
@@ -67,8 +68,8 @@ const mapDispatch = (dispatch) => {
       const thunk = fetchMap(component);
       dispatch(thunk);
     },
-    getSpots() {
-      dispatch(fetchSpots())
+    getSpots(component) {
+      dispatch(fetchSpots(component))
     },
     occupySpot(id) {
       const thunk = takeSpot(id);

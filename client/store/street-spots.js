@@ -22,7 +22,7 @@ const getSpots = spots => ({type: GET_SPOTS, spots});
  * THUNK CREATORS
  */
 
-export const fetchSpots = (component) =>
+export const fetchSpots = (map) =>
   dispatch =>
     axios.get('/api/streetspots')
       .then( res => res.data)
@@ -36,7 +36,7 @@ export const fetchSpots = (component) =>
 
             new mapboxgl.Marker(el)
             .setLngLat(marker.geometry.coordinates)
-            .addTo(component);
+            .addTo(map);
           });
         dispatch(getSpots(spots || defaultSpots));
       })
