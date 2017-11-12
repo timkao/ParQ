@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, fetchSpots, takeSpot } from '../store';
+import { fetchMap, fetchSpots, takeSpot, addSpotOnServer } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
 
@@ -17,6 +17,7 @@ export class UserHome extends Component {
       showNotification: {isShow: false, message: ''}
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
+    this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
   }
 
   componentDidMount() {
@@ -33,16 +34,21 @@ export class UserHome extends Component {
     }
   }
 
+  handleAddSpotGeo() {
+    this.props.addSpot(this.map, this.props.id) //eventually pass in users default vehicle size
+    // this.props.getMap(this);
+  }
+
   render() {
     const { email } = this.props;
-    const { handleSpotTaken } = this;
+    const { handleSpotTaken, handleAddSpotGeo } = this;
     const { showNotification } = this.state;
 
     return (
       <div>
         <h3>Welcome, {email}</h3>
-        <button onClick={handleSpotTaken}>Spot is taken!</button>
-        <button>Found Another Spot</button>
+        <button onClick={handleSpotTaken}>Mark Spot Taken</button>
+        <button onClick={handleAddSpotGeo}>Open Spot Here</button>
         {
           showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
         }
@@ -55,6 +61,7 @@ export class UserHome extends Component {
 
 const mapState = (state) => {
   return {
+    id: state.user.id,
     email: state.user.email,
     spots: state.streetspots,
     spotsTaken: state.user.spotsTaken
@@ -67,12 +74,12 @@ const mapDispatch = (dispatch) => {
       const thunk = fetchMap(component);
       dispatch(thunk);
     },
-    getSpots(map) {
-      dispatch(fetchSpots(map))
-    },
     occupySpot(id) {
       const thunk = takeSpot(id);
       dispatch(thunk);
+    },
+    addSpot(component, id){
+      dispatch(addSpotOnServer(component, id))
     }
   };
 };
