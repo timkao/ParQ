@@ -16,7 +16,7 @@ const Main = (props) => {
 
   return (
     <div>
-      <h1>Check</h1>
+      {/* <h1>Check</h1> */}
       <nav>
         {
           isLoggedIn

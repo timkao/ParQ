@@ -39,10 +39,12 @@ export const fetchMap = (component) => {
         }));
         // map.scrollZoom.disable();
 
+
         map.addControl(mapDirection);
-        mapDirection.setOrigin([longitude, latitude]);
+        mapDirection.setOrigin([longitude, latitude])
         mapDirection.setDestination([-73.9947929, 40.7408902]);
 
+        
         // map.on('load', function () {
         //   map.addLayer({
         //     "id": "places",
@@ -120,6 +122,8 @@ export const fetchMap = (component) => {
         // remove profile
         document.getElementsByClassName('mapbox-directions-clearfix')[0].remove();
         component.setState({ loaded: true });
+
+
 
       })
       .catch((err) => {
