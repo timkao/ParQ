@@ -1,6 +1,7 @@
 import axios from 'axios';
 import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
+import { getUserLocation } from '../helpers'
 import socket from '../socket';
 
 /**
@@ -39,14 +40,19 @@ export const fetchSpots = (map) =>
         return GeoJSON.parse(spotLatLong, {Point: ['latitude', 'longitude']});
       })
       .then(spots => {
-        spots.features.forEach(function(marker) {
+        spots.features.forEach(function(spot) {
+            // create the marker
             var el = document.createElement('div');
             el.className = 'marker';
-            fetchAddress(marker.geometry.coordinates)
+            fetchAddress(spot.geometry.coordinates)
             .then( place => {
-              marker.place_name = place;
+              spot.place_name = place;
+              // create the popup
+              var popup = new mapboxgl.Popup()
+              .setText(`Size: ${ spot.properties.size }`);
               new mapboxgl.Marker(el)
-              .setLngLat(marker.geometry.coordinates)
+              .setLngLat(spot.geometry.coordinates)
+              .setPopup(popup) // sets a popup on this marker
               .addTo(map);
             })
           });
@@ -54,13 +60,17 @@ export const fetchSpots = (map) =>
       })
       .catch(err => console.log(err));
 
-export const addSpot = (spot, userId) =>
+export const addSpotOnServer = (map, userId, defaultVehicle) =>
   dispatch =>
-    axios.post(`/api/streetspots/${ userId }`, spot)
-      .then( () => dispatch(fetchSpots()))
+   getUserLocation()
+      .then( position => {
+        const { longitude, latitude } = position.coords;
+        const spot = { longitude, latitude, size: defaultVehicle || null } //eventually need to pull in default vehicle
+        return axios.post(`/api/streetspots/${ userId }`, spot)})
+      .then( () => dispatch(fetchSpots(map)))
       .catch(err => console.log(err));
 
-export const deleteSpot = (spotId) =>
+export const deleteSpotOnServer = (spotId) =>
   dispatch =>
     axios.delete(`/api/streetspots/${ spotId }`)
       .then( () => dispatch(fetchSpots()))

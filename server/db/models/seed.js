@@ -17,8 +17,10 @@ const streetspots = [
   { latitude: 40.75809432300878, longitude: -73.99005119893565, size: 'mid-size car' },
   { latitude: 40.754736989431535, longitude: -73.99348737644738, size: 'compact car' },
   { latitude: 40.75262442297549, longitude: -73.99049939597558, size: 'full-size SUV' },
-  { latitude: 40.748723, longitude: -74.037123, size: 'mid-size car' }
-
+  { latitude: 40.748723, longitude: -74.037123, size: 'mid-size car' },
+  { latitude: 40.21733690809492, longitude: -74.00885645263406, size: 'full-size SUV'},
+  { latitude: 40.21892624348152, longitude: -74.01105586401843, size: 'full-size SUV'},
+  { latitude: 40.21892624348152, longitude: -74.00692526212578, size: 'full-size SUV'}
 ];
 
 //Export

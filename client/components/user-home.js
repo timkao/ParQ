@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, fetchSpots, takeSpot } from '../store';
+import { fetchMap, fetchSpots, takeSpot, addSpotOnServer } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
@@ -19,6 +19,7 @@ export class UserHome extends Component {
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
     this.setMapView = this.setMapView.bind(this);
+    this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
   }
 
   componentDidMount() {
@@ -39,9 +40,14 @@ export class UserHome extends Component {
     this.setState({mapView: bool});
   }
 
+  handleAddSpotGeo() {
+    this.props.addSpot(this.map, this.props.id) //eventually pass in users default vehicle size
+    // this.props.getMap(this);
+  }
+
   render() {
     const { email, spots } = this.props;
-    const { handleSpotTaken, setMapView } = this;
+    const { handleSpotTaken, setMapView, handleAddSpotGeo } = this;
     const { showNotification, mapView } = this.state;
 
     return (
@@ -49,8 +55,8 @@ export class UserHome extends Component {
         <h3>Welcome, {email}</h3>
         <div className="row">
           <div className="col-md-4">
-            <button className="btn btn-default" onClick={handleSpotTaken}>Spot is taken!</button>
-            <button className="btn btn-default">Found Another Spot</button>
+            <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
+            <button className="btn btn-default" onClick={handleAddSpotGeo}>Open Spot Here</button>
             {
               showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
             }
@@ -68,6 +74,7 @@ export class UserHome extends Component {
 
 const mapState = (state) => {
   return {
+    id: state.user.id,
     email: state.user.email,
     spots: state.streetspots,
     spotsTaken: state.user.spotsTaken
@@ -79,6 +86,9 @@ const mapDispatch = (dispatch) => {
     occupySpot(id) {
       const thunk = takeSpot(id);
       dispatch(thunk);
+    },
+    addSpot(component, id){
+      dispatch(addSpotOnServer(component, id))
     }
   };
 };
