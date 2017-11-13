@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap } from '../store';
+import { fetchMap, addSpotOnServer } from '../store';
 import Loader from 'react-loader';
 
 
@@ -12,12 +12,18 @@ export class Map extends Component {
     this.state = {
       loaded: false,
     };
+    this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
   }
 
   componentDidMount() {
     this.props.getMap(this);
+    this.props.onRef(this);
   }
 
+  handleAddSpotGeo() {
+    this.props.addSpot(this.map, this.props.id) //eventually pass in users default vehicle size
+    // this.props.getMap(this);
+  }
 
   render() {
     return (
@@ -30,7 +36,8 @@ export class Map extends Component {
 
 const mapState = (state) => {
   return {
-    spots: state.streetspots,
+    id: state.user.id,
+    spots: state.streetspots
   };
 };
 
@@ -39,6 +46,9 @@ const mapDispatch = (dispatch) => {
     getMap(component) {
       const thunk = fetchMap(component);
       dispatch(thunk);
+    },
+    addSpot(component, id){
+      dispatch(addSpotOnServer(component, id));
     }
   };
 };

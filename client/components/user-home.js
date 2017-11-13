@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, fetchSpots, takeSpot, addSpotOnServer } from '../store';
+import { takeSpot } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
@@ -19,7 +19,11 @@ export class UserHome extends Component {
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
     this.setMapView = this.setMapView.bind(this);
-    this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
+    this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
+  }
+  triggerHandleAddSpotGeo() {
+    //to trigger function in child component from parent using ref
+    this.map.handleAddSpotGeo();
   }
 
   componentDidMount() {
@@ -40,14 +44,9 @@ export class UserHome extends Component {
     this.setState({mapView: bool});
   }
 
-  handleAddSpotGeo() {
-    this.props.addSpot(this.map, this.props.id) //eventually pass in users default vehicle size
-    // this.props.getMap(this);
-  }
-
   render() {
-    const { email, spots } = this.props;
-    const { handleSpotTaken, setMapView, handleAddSpotGeo } = this;
+    const { email } = this.props;
+    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo } = this;
     const { showNotification, mapView } = this.state;
 
     return (
@@ -56,7 +55,7 @@ export class UserHome extends Component {
         <div className="row">
           <div className="col-md-4">
             <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
-            <button className="btn btn-default" onClick={handleAddSpotGeo}>Open Spot Here</button>
+            <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
             {
               showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
             }
@@ -66,7 +65,7 @@ export class UserHome extends Component {
             <button onClick={() => setMapView(false) } className="btn btn-default pull-right"><span className="glyphicon glyphicon-list" /> List</button>
           </div>
         </div>
-        {mapView === true ? <Map /> : <List />}
+        {mapView === true ? <Map onRef={(ref) => {this.map = ref; }} /> : <List />}
       </div>
     );
   }
@@ -76,7 +75,6 @@ const mapState = (state) => {
   return {
     id: state.user.id,
     email: state.user.email,
-    spots: state.streetspots,
     spotsTaken: state.user.spotsTaken
   };
 };
@@ -86,9 +84,6 @@ const mapDispatch = (dispatch) => {
     occupySpot(id) {
       const thunk = takeSpot(id);
       dispatch(thunk);
-    },
-    addSpot(component, id){
-      dispatch(addSpotOnServer(component, id))
     }
   };
 };
