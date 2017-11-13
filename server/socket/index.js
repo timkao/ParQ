@@ -20,17 +20,19 @@ module.exports = (io, User) => {
     socket.on('spot-taken-online', socketId => {
       console.log('--------------------on');
       socket.broadcast.to(socketId).emit('notifications', 'Thank you! A spot you reported is taken! You earned 100 point!');
+      socket.broadcast.emit('A Spot Taken');
     })
 
     socket.on('spot-taken-offline', reporterId => {
       console.log('--------------------off');
       User.findById(reporterId)
-      .then( user => {
-        user.spotsTaken += 1;
-        return user.save();
-      })
-      .catch( err => console.log(err));
+        .then(user => {
+          user.spotsTaken += 1;
+          console.log(user);
+          return user.save();
+        })
+        .catch(err => console.log(err));
+      socket.broadcast.emit('A Spot Taken');
     })
-
   })
 }
