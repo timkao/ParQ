@@ -1,13 +1,30 @@
-html, body, #map {
+#map {
   height: 100vh;
 }
-
 .loader {
-  position: fixed;
+  position: inherit;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   background: white;
   z-index: 9999;
+}
+.marker {
+  background-image: url('/public/images/car.png');
+  background-size: cover;
+  width: 40px;
+  height: 20px;
+  cursor: pointer;
+}
+.mapboxgl-popup {
+  max-width: 200px;
+}
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }

@@ -12,7 +12,7 @@ import {logout} from '../store'
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const {children, handleClick, isLoggedIn} = props
+  const {children, handleClick, isLoggedIn} = props;
 
   return (
     <div>
@@ -21,9 +21,12 @@ const Main = (props) => {
         {
           isLoggedIn
             ? <div>
-              {/* The navbar will show these links after you log in */}
+              {/* The navbar will show these NavLinks after you log in */}
               <Link to='/home'>Home</Link>
-              <Link to={`/home/profile/${1}`} className="pull-right">Profile click</Link>
+              <Link to={`/home/profile/${1}`} className="pull-right">Profile</Link>
+              {/* For easier socket.io testing */}
+              <Link to='/login'>Login</Link>
+              <Link to='/signup'>Sign Up</Link>
               <a href='#' onClick={handleClick}>Logout</a>
             </div>
             : <div>

@@ -1,4 +1,4 @@
-const chalk = require('chalk')
+const chalk = require('chalk');
 
 // Seed data
 const users = [
@@ -7,16 +7,20 @@ const users = [
 ];
 
 const streetspots = [
-  { latitude: 40.7152989, longitude: -74.01153299999999 },
-  { latitude: 40.73336740000001, longitude: -73.98670679999998},
-  { latitude: 40.750955, longitude: -73.999572 },
-  { latitude: 40.75220700000001, longitude: -73.992729 },
-  { latitude: 40.7408902, longitude: -73.9947929 },
-  { latitude: 40.75486175810943, longitude: -73.99149451085543 },
-  { latitude: 40.75603844785587, longitude: -73.99112189192192 },
-  { latitude: 40.75809432300878, longitude: -73.99005119893565 },
-  { latitude: 40.754736989431535, longitude: -73.99348737644738 },
-  { latitude: 40.75262442297549, longitude: -73.99049939597558 }
+  { latitude: 40.7152989, longitude: -74.01153299999999, size: 'compact car' },
+  { latitude: 40.73336740000001, longitude: -73.98670679999998, size: 'mid-size car'},
+  { latitude: 40.750955, longitude: -73.999572, size: 'full-size car' },
+  { latitude: 40.75220700000001, longitude: -73.992729, size: 'full-size SUV' },
+  { latitude: 40.7408902, longitude: -73.9947929, size: 'full-size SUV' },
+  { latitude: 40.75486175810943, longitude: -73.99149451085543, size: 'full-size car' },
+  { latitude: 40.75603844785587, longitude: -73.99112189192192, size: 'mid-size car' },
+  { latitude: 40.75809432300878, longitude: -73.99005119893565, size: 'mid-size car' },
+  { latitude: 40.754736989431535, longitude: -73.99348737644738, size: 'compact car' },
+  { latitude: 40.75262442297549, longitude: -73.99049939597558, size: 'full-size SUV' },
+  { latitude: 40.748723, longitude: -74.037123, size: 'mid-size car' },
+  { latitude: 40.21733690809492, longitude: -74.00885645263406, size: 'full-size SUV'},
+  { latitude: 40.21892624348152, longitude: -74.01105586401843, size: 'full-size SUV'},
+  { latitude: 40.21892624348152, longitude: -74.00692526212578, size: 'full-size SUV'}
 ];
 
 //Export
@@ -31,7 +35,8 @@ module.exports = (User, Streetspots) => {
     user2 = _u2;
     return Promise.all(
       streetspots.map((location) => Streetspots.create(location))
-    )})
+    );
+  })
   .then(([_lot1, _lot2, _lot3, _lot4, _lot5, _lot6, _lot7, _lot8, _lot9, _lot10]) => {
     return Promise.all([
       _lot1.setUser(user1),
@@ -48,7 +53,7 @@ module.exports = (User, Streetspots) => {
   .then(() => console.log(chalk.green('DB is synced and seeded')));
   })
   .catch((err) => {
-    console.log('seed error:')
-    console.log(err)
-  })
+    console.log('seed error:');
+    console.log(err);
+  });
 };
