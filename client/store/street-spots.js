@@ -21,6 +21,15 @@ const getSpots = spots => ({type: GET_SPOTS, spots});
 /**
  * THUNK CREATORS
  */
+const fetchAddress = (coor) => {
+  const [lat, lng] = coor;
+  return axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + lat + ',' + lng + '.json?access_token=' + mapboxgl.accessToken)
+  .then(res => res.data)
+  .then( data => {
+    return data.features[0].place_name;
+  })
+  .catch(err => console.log(err));
+};
 
 export const fetchSpots = (map) =>
   dispatch =>
@@ -33,10 +42,13 @@ export const fetchSpots = (map) =>
         spots.features.forEach(function(marker) {
             var el = document.createElement('div');
             el.className = 'marker';
-
-            new mapboxgl.Marker(el)
-            .setLngLat(marker.geometry.coordinates)
-            .addTo(map);
+            fetchAddress(marker.geometry.coordinates)
+            .then( place => {
+              marker.place_name = place;
+              new mapboxgl.Marker(el)
+              .setLngLat(marker.geometry.coordinates)
+              .addTo(map);
+            })
           });
         dispatch(getSpots(spots || defaultSpots));
       })
@@ -59,7 +71,7 @@ export const takeSpot = (id) =>
     axios.put(`/api/streetspots/${ id }`)
     .then(result => result.data)
     .then( reporter => {
-      dispatch(fetchSpots())
+      dispatch(fetchSpots());
       console.log(reporter);
       if (reporter.socketId) {
         socket.emit('spot-taken-online', reporter.socketId);
@@ -67,7 +79,7 @@ export const takeSpot = (id) =>
         socket.emit('spot-taken-offline', reporter.id);
       }
     })
-    .catch( err => console.log(err))
+    .catch( err => console.log(err));
 
 /**
  * REDUCER

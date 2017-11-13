@@ -25,10 +25,11 @@ export const mapDirection = new MapboxDirections({
 
 export const mapGeocoder = new MapboxGeocoder({
   accessToken: mapboxgl.accessToken
-})  // MapboxGeocoder Objecr is from index.html
+})  // MapboxGeocoder Object is from index.html
 
 
 export const fetchMap = (component) => {
+  console.log(component)
   return function (dispatch) {
     getUserLocation()
       .then( position => {

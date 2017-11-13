@@ -1,4 +1,4 @@
-const chalk = require('chalk')
+const chalk = require('chalk');
 
 // Seed data
 const users = [
@@ -16,7 +16,9 @@ const streetspots = [
   { latitude: 40.75603844785587, longitude: -73.99112189192192, size: 'mid-size car' },
   { latitude: 40.75809432300878, longitude: -73.99005119893565, size: 'mid-size car' },
   { latitude: 40.754736989431535, longitude: -73.99348737644738, size: 'compact car' },
-  { latitude: 40.75262442297549, longitude: -73.99049939597558, size: 'full-size SUV' }
+  { latitude: 40.75262442297549, longitude: -73.99049939597558, size: 'full-size SUV' },
+  { latitude: 40.748723, longitude: -74.037123, size: 'mid-size car' }
+
 ];
 
 //Export
@@ -31,7 +33,8 @@ module.exports = (User, Streetspots) => {
     user2 = _u2;
     return Promise.all(
       streetspots.map((location) => Streetspots.create(location))
-    )})
+    );
+  })
   .then(([_lot1, _lot2, _lot3, _lot4, _lot5, _lot6, _lot7, _lot8, _lot9, _lot10]) => {
     return Promise.all([
       _lot1.setUser(user1),
@@ -48,7 +51,7 @@ module.exports = (User, Streetspots) => {
   .then(() => console.log(chalk.green('DB is synced and seeded')));
   })
   .catch((err) => {
-    console.log('seed error:')
-    console.log(err)
-  })
+    console.log('seed error:');
+    console.log(err);
+  });
 };
