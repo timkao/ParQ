@@ -1,22 +1,19 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
 import store, { updateSpotsTaken, fetchSpots } from './';
-import { getUserLocation } from '../helpers'
-mapboxgl.accessToken = process.env.mapboxKey;
 
-/**
- * ACTION TYPES
- */
+const getUserLocation = function (options) {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+};
 const GET_MAP = 'GET_MAP';
 
-/**
- * ACTION CREATORS
- */
-const getMap = map => ({type: GET_MAP, map});
+const getMap = map => ({ type: GET_MAP, map });
 
-/**
- * THUNK CREATORS
- */
+
+mapboxgl.accessToken = process.env.mapboxKey;
+
 export const mapDirection = new MapboxDirections({
   accessToken: mapboxgl.accessToken,
   interactive: false,
@@ -28,7 +25,7 @@ export const mapDirection = new MapboxDirections({
 
 export const mapGeocoder = new MapboxGeocoder({
   accessToken: mapboxgl.accessToken
-})  // MapboxGeocoder Objecr is from index.html
+})  // MapboxGeocoder Object is from index.html
 
 
 export const fetchMap = (component) => {
@@ -176,14 +173,6 @@ export const fetchMap = (component) => {
       });
   };
 };
-
-export const addSpotGeo = (component) => {
-    return getUserLocation()
-        .then((position) => {
-            const { longitude, latitude } = position.coords;
-            console.log('you are at',longitude,latitude)
-    })
-}
 
 export default function (state = {}, action) {
   switch (action.type) {

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, fetchSpots, takeSpot, addSpotOnServer } from '../store';
-import Loader from 'react-loader';
+import { takeSpot } from '../store';
 import socket from '../socket';
+import Map from './Map';
+import List from './List';
 
 export class UserHome extends Component {
 
@@ -12,19 +13,25 @@ export class UserHome extends Component {
     this.state = {
       currentLong: 0,  // this two might not be neccessary
       currentLat: 0,   // this might not be neccessary
-      loaded: false,
       headingTo: 0,
-      showNotification: {isShow: false, message: ''}
+      showNotification: {isShow: false, message: ''},
+      mapView: true
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
-    this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
+    this.setMapView = this.setMapView.bind(this);
+    this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
+  }
+  triggerHandleAddSpotGeo() {
+    //to trigger function in child component from parent using ref
+    this.map.handleAddSpotGeo();
   }
 
   componentDidMount() {
-    this.props.getMap(this);
     socket.on('notifications', message => {
       this.setState({showNotification: {isShow: true, message: message}});
-      setTimeout(() => { this.setState({ showNotification: {isShow: false, message: ''}})}, 4000);
+      setTimeout(() => {
+        this.setState({ showNotification: {isShow: false, message: ''}});
+      }, 4000);
     });
   }
 
@@ -33,27 +40,32 @@ export class UserHome extends Component {
       this.props.occupySpot(this.state.headingTo);
     }
   }
-
-  handleAddSpotGeo() {
-    this.props.addSpot(this.map, this.props.id) //eventually pass in users default vehicle size
-    // this.props.getMap(this);
+  setMapView(bool){
+    this.setState({mapView: bool});
   }
 
   render() {
     const { email } = this.props;
-    const { handleSpotTaken, handleAddSpotGeo } = this;
-    const { showNotification } = this.state;
+    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo } = this;
+    const { showNotification, mapView } = this.state;
 
     return (
-      <div>
+      <div className="container">
         <h3>Welcome, {email}</h3>
-        <button onClick={handleSpotTaken}>Mark Spot Taken</button>
-        <button onClick={handleAddSpotGeo}>Open Spot Here</button>
-        {
-          showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
-        }
-        <Loader loaded={this.state.loaded} className="loader" />
-        <div id="map"></div>
+        <div className="row">
+          <div className="col-md-4">
+            <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
+            <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
+            {
+              showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
+            }
+          </div>
+          <div className="col-md-4 col-md-offset-4">
+            <button onClick={() => setMapView(true) } className="btn btn-default pull-right"><span className="glyphicon glyphicon-map-marker" /> Map</button>
+            <button onClick={() => setMapView(false) } className="btn btn-default pull-right"><span className="glyphicon glyphicon-list" /> List</button>
+          </div>
+        </div>
+        {mapView === true ? <Map onRef={(ref) => {this.map = ref; }} /> : <List />}
       </div>
     );
   }
@@ -63,23 +75,15 @@ const mapState = (state) => {
   return {
     id: state.user.id,
     email: state.user.email,
-    spots: state.streetspots,
     spotsTaken: state.user.spotsTaken
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
-    getMap(component) {
-      const thunk = fetchMap(component);
-      dispatch(thunk);
-    },
     occupySpot(id) {
       const thunk = takeSpot(id);
       dispatch(thunk);
-    },
-    addSpot(component, id){
-      dispatch(addSpotOnServer(component, id))
     }
   };
 };

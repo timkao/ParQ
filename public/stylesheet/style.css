@@ -1,8 +1,8 @@
-html, body, #map {
+#map {
   height: 100vh;
 }
 .loader {
-  position: fixed;
+  position: inherit;
   top: 0;
   right: 0;
   bottom: 0;
