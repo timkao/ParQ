@@ -3,6 +3,8 @@ import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { getUserLocation } from '../helpers'
 import socket from '../socket';
+import store, { getHeadingTo, mapDirection, longitude, latitude } from './';
+
 
 /**
  * ACTION TYPES
@@ -40,10 +42,25 @@ export const fetchSpots = (map) =>
         return GeoJSON.parse(spotLatLong, {Point: ['latitude', 'longitude']});
       })
       .then(spots => {
+
+        // remove existing marker (we can optimize it later)
+        const currentMarkers = document.getElementsByClassName("marker");
+        if (currentMarkers.length > 0) {
+          for (let i = 0; i < currentMarkers.length; i++) {
+            currentMarkers[i].remove();
+          }
+        }
+
         spots.features.forEach(function(spot) {
             // create the marker
             var el = document.createElement('div');
             el.className = 'marker';
+            // add event listener
+            el.addEventListener("click", () => {
+              dispatch(getHeadingTo(spot.properties.id))
+              mapDirection.setOrigin([longitude, latitude]);
+              mapDirection.setDestination(spot.geometry.coordinates);
+            })
             fetchAddress(spot.geometry.coordinates)
             .then( place => {
               spot.place_name = place;
@@ -56,7 +73,7 @@ export const fetchSpots = (map) =>
               .addTo(map);
             })
           });
-        dispatch(getSpots(spots || defaultSpots));
+        return dispatch(getSpots(spots || defaultSpots));
       })
       .catch(err => console.log(err));
 
@@ -76,12 +93,12 @@ export const deleteSpotOnServer = (spotId) =>
       .then( () => dispatch(fetchSpots()))
       .catch(err => console.log(err));
 
-export const takeSpot = (id) =>
+export const takeSpot = (id, map) =>
   dispatch =>
     axios.put(`/api/streetspots/${ id }`)
     .then(result => result.data)
     .then( reporter => {
-      dispatch(fetchSpots());
+      dispatch(fetchSpots(map));
       console.log(reporter);
       if (reporter.socketId) {
         socket.emit('spot-taken-online', reporter.socketId);
