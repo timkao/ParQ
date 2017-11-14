@@ -51,9 +51,9 @@ export const fetchMap = (component) => {
         // map.scrollZoom.disable();
 
 
-        map.addControl(mapDirection);
-        mapDirection.setOrigin([longitude, latitude])
-        mapDirection.setDestination([-73.9947929, 40.7408902]);
+        // map.addControl(mapDirection);
+        // mapDirection.setOrigin([longitude, latitude])
+        // mapDirection.setDestination([-73.9947929, 40.7408902]);
 
         // remove profile
           component.map.scrollZoom.disable();
