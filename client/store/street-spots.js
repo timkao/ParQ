@@ -10,7 +10,6 @@ import store, { getHeadingTo, mapDirection, longitude, latitude } from './';
  * ACTION TYPES
  */
  const GET_SPOTS = 'GET_SPOTS';
- const GET_ADDRESS = 'GET_ADDRESS'
 
  /**
  * INITIAL STATE
@@ -25,7 +24,7 @@ const getSpots = spots => ({type: GET_SPOTS, spots});
 /**
  * THUNK CREATORS
  */
-export const fetchAddress = (coor) => {
+const fetchAddress = (coor) => {
   const [lat, lng] = coor;
   return axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + lat + ',' + lng + '.json?access_token=' + mapboxgl.accessToken)
   .then(res => res.data)
@@ -51,6 +50,9 @@ export const fetchSpots = (map) =>
             currentMarkers[i].remove();
           }
         }
+        //This has been changed so that we're only returning the spots
+        //and their addresses appended onto the object in the store
+        //markers are now created in the front-end component
         spots.features.forEach(function(spot) {
             fetchAddress(spot.geometry.coordinates)
             .then( place => spot.place_name = place)
@@ -120,8 +122,6 @@ export default function (state = defaultSpots, action) {
   switch (action.type) {
     case GET_SPOTS:
       return action.spots;
-    case GET_ADDRESS:
-      return action.spots
     default:
       return state;
   }

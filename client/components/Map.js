@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, addSpotOnServer, fetchSpots, fetchAddress, getHeadingTo, mapDirection, longitude, latitude } from '../store';
+import { fetchMap, addSpotOnServer, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
 import { SpotInfo } from './';
@@ -29,8 +29,8 @@ export class Map extends Component {
   componentDidUpdate(prevProps, prevState){
     console.log('updated');
     console.log(<SpotInfo />)
-    const { spots, map } = this.props
-        const currentMarkers = document.getElementsByClassName("marker");
+    const { spots, map, headTo } = this.props
+    const currentMarkers = document.getElementsByClassName("marker");
     if (currentMarkers.length > 0) {
       for (let i = 0; i < currentMarkers.length; i++) {
         currentMarkers[i].remove();
@@ -44,7 +44,7 @@ export class Map extends Component {
         el.className = 'marker';
         // add event listener
         el.addEventListener("click", () => {
-          getHeadingTo(spot.properties.id)
+          headTo(spot.properties.id)
           mapDirection.setOrigin([longitude, latitude]);
           mapDirection.setDestination(spot.geometry.coordinates);
         })
@@ -101,8 +101,8 @@ const mapDispatch = (dispatch) => {
     renewSpots(map) {
       dispatch(fetchSpots(map));
     },
-    getAddress(coor){
-      dispatch(fetchAddress(coor));
+    headTo(spotId){
+      dispatch(getHeadingTo(spotId));
     }
   };
 };
