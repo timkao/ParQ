@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { takeSpot } from '../store';
+import { takeSpot, updateSpotsTaken } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
@@ -13,7 +13,6 @@ export class UserHome extends Component {
     this.state = {
       currentLong: 0,  // this two might not be neccessary
       currentLat: 0,   // this might not be neccessary
-      headingTo: 0,
       showNotification: {isShow: false, message: ''},
       mapView: true
     };
@@ -36,10 +35,11 @@ export class UserHome extends Component {
   }
 
   handleSpotTaken() {
-    if (this.state.headingTo) {
-      this.props.occupySpot(this.state.headingTo);
+    if (this.props.headingTo) {
+      this.props.occupySpot(this.props.headingTo, this.props.map);
     }
   }
+
   setMapView(bool){
     this.setState({mapView: bool});
   }
@@ -48,7 +48,6 @@ export class UserHome extends Component {
     const { email } = this.props;
     const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo } = this;
     const { showNotification, mapView } = this.state;
-
     return (
       <div className="container">
         <h3>Welcome, {email}</h3>
@@ -75,15 +74,20 @@ const mapState = (state) => {
   return {
     id: state.user.id,
     email: state.user.email,
-    spotsTaken: state.user.spotsTaken
+    spotsTaken: state.user.spotsTaken,
+    headingTo: state.headingTo,
+    map: state.map
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
-    occupySpot(id) {
-      const thunk = takeSpot(id);
+    occupySpot(id, map) {
+      const thunk = takeSpot(id, map);
       dispatch(thunk);
+    },
+    updateUserSpotsTaken() {
+      dispatch(updateSpotsTaken());
     }
   };
 };

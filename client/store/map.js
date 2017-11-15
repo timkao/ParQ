@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
-import store, { updateSpotsTaken, fetchSpots } from './';
+import store, { updateSpotsTaken, fetchSpots, getHeadingTo } from './';
 
 const getUserLocation = function (options) {
   return new Promise(function (resolve, reject) {
@@ -27,12 +27,15 @@ export const mapGeocoder = new MapboxGeocoder({
   accessToken: mapboxgl.accessToken
 })  // MapboxGeocoder Object is from index.html
 
+export let longitude;
+export let latitude;
 
 export const fetchMap = (component) => {
   return function (dispatch) {
     getUserLocation()
-      .then( position => {
-        const { longitude, latitude } = position.coords;
+      .then(position => {
+        longitude = position.coords.longitude;
+        latitude = position.coords.latitude;
         component.setState({ currentLat: longitude, currentLong: latitude });
 
         component.map = new mapboxgl.Map({
@@ -48,21 +51,15 @@ export const fetchMap = (component) => {
           },
           trackUserLocation: true
         }));
-        // map.scrollZoom.disable();
-
-
-        // map.addControl(mapDirection);
-        // mapDirection.setOrigin([longitude, latitude])
-        // mapDirection.setDestination([-73.9947929, 40.7408902]);
 
         // remove profile
-          component.map.scrollZoom.disable();
-          component.map.addControl(new mapboxgl.NavigationControl());
-          dispatch(getMap(component.map));
-          dispatch(fetchSpots(component.map));
-        })
-      .then(() => {
-
+       
+        component.map.scrollZoom.disable();
+        component.map.addControl(new mapboxgl.NavigationControl());
+        dispatch(getMap(component.map));
+        return dispatch(fetchSpots(component.map))
+          })
+          .then(() => {
         // add search box
         component.map.addControl(mapGeocoder, 'top-left');
 
@@ -76,7 +73,7 @@ export const fetchMap = (component) => {
 
         component.map.on('load', function () {
           // source of search marker
-        component.map.addSource('single-point', {
+          component.map.addSource('single-point', {
             "type": "geojson",
             "data": {
               "type": "FeatureCollection",
@@ -94,67 +91,7 @@ export const fetchMap = (component) => {
               "circle-color": "#007cbf"
             }
           });
-
-          /*** example I use to test "notification" ****/
-          // component.map.addLayer({
-          //   "id": "places",
-          //   "type": "symbol",
-          //   "source": {
-          //     "type": "geojson",
-          //     "data": {
-          //       "type": "FeatureCollection",
-          //       "features": [{
-          //         "type": "Feature",
-          //         "properties": {
-          //           "description": "<strong>A Little Night Music</strong><p>The Arlington Players' production of Stephen Sondheim's  <a href=\"http://www.thearlingtonplayers.org/drupal-6.20/node/4661/show\" target=\"_blank\" title=\"Opens in a new window\"><em>A Little Night Music</em></a> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>",
-          //           "icon": "music",
-          //           "id": 2  // test notifications
-          //         },
-          //         "geometry": {
-          //           "type": "Point",
-          //           "coordinates": [-73.999572, 40.750955],
-          //         }
-          //       }, {
-          //         "type": "Feature",
-          //         "properties": {
-          //           "description": "<strong>Truckeroo</strong><p><a href=\"http://www.truckeroodc.com/www/\" target=\"_blank\">Truckeroo</a> brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>",
-          //           "icon": "music"
-          //         },
-          //         "geometry": {
-          //           "type": "Point",
-          //           "coordinates": [-73.992729, 40.75220700000001]
-          //         }
-          //       }]
-          //     }
-          //   },
-          //   "layout": {
-          //     "icon-image": "{icon}-15",
-          //     "icon-allow-overlap": true
-          //   }
-          // });
         })
-
-        // onclick and change the "headingTo" target
-        component.map.on('click', 'places', function (e) {
-          console.log(e);
-          new mapboxgl.Popup()
-            .setLngLat(e.features[0].geometry.coordinates)
-            .setHTML(e.features[0].properties.description)
-            .addTo(component.map);
-          component.setState({ headingTo: e.features[0].properties.id });
-          mapDirection.setOrigin([longitude, latitude]);
-          mapDirection.setDestination(e.features[0].geometry.coordinates);
-        });
-
-        // event listener to change cursor
-        component.map.on('mouseenter', 'places', function () {
-          component.map.getCanvas().style.cursor = 'pointer';
-        });
-
-        // event listener to change cursor
-        component.map.on('mouseleave', 'places', function () {
-          component.map.getCanvas().style.cursor = '';
-        });
 
         // remove profile and direction panel
         document.getElementsByClassName('mapbox-directions-clearfix')[0].remove();
@@ -164,16 +101,19 @@ export const fetchMap = (component) => {
         component.setState({ loaded: true });
 
         // show notification for 4 seconds and then remove it
-        const spotsTaken = store.getState().user.spotsTaken;
-        if (spotsTaken) {
-          component.setState({
-            showNotification: { isShow: true, message: `${spotsTaken} spot${spotsTaken > 1 ? 's' : ''} you reported ${spotsTaken > 1 ? 'are' : 'is'} taken! You earned ${spotsTaken * 100} points` }
-          });
-          setTimeout(() => {
-            component.setState({ showNotification: { isShow: false, message: '' } });
-            dispatch(updateSpotsTaken());
-          }, 4000);
-        }
+
+        // const spotsTaken = store.getState().user.spotsTaken;
+        // if (spotsTaken) {
+        //   component.setState({
+        //     showNotification: { isShow: true, message: `${spotsTaken} spot${spotsTaken > 1 ? 's' : ''} you reported ${spotsTaken > 1 ? 'are' : 'is'} taken! You earned ${spotsTaken * 100} points` }
+        //   });
+        //   setTimeout(() => {
+        //     component.setState({ showNotification: { isShow: false, message: '' } });
+        //     dispatch(updateSpotsTaken());
+        //   }, 4000);
+        // }
+
+
       })
       .catch((err) => {
         console.error(err.message);

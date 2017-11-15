@@ -5,12 +5,14 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import user from './user';
 import streetspots from './street-spots';
 import map from './map';
+import headingTo from './headingTo';
 
 const reducer = combineReducers(
 	{
     user,
     streetspots,
-    map
+    map,
+    headingTo
 	}
 );
 
@@ -27,3 +29,4 @@ export default store;
 export * from './user';
 export * from './map';
 export * from './street-spots';
+export * from './headingTo';
