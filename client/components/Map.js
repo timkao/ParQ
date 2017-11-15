@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fetchMap, addSpotOnServer, fetchSpots } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
+import { SpotInfo } from './';
 
 export class Map extends Component {
 
@@ -22,6 +23,13 @@ export class Map extends Component {
     socket.on('A Spot Taken', () => {
       this.renewSpotsWihMap();
     })
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    console.log('updated');
+    console.log(<SpotInfo />)
+    //check for spots that came back in the props and then create the popups in here
+    //can probably do the same for the markers honestlty
   }
 
   handleAddSpotGeo() {
