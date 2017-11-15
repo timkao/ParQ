@@ -10,6 +10,7 @@ import store, { getHeadingTo, mapDirection, longitude, latitude } from './';
  * ACTION TYPES
  */
  const GET_SPOTS = 'GET_SPOTS';
+ const GET_ADDRESS = 'GET_ADDRESS'
 
  /**
  * INITIAL STATE
@@ -24,7 +25,7 @@ const getSpots = spots => ({type: GET_SPOTS, spots});
 /**
  * THUNK CREATORS
  */
-const fetchAddress = (coor) => {
+export const fetchAddress = (coor) => {
   const [lat, lng] = coor;
   return axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + lat + ',' + lng + '.json?access_token=' + mapboxgl.accessToken)
   .then(res => res.data)
@@ -50,29 +51,32 @@ export const fetchSpots = (map) =>
             currentMarkers[i].remove();
           }
         }
-
         spots.features.forEach(function(spot) {
-            // create the marker
-            var el = document.createElement('div');
-            el.className = 'marker';
-            // add event listener
-            el.addEventListener("click", () => {
-              dispatch(getHeadingTo(spot.properties.id))
-              mapDirection.setOrigin([longitude, latitude]);
-              mapDirection.setDestination(spot.geometry.coordinates);
-            })
             fetchAddress(spot.geometry.coordinates)
-            .then( place => {
-              spot.place_name = place;
-              // create the popup
-              var popup = new mapboxgl.Popup()
-              .setText(`Size: ${ spot.properties.size }`);
-              new mapboxgl.Marker(el)
-              .setLngLat(spot.geometry.coordinates)
-              .setPopup(popup) // sets a popup on this marker
-              .addTo(map);
-            })
+            .then( place => spot.place_name = place)
           });
+        // spots.features.forEach(function(spot) {
+        //     // create the marker
+        //     var el = document.createElement('div');
+        //     el.className = 'marker';
+        //     // add event listener
+        //     el.addEventListener("click", () => {
+        //       dispatch(getHeadingTo(spot.properties.id))
+        //       mapDirection.setOrigin([longitude, latitude]);
+        //       mapDirection.setDestination(spot.geometry.coordinates);
+        //     })
+        //     fetchAddress(spot.geometry.coordinates)
+        //     .then( place => {
+        //       spot.place_name = place;
+        //       // create the popup
+        //       var popup = new mapboxgl.Popup()
+        //       .setText(`Size: ${ spot.properties.size }`);
+        //       new mapboxgl.Marker(el)
+        //       .setLngLat(spot.geometry.coordinates)
+        //       .setPopup(popup) // sets a popup on this marker
+        //       .addTo(map);
+        //     })
+        //   });
         return dispatch(getSpots(spots || defaultSpots));
       })
       .catch(err => console.log(err));
@@ -116,6 +120,8 @@ export default function (state = defaultSpots, action) {
   switch (action.type) {
     case GET_SPOTS:
       return action.spots;
+    case GET_ADDRESS:
+      return action.spots
     default:
       return state;
   }
