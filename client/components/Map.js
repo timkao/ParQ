@@ -76,6 +76,25 @@ export class Map extends Component {
     return (
       <div id="map">
         <Loader loaded={this.state.loaded} className="loader" />
+        {
+          //Will Load the markers here so that the component
+          //is used
+          // markers.forEach(spot => {
+          //   let spotInfo = <SpotInfo spot={spot} map={map} />
+
+          //     var el = document.createElement('div');
+          //     el.className = 'marker';
+
+          //     var popup = new mapboxgl.Popup()
+          //     .setHTML(spotInfo);
+
+          //     console.log('popup',popup)
+          //     new mapboxgl.Marker(el)
+          //   .setLngLat(spot.geometry.coordinates)
+          //   .setPopup(popup) // sets a popup on this marker
+          //   .addTo(map);
+          // })
+        }
       </div>
     );
   }
