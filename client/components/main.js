@@ -22,7 +22,7 @@ const Main = (props) => {
           isLoggedIn
             ? <div>
               {/* The navbar will show these NavLinks after you log in */}
-              <Link to='/home'>Home</Link>
+              <Link style={{position: "relative"}} to='/home'>Home</Link>
               <Link to={`/home/profile/${1}`} className="pull-right">Profile</Link>
               {/* For easier socket.io testing */}
               <Link to='/login'>Login</Link>
