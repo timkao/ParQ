@@ -45,10 +45,8 @@ export const fetchSpots = (map) =>
 
         // remove existing marker (we can optimize it later)
         const currentMarkers = document.getElementsByClassName("marker");
-        if (currentMarkers.length > 0) {
-          for (let i = 0; i < currentMarkers.length; i++) {
-            currentMarkers[i].remove();
-          }
+        while (currentMarkers.length > 0) {
+          currentMarkers[0].remove();
         }
 
         spots.features.forEach(function(spot) {
@@ -99,12 +97,16 @@ export const takeSpot = (id, map) =>
     .then(result => result.data)
     .then( reporter => {
       dispatch(fetchSpots(map));
+      if (document.getElementsByClassName("mapboxgl-popup").length > 0) {
+        document.getElementsByClassName("mapboxgl-popup")[0].remove();
+      }
       console.log(reporter);
       if (reporter.socketId) {
         socket.emit('spot-taken-online', reporter.socketId);
       } else {
         socket.emit('spot-taken-offline', reporter.id);
       }
+      mapDirection.removeRoutes();
     })
     .catch( err => console.log(err));
 
