@@ -5,6 +5,8 @@ import { takeSpot, updateSpotsTaken } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
+import {timer} from '../helpers';
+import moment from 'moment';
 
 export class UserHome extends Component {
 
@@ -45,6 +47,10 @@ export class UserHome extends Component {
   }
 
   render() {
+    // const now = new Date().getTime();
+    // const fiveMinutesLater = now + 5;
+    // console.dir(this.props.spots.features);
+    
     const { email } = this.props;
     const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo } = this;
     const { showNotification, mapView } = this.state;
@@ -76,7 +82,8 @@ const mapState = (state) => {
     email: state.user.email,
     spotsTaken: state.user.spotsTaken,
     headingTo: state.headingTo,
-    map: state.map
+    map: state.map,
+    spots: state.streetspots,
   };
 };
 
