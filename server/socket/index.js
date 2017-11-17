@@ -28,7 +28,7 @@ module.exports = (io, User) => {
       User.findById(reporterId)
         .then(user => {
           user.spotsTaken += 1;
-          console.log(user);
+          //console.log(user);
           return user.save();
         })
         .catch(err => console.log(err));

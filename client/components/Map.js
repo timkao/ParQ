@@ -12,7 +12,7 @@ export class Map extends Component {
   constructor() {
     super();
     this.state = {
-      loaded: false,
+      loaded: false
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
@@ -28,15 +28,15 @@ export class Map extends Component {
 
   componentDidUpdate(prevProps, prevState){
     console.log('updated');
-    console.log(<SpotInfo />)
-    const { spots, map, headTo } = this.props
+    // const comp = JSON.stringify(<SpotInfo />)
+    // console.log(JSON.stringify(comp))
+    const { spots, map, headTo, sayHello } = this.props
+    // remove existing marker (we can optimize it later)
     const currentMarkers = document.getElementsByClassName("marker");
-    if (currentMarkers.length > 0) {
-      for (let i = 0; i < currentMarkers.length; i++) {
-        currentMarkers[i].remove();
-      }
+    while (currentMarkers.length > 0) {
+      currentMarkers[0].remove();
     }
-    console.log('spots', spots)
+
     spots.features ?
     spots.features.forEach(function(spot) {
         // create the marker
@@ -50,12 +50,11 @@ export class Map extends Component {
         })
           // create the popup
           var popup = new mapboxgl.Popup()
-          .setText(`Size: ${ spot.properties.size }`);
+          .setHTML('<button onClick=(sayHello())>hello</button>');
           new mapboxgl.Marker(el)
           .setLngLat(spot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
-
       })
       : null
     //check for spots that came back in the props and then create the popups in here
@@ -73,28 +72,12 @@ export class Map extends Component {
   }
 
   render() {
+    // const { spots, map } = this.props
+    // console.log('spots',spots)
+    // console.log('map',map)
     return (
       <div id="map">
         <Loader loaded={this.state.loaded} className="loader" />
-        {
-          //Will Load the markers here so that the component
-          //is used
-          // markers.forEach(spot => {
-          //   let spotInfo = <SpotInfo spot={spot} map={map} />
-
-          //     var el = document.createElement('div');
-          //     el.className = 'marker';
-
-          //     var popup = new mapboxgl.Popup()
-          //     .setHTML(spotInfo);
-
-          //     console.log('popup',popup)
-          //     new mapboxgl.Marker(el)
-          //   .setLngLat(spot.geometry.coordinates)
-          //   .setPopup(popup) // sets a popup on this marker
-          //   .addTo(map);
-          // })
-        }
       </div>
     );
   }
@@ -122,6 +105,9 @@ const mapDispatch = (dispatch) => {
     },
     headTo(spotId){
       dispatch(getHeadingTo(spotId));
+    },
+    sayHello(){
+      console.log('hello')
     }
   };
 };

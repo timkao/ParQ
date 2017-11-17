@@ -37,7 +37,7 @@ module.exports = (User, Streetspots) => {
       streetspots.map((location) => Streetspots.create(location))
     );
   })
-  .then(([_lot1, _lot2, _lot3, _lot4, _lot5, _lot6, _lot7, _lot8, _lot9, _lot10]) => {
+  .then(([_lot1, _lot2, _lot3, _lot4, _lot5, _lot6, _lot7, _lot8, _lot9, _lot10, _lot11, _lot12, _lot13, _lot14]) => {
     return Promise.all([
       _lot1.setUser(user1),
       _lot2.setUser(user1),
@@ -48,7 +48,11 @@ module.exports = (User, Streetspots) => {
       _lot7.setUser(user2),
       _lot8.setUser(user2),
       _lot9.setUser(user1),
-      _lot10.setUser(user1)
+      _lot10.setUser(user1),
+      _lot11.setUser(user1),
+      _lot12.setUser(user2),
+      _lot13.setUser(user2),
+      _lot14.setUser(user1)
     ])
   .then(() => console.log(chalk.green('DB is synced and seeded')));
   })

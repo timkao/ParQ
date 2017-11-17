@@ -105,12 +105,16 @@ export const takeSpot = (id, map) =>
     .then(result => result.data)
     .then( reporter => {
       dispatch(fetchSpots(map));
+      if (document.getElementsByClassName("mapboxgl-popup").length > 0) {
+        document.getElementsByClassName("mapboxgl-popup")[0].remove();
+      }
       console.log(reporter);
       if (reporter.socketId) {
         socket.emit('spot-taken-online', reporter.socketId);
       } else {
         socket.emit('spot-taken-offline', reporter.id);
       }
+      mapDirection.removeRoutes();
     })
     .catch( err => console.log(err));
 

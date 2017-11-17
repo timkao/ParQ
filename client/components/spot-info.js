@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
 
 export const SpotInfo  = (props) => {
-    return ( <p>marker! </p>)
+    return ( <p>marker!</p>)
 }
