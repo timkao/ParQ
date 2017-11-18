@@ -12,7 +12,7 @@ export class Map extends Component {
   constructor() {
     super();
     this.state = {
-      loaded: false
+      loaded: false,
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
@@ -27,10 +27,8 @@ export class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    console.log('updated');
-    // const comp = JSON.stringify(<SpotInfo />)
-    // console.log(JSON.stringify(comp))
-    const { spots, map, headTo, sayHello } = this.props
+    console.log('*map component updated*');
+    const { spots, map, headTo } = this.props
     // remove existing marker (we can optimize it later)
     const currentMarkers = document.getElementsByClassName("marker");
     while (currentMarkers.length > 0) {
@@ -50,15 +48,13 @@ export class Map extends Component {
         })
           // create the popup
           var popup = new mapboxgl.Popup()
-          .setHTML('<button onClick=(sayHello())>hello</button>');
+          .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
           new mapboxgl.Marker(el)
           .setLngLat(spot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
       })
       : null
-    //check for spots that came back in the props and then create the popups in here
-    //can probably do the same for the markers honestlty
   }
 
   handleAddSpotGeo() {
@@ -105,9 +101,6 @@ const mapDispatch = (dispatch) => {
     },
     headTo(spotId){
       dispatch(getHeadingTo(spotId));
-    },
-    sayHello(){
-      console.log('hello')
     }
   };
 };
