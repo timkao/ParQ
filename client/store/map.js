@@ -16,8 +16,8 @@ const getUserLocation = function (options) {
   });
 };
 
-
-const createDraggablePoint = (map) => {
+// This function is not fully implemented
+const createDraggablePoint = (map, event) => {
   console.log('creating draggable point')
   // Holds mousedown state for events. if this
   // flag is active, we move the point on `mousemove`.
@@ -35,11 +35,11 @@ const createDraggablePoint = (map) => {
           "type": "Feature",
           "geometry": {
               "type": "Point",
-              "coordinates": [-74.01267388943265, 40.217866968788115]
+              // "coordinates": [event.lng, event.lat]
+              "coordinates": [-74.00880017963634, 40.218755763900845]
           }
       }]
   };
-
   function mouseDown() {
       if (!isCursorOverPoint) return;
 
@@ -81,7 +81,7 @@ const createDraggablePoint = (map) => {
       map.off('mousemove', onMove);
   }
 
-  map.on('load', function() {
+  // map.on('load', function() {
 
       // Add a single point to the map
       map.addSource('point', {
@@ -115,7 +115,7 @@ const createDraggablePoint = (map) => {
       });
 
       map.on('mousedown', mouseDown);
-  });
+  // });
 }
 
 
@@ -210,11 +210,15 @@ export const fetchMap = (component) => {
         // add draggable point
         // used for creating spots on demand
         // see helper function above
-        createDraggablePoint(component.map)
+        var firstClick = true;
         component.map.on('click', function (e) {
+          if (firstClick) {
+          createDraggablePoint(component.map, e)
             console.log('clicking:'+
                 // e.lngLat is the longitude, latitude geographical position of the event
                 JSON.stringify(e.lngLat));
+          }
+          firstClick = false
         });
 
 
