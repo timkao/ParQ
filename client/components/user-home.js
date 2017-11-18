@@ -40,6 +40,13 @@ export class UserHome extends Component {
     });
   }
 
+  componentDidUpdate() {
+    const spotsTaken = this.props.spotsTaken;
+    if (spotsTaken > 0) {
+      this.props.updateUserSpotsTaken(this, spotsTaken)
+    }
+  }
+
   handleSpotTaken() {
     if (this.props.headingTo) {
       this.props.occupySpot(this.props.headingTo, this.props.map);
