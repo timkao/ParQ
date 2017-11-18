@@ -18,6 +18,17 @@ const getUserLocation = function (options) {
 
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {
+
+  //First we check to see if user is trying to create
+  //another point on map and instead of dragging current one
+  let exits = map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
+  //If so, we remove the point so we can create a new one
+  //note we need to remove the source as well
+  if (exits) {
+    map.removeLayer(exits.id)
+    map.removeSource(exits.id)
+  }
+
   // Holds mousedown state for events. if this
   // flag is active, we move the point on `mousemove`.
   var isDragging;
@@ -63,7 +74,7 @@ const createDraggablePoint = (map, event) => {
       // Update the Point feature in `geojson` coordinates
       // and call setData to the source layer `point` on it.
       geojson.features[0].geometry.coordinates = [coords.lng, coords.lat];
-      map.getSource('point').setData(geojson);
+      map.getSource('createdPoint').setData(geojson);
   }
 
   function onUp(e) {
@@ -82,15 +93,15 @@ const createDraggablePoint = (map, event) => {
   }
 
   // Add a single point to the map
-  map.addSource('point', {
+  map.addSource('createdPoint', {
       "type": "geojson",
       "data": geojson
   });
 
   map.addLayer({
-      "id": "point",
+      "id": "createdPoint",
       "type": "circle",
-      "source": "point",
+      "source": "createdPoint",
       "paint": {
           "circle-radius": 10,
           "circle-color": "#3887be"
@@ -98,15 +109,15 @@ const createDraggablePoint = (map, event) => {
   });
 
   // When the cursor enters a feature in the point layer, prepare for dragging.
-  map.on('mouseenter', 'point', function() {
-      map.setPaintProperty('point', 'circle-color', '#3bb2d0');
+  map.on('mouseenter', 'createdPoint', function() {
+      map.setPaintProperty('createdPoint', 'circle-color', '#3bb2d0');
       canvas.style.cursor = 'move';
       isCursorOverPoint = true;
       map.dragPan.disable();
   });
 
-  map.on('mouseleave', 'point', function() {
-      map.setPaintProperty('point', 'circle-color', '#3887be');
+  map.on('mouseleave', 'createdPoint', function() {
+      map.setPaintProperty('createdPoint', 'circle-color', '#3887be');
       canvas.style.cursor = '';
       isCursorOverPoint = false;
       map.dragPan.enable();
@@ -209,10 +220,10 @@ export const fetchMap = (component) => {
         // see helper function above
         var firstClick = true;
         component.map.on('click', function (e) {
-          if (firstClick) {
+          // if (firstClick) {
             createDraggablePoint(component.map, e)
-            firstClick = false
-          }
+          //   firstClick = false
+          // }
         });
 
 

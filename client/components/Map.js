@@ -66,8 +66,8 @@ export class Map extends Component {
     console.log('add via marker')
     //location of marker is returned by the .getSource function below
     let spot = {
-      longitude: this.map.getSource('point')._data.features[0].geometry.coordinates[0],
-      latitude: this.map.getSource('point')._data.features[0].geometry.coordinates[1],
+      longitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[0],
+      latitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[1],
     }
     this.props.addSpotMarker(this.map, this.props.id, null, spot) //eventually pass in users default vehicle size
     // this.props.getMap(this);
@@ -105,7 +105,6 @@ const mapDispatch = (dispatch) => {
       dispatch(addSpotOnServerGeo(component, id));
     },
     addSpotMarker(component, id, defaultVehicle, spot){
-      console.log('adding marker:',spot)
       dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
     },
     renewSpots(map) {
