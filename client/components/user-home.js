@@ -100,8 +100,16 @@ const mapDispatch = (dispatch) => {
       const thunk = takeSpot(id, map);
       dispatch(thunk);
     },
-    updateUserSpotsTaken() {
-      dispatch(updateSpotsTaken());
+    updateUserSpotsTaken(comp, spots) {
+      dispatch(updateSpotsTaken())
+        .then(() => {
+          comp.setState({
+            showNotification: { isShow: true, message: `${spots} spot${spots > 1 ? 's' : ''} you reported ${spots > 1 ? 'are' : 'is'} taken! You earned ${spots * 100} points` }
+          });
+          setTimeout(() => {
+            comp.setState({ showNotification: { isShow: false, message: '' } });
+          }, 4000);
+        })
     },
     createSpot(component, id){
       dispatch(addSpotOnServer(component, id));
