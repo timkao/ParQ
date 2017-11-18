@@ -48,34 +48,40 @@ export const fetchSpots = (map) =>
         while (currentMarkers.length > 0) {
           currentMarkers[0].remove();
         }
-
+        //This has been changed so that we're only returning the spots
+        //and their addresses appended onto the object in the store
+        //markers are now created in the front-end component
         spots.features.forEach(function(spot) {
-            // create the marker
-            var el = document.createElement('div');
-            el.className = 'marker';
-            // add event listener
-            el.addEventListener("click", () => {
-              dispatch(getHeadingTo(spot.properties.id))
-              mapDirection.setOrigin([longitude, latitude]);
-              mapDirection.setDestination(spot.geometry.coordinates);
-            })
             fetchAddress(spot.geometry.coordinates)
-            .then( place => {
-              spot.place_name = place;
-              // create the popup
-              var popup = new mapboxgl.Popup()
-              .setText(`Size: ${ spot.properties.size }`);
-              new mapboxgl.Marker(el)
-              .setLngLat(spot.geometry.coordinates)
-              .setPopup(popup) // sets a popup on this marker
-              .addTo(map);
-            })
+            .then( place => spot.place_name = place)
           });
+        // spots.features.forEach(function(spot) {
+        //     // create the marker
+        //     var el = document.createElement('div');
+        //     el.className = 'marker';
+        //     // add event listener
+        //     el.addEventListener("click", () => {
+        //       dispatch(getHeadingTo(spot.properties.id))
+        //       mapDirection.setOrigin([longitude, latitude]);
+        //       mapDirection.setDestination(spot.geometry.coordinates);
+        //     })
+        //     fetchAddress(spot.geometry.coordinates)
+        //     .then( place => {
+        //       spot.place_name = place;
+        //       // create the popup
+        //       var popup = new mapboxgl.Popup()
+        //       .setText(`Size: ${ spot.properties.size }`);
+        //       new mapboxgl.Marker(el)
+        //       .setLngLat(spot.geometry.coordinates)
+        //       .setPopup(popup) // sets a popup on this marker
+        //       .addTo(map);
+        //     })
+        //   });
         return dispatch(getSpots(spots || defaultSpots));
       })
       .catch(err => console.log(err));
 
-export const addSpotOnServer = (map, userId, defaultVehicle) =>
+export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
   dispatch =>
    getUserLocation()
       .then( position => {
@@ -84,6 +90,13 @@ export const addSpotOnServer = (map, userId, defaultVehicle) =>
         return axios.post(`/api/streetspots/${ userId }`, spot)})
       .then( () => dispatch(fetchSpots(map)))
       .catch(err => console.log(err));
+
+export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
+  dispatch =>
+    axios.post(`/api/streetspots/${ userId }`, spot)
+        .then( () => dispatch(fetchSpots(map)))
+        .catch(err => console.log(err))
+
 
 export const deleteSpotOnServer = (spotId) =>
   dispatch =>

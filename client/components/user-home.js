@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { takeSpot, updateSpotsTaken } from '../store';
+import { takeSpot, updateSpotsTaken, addSpotOnServer } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
@@ -19,10 +19,16 @@ export class UserHome extends Component {
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
     this.setMapView = this.setMapView.bind(this);
     this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
+    this.triggerHandleAddSpotMarker = this.triggerHandleAddSpotMarker.bind(this);
   }
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
     this.map.handleAddSpotGeo();
+  }
+
+  triggerHandleAddSpotMarker(){
+    //same as above
+    this.map.handleAddSpotMarker();
   }
 
   componentDidMount() {
@@ -46,7 +52,7 @@ export class UserHome extends Component {
 
   render() {
     const { email } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo } = this;
+    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker } = this;
     const { showNotification, mapView } = this.state;
     return (
       <div className="container">
@@ -55,6 +61,7 @@ export class UserHome extends Component {
           <div className="col-md-4">
             <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
             <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
+            <button className="btn btn-default" onClick={triggerHandleAddSpotMarker}>Open Spot at Marker</button>
             {
               showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
             }
@@ -88,6 +95,9 @@ const mapDispatch = (dispatch) => {
     },
     updateUserSpotsTaken() {
       dispatch(updateSpotsTaken());
+    },
+    createSpot(component, id){
+      dispatch(addSpotOnServer(component, id));
     }
   };
 };
