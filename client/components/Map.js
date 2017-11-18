@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, addSpotOnServer, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
+import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
 import { SpotInfo } from './';
@@ -57,7 +57,19 @@ export class Map extends Component {
   }
 
   handleAddSpotGeo() {
-    this.props.addSpot(this.map, this.props.id) //eventually pass in users default vehicle size
+    console.log('add via geo')
+    this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
+    // this.props.getMap(this);
+  }
+
+  handleAddSpotMarker(){
+    console.log('add via marker')
+    //location of marker is returned by the .getSource function below
+    let spot = {
+      longitude: this.map.getSource('point')._data.features[0].geometry.coordinates[0],
+      latitude: this.map.getSource('point')._data.features[0].geometry.coordinates[1],
+    }
+    this.props.addSpotMarker(this.map, this.props.id, null, spot) //eventually pass in users default vehicle size
     // this.props.getMap(this);
   }
 
@@ -89,8 +101,12 @@ const mapDispatch = (dispatch) => {
       const thunk = fetchMap(component);
       dispatch(thunk);
     },
-    addSpot(component, id){
-      dispatch(addSpotOnServer(component, id));
+    addSpotGeo(component, id){
+      dispatch(addSpotOnServerGeo(component, id));
+    },
+    addSpotMarker(component, id, defaultVehicle, spot){
+      console.log('adding marker:',spot)
+      dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
     },
     renewSpots(map) {
       dispatch(fetchSpots(map));

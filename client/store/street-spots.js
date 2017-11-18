@@ -83,7 +83,7 @@ export const fetchSpots = (map) =>
       })
       .catch(err => console.log(err));
 
-export const addSpotOnServer = (map, userId, defaultVehicle) =>
+export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
   dispatch =>
    getUserLocation()
       .then( position => {
@@ -92,6 +92,13 @@ export const addSpotOnServer = (map, userId, defaultVehicle) =>
         return axios.post(`/api/streetspots/${ userId }`, spot)})
       .then( () => dispatch(fetchSpots(map)))
       .catch(err => console.log(err));
+
+export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
+  dispatch =>
+    axios.post(`/api/streetspots/${ userId }`, spot)
+        .then( () => dispatch(fetchSpots(map)))
+        .catch(err => console.log(err))
+
 
 export const deleteSpotOnServer = (spotId) =>
   dispatch =>

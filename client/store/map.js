@@ -39,6 +39,7 @@ const createDraggablePoint = (map, event) => {
           }
       }]
   };
+
   function mouseDown() {
       if (!isCursorOverPoint) return;
 
@@ -93,7 +94,7 @@ const createDraggablePoint = (map, event) => {
       "paint": {
           "circle-radius": 10,
           "circle-color": "#3887be"
-      }
+      },
   });
 
   // When the cursor enters a feature in the point layer, prepare for dragging.
