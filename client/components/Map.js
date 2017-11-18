@@ -27,7 +27,7 @@ export class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    console.log('*map component updated*');
+    console.log('*map component updated* || Adding markers');
     const { spots, map, headTo } = this.props
     // remove existing marker (we can optimize it later)
     const currentMarkers = document.getElementsByClassName("marker");
@@ -35,7 +35,7 @@ export class Map extends Component {
       currentMarkers[0].remove();
     }
 
-    spots.features ?
+    spots.features &&
     spots.features.forEach(function(spot) {
         // create the marker
         var el = document.createElement('div');
@@ -54,7 +54,6 @@ export class Map extends Component {
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
       })
-      : null
   }
 
   handleAddSpotGeo() {
@@ -68,9 +67,6 @@ export class Map extends Component {
   }
 
   render() {
-    // const { spots, map } = this.props
-    // console.log('spots',spots)
-    // console.log('map',map)
     return (
       <div id="map">
         <Loader loaded={this.state.loaded} className="loader" />

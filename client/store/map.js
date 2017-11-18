@@ -18,8 +18,6 @@ const getUserLocation = function (options) {
 
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {
-  console.log('creating draggable point')
-  console.log(event)
   // Holds mousedown state for events. if this
   // flag is active, we move the point on `mousemove`.
   var isDragging;
@@ -82,41 +80,38 @@ const createDraggablePoint = (map, event) => {
       map.off('mousemove', onMove);
   }
 
-  // map.on('load', function() {
+  // Add a single point to the map
+  map.addSource('point', {
+      "type": "geojson",
+      "data": geojson
+  });
 
-      // Add a single point to the map
-      map.addSource('point', {
-          "type": "geojson",
-          "data": geojson
-      });
+  map.addLayer({
+      "id": "point",
+      "type": "circle",
+      "source": "point",
+      "paint": {
+          "circle-radius": 10,
+          "circle-color": "#3887be"
+      }
+  });
 
-      map.addLayer({
-          "id": "point",
-          "type": "circle",
-          "source": "point",
-          "paint": {
-              "circle-radius": 10,
-              "circle-color": "#3887be"
-          }
-      });
+  // When the cursor enters a feature in the point layer, prepare for dragging.
+  map.on('mouseenter', 'point', function() {
+      map.setPaintProperty('point', 'circle-color', '#3bb2d0');
+      canvas.style.cursor = 'move';
+      isCursorOverPoint = true;
+      map.dragPan.disable();
+  });
 
-      // When the cursor enters a feature in the point layer, prepare for dragging.
-      map.on('mouseenter', 'point', function() {
-          map.setPaintProperty('point', 'circle-color', '#3bb2d0');
-          canvas.style.cursor = 'move';
-          isCursorOverPoint = true;
-          map.dragPan.disable();
-      });
+  map.on('mouseleave', 'point', function() {
+      map.setPaintProperty('point', 'circle-color', '#3887be');
+      canvas.style.cursor = '';
+      isCursorOverPoint = false;
+      map.dragPan.enable();
+  });
 
-      map.on('mouseleave', 'point', function() {
-          map.setPaintProperty('point', 'circle-color', '#3887be');
-          canvas.style.cursor = '';
-          isCursorOverPoint = false;
-          map.dragPan.enable();
-      });
-
-      map.on('mousedown', mouseDown);
-  // });
+  map.on('mousedown', mouseDown);
 }
 
 
@@ -214,12 +209,9 @@ export const fetchMap = (component) => {
         var firstClick = true;
         component.map.on('click', function (e) {
           if (firstClick) {
-          createDraggablePoint(component.map, e)
-            console.log('clicking:'+
-                // e.lngLat is the longitude, latitude geographical position of the event
-                JSON.stringify(e.lngLat));
+            createDraggablePoint(component.map, e)
+            firstClick = false
           }
-          firstClick = false
         });
 
 
