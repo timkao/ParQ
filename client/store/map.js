@@ -19,9 +19,11 @@ const getUserLocation = function (options) {
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {
   console.log('creating draggable point')
+  console.log(event)
   // Holds mousedown state for events. if this
   // flag is active, we move the point on `mousemove`.
   var isDragging;
+  var coords = event.lngLat;
 
   // Is the cursor over a point? if this
   // flag is active, we listen for a mousedown event.
@@ -35,8 +37,7 @@ const createDraggablePoint = (map, event) => {
           "type": "Feature",
           "geometry": {
               "type": "Point",
-              // "coordinates": [event.lng, event.lat]
-              "coordinates": [-74.00880017963634, 40.218755763900845]
+              "coordinates": [coords.lng, coords.lat]
           }
       }]
   };
