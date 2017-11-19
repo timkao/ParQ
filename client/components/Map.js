@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
-import { SpotInfo } from './';
 import mapboxgl from 'mapbox-gl';
 
 export class Map extends Component {
@@ -20,14 +19,12 @@ export class Map extends Component {
 
   componentDidMount() {
     this.props.getMap(this);
-    this.props.onRef(this);
     socket.on('A Spot Taken', () => {
       this.renewSpotsWithMap();
-    })
+    });
   }
 
   componentDidUpdate(prevProps, prevState){
-    console.log('*map component updated* || Adding markers');
     const { spots, map, headTo } = this.props
     // remove existing marker (we can optimize it later)
     const currentMarkers = document.getElementsByClassName("marker");
@@ -45,7 +42,7 @@ export class Map extends Component {
           headTo(spot.properties.id)
           mapDirection.setOrigin([longitude, latitude]);
           mapDirection.setDestination(spot.geometry.coordinates);
-        })
+        });
           // create the popup
           var popup = new mapboxgl.Popup()
           .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
@@ -53,7 +50,7 @@ export class Map extends Component {
           .setLngLat(spot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
-      })
+      });
   }
 
   handleAddSpotGeo() {
