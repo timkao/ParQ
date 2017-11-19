@@ -25,7 +25,7 @@ export class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    const { spots, map, headTo } = this.props
+    const { spots, map, headTo, lots } = this.props;
     // remove existing marker (we can optimize it later)
     const currentMarkers = document.getElementsByClassName("marker");
     while (currentMarkers.length > 0) {
@@ -38,8 +38,8 @@ export class Map extends Component {
         var el = document.createElement('div');
         el.className = 'marker';
         // add event listener
-        el.addEventListener("click", () => {
-          headTo(spot.properties.id)
+        el.addEventListener('click', () => {
+          headTo(spot.properties.id);
           mapDirection.setOrigin([longitude, latitude]);
           mapDirection.setDestination(spot.geometry.coordinates);
         });
@@ -51,6 +51,24 @@ export class Map extends Component {
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
       });
+    lots.features && lots.features.forEach(function(lot) {
+      // create the marker
+      var el = document.createElement('div');
+      el.className = 'lot';
+      // add event listener
+      el.addEventListener('click', () => {
+        headTo(lot.properties.id);
+        mapDirection.setOrigin([longitude, latitude]);
+        mapDirection.setDestination(lot.geometry.coordinates);
+      });
+        // create the popup
+        var popup = new mapboxgl.Popup()
+        .setHTML(`<div>${lot.place_name}</div>`);
+        new mapboxgl.Marker(el)
+        .setLngLat(lot.geometry.coordinates)
+        .setPopup(popup) // sets a popup on this marker
+        .addTo(map);
+    });
   }
 
   handleAddSpotGeo() {
@@ -88,7 +106,8 @@ const mapState = (state) => {
   return {
     id: state.user.id,
     spots: state.streetspots,
-    map: state.map
+    map: state.map,
+    lots: state.lots
   };
 };
 
@@ -104,8 +123,8 @@ const mapDispatch = (dispatch) => {
     addSpotMarker(component, id, defaultVehicle, spot){
       dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
     },
-    renewSpots(map) {
-      dispatch(fetchSpots(map));
+    renewSpots() {
+      dispatch(fetchSpots());
     },
     headTo(spotId){
       dispatch(getHeadingTo(spotId));

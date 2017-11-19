@@ -7,6 +7,7 @@ import streetspots from './street-spots';
 import map from './map';
 import headingTo from './headingTo';
 import filter from './filter';
+import lots from './lots';
 import {loadState} from './localStorage';
 
 const persistedState = loadState();
@@ -16,7 +17,8 @@ const reducer = combineReducers(
     streetspots,
     map,
     headingTo,
-    filter
+    filter,
+    lots
 	}
 );
 
@@ -36,3 +38,4 @@ export * from './street-spots';
 export * from './headingTo';
 export * from './filter';
 export * from './localStorage';
+export * from './lots';
