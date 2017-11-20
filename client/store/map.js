@@ -234,18 +234,6 @@ export const fetchMap = (component) => {
         // stop loading icon when everything is done
         component.setState({ loaded: true });
 
-        // show notification for 4 seconds and then remove it
-        // const spotsTaken = store.getState().user.spotsTaken;
-        // if (spotsTaken) {
-        //   component.setState({
-        //     showNotification: { isShow: true, message: `${spotsTaken} spot${spotsTaken > 1 ? 's' : ''} you reported ${spotsTaken > 1 ? 'are' : 'is'} taken! You earned ${spotsTaken * 100} points` }
-        //   });
-        //   setTimeout(() => {
-        //     component.setState({ showNotification: { isShow: false, message: '' } });
-        //     dispatch(updateSpotsTaken());
-        //   }, 4000);
-        // }
-
       })
       .catch((err) => {
         console.error(err.message);
