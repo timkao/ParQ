@@ -1,5 +1,6 @@
-const User = require('./user')
-const Streetspots = require('./streetspots')
+const User = require('./user');
+const Streetspots = require('./streetspots');
+const Lots = require('./lots');
 
 /* Associations ================================== */
 Streetspots.belongsTo(User)
@@ -13,5 +14,6 @@ User.hasMany(Streetspots)
  */
 module.exports = {
   User,
-  Streetspots
+  Streetspots,
+  Lots
 }
