@@ -62,13 +62,13 @@ export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
         const { longitude, latitude } = position.coords;
         const spot = { longitude, latitude, size: defaultVehicle || null } //eventually need to pull in default vehicle
         return axios.post(`/api/streetspots/${ userId }`, spot)})
-      .then( () => dispatch(fetchSpots(map)))
+      .then( () => dispatch(fetchSpots()))
       .catch(err => console.log(err));
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
   dispatch =>
     axios.post(`/api/streetspots/${ userId }`, spot)
-        .then( () => dispatch(fetchSpots(map)))
+        .then( () => dispatch(fetchSpots()))
         .catch(err => console.log(err))
 
 
@@ -83,7 +83,7 @@ export const takeSpot = (id, map) =>
     axios.put(`/api/streetspots/${ id }`)
     .then(result => result.data)
     .then( reporter => {
-      dispatch(fetchSpots(map));
+      dispatch(fetchSpots());
       if (document.getElementsByClassName("mapboxgl-popup").length > 0) {
         document.getElementsByClassName("mapboxgl-popup")[0].remove();
       }

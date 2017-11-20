@@ -181,7 +181,7 @@ export const fetchMap = (component) => {
         component.map.addControl(new mapboxgl.NavigationControl());
         dispatch(getMap(component.map));
         dispatch(fetchLots());
-        return dispatch(fetchSpots());
+        dispatch(fetchSpots());
       })
       .then(() => {
         // add search box

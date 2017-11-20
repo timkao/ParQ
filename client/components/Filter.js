@@ -65,23 +65,23 @@ export class Filter extends Component {
         <MenuItem header>
           <h5>Distance <small onClick={() => handleClickClear('distance') }><a>clear</a></small></h5>
           <ToggleButtonGroup value={distance} onChange={(value) => onChange('distance', value)} type="checkbox" className="btn-group-sm">
-            <ToggleButton value="<1mi" className="btn btn-default">{'< 1 mi'}</ToggleButton>
-            <ToggleButton value="<3mi" className="btn btn-default">{'< 3 mi'}</ToggleButton>
+            <ToggleButton value={1} className="btn btn-default">{'< 1 mi'}</ToggleButton>
+            <ToggleButton value={3} className="btn btn-default">{'< 3 mi'}</ToggleButton>
           </ToggleButtonGroup>
         </MenuItem>
         <MenuItem divider />
         <MenuItem header >
         <h5>Time Available <small onClick={() => handleClickClear('timeAvailable') }><a>clear</a></small></h5>
           <ToggleButtonGroup value={timeAvailable} onChange={(value) => onChange('timeAvailable', value)} type="checkbox" className="btn-group-sm">
-            <ToggleButton value="<5min" className="btn btn-default">{'< 5 min'}</ToggleButton>
-            <ToggleButton value="<15min" className="btn btn-default">{'< 15 min'}</ToggleButton>
+            <ToggleButton value={5} className="btn btn-default">{'< 5 min'}</ToggleButton>
+            <ToggleButton value={15} className="btn btn-default">{'< 15 min'}</ToggleButton>
           </ToggleButtonGroup>
         </MenuItem>
         <MenuItem divider />
         <MenuItem header >
         <h5>Size <small onClick={() => handleClickClear('size') }><a>clear</a></small></h5>
           <ToggleButtonGroup value={size} onChange={(value) => onChange('size', value)} type="checkbox" className="btn-group-sm">
-            <ToggleButton value="compact" className="btn btn-default">{'compact'}</ToggleButton>
+            <ToggleButton value="compact car" className="btn btn-default">{'compact car'}</ToggleButton>
             <ToggleButton value="mid-size car" className="btn btn-default">{'mid-size car'}</ToggleButton>
             <ToggleButton value="full-size car" className="btn btn-default">{'full-size car'}</ToggleButton>
             <ToggleButton value="mid-size SUV" className="btn btn-default">{'mid-size SUV'}</ToggleButton>

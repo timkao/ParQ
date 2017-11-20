@@ -5,6 +5,7 @@ import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHea
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
+import {filterSpots} from '../helpers';
 
 export class Map extends Component {
 
@@ -25,60 +26,77 @@ export class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    const { spots, map, headTo, lots } = this.props;
+    const { spots, map, headTo, lots, filter } = this.props;
     // remove existing marker (we can optimize it later)
-    const currentMarkers = document.getElementsByClassName("marker");
-    while (currentMarkers.length > 0) {
+    if (this.state.loaded === true && spots.features){
+    const currentMarkers = document.getElementsByClassName('marker');
+    const currentLots = document.getElementsByClassName('lot');
+    while (currentMarkers.length > 0 ) {
       currentMarkers[0].remove();
     }
+    while (currentLots.length > 0) {
+      currentLots[0].remove();
+    }
+    let currentFilter = {};
+    for (var key in filter){
+      if (filter[key].length > 0 && key !== 'type'){
+        currentFilter[key] = filter[key];
+      }
+    }
 
-    spots.features &&
-    spots.features.forEach(function(spot) {
+    let filteredSpots = filterSpots(currentFilter, spots.features);
+    let filteredLots = filterSpots(currentFilter, lots.features);
+
+    if (filter.type.includes('Street') || filter.type.length < 1 ){
+      spots.features &&
+      filteredSpots.forEach(function(spot) {
+          // create the marker
+          var el = document.createElement('div');
+          el.className = 'marker';
+          // add event listener
+          el.addEventListener('click', () => {
+            headTo(spot.properties.id);
+            mapDirection.setOrigin([longitude, latitude]);
+            mapDirection.setDestination(spot.geometry.coordinates);
+          });
+            // create the popup
+            var popup = new mapboxgl.Popup()
+            .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
+            new mapboxgl.Marker(el)
+            .setLngLat(spot.geometry.coordinates)
+            .setPopup(popup) // sets a popup on this marker
+            .addTo(map);
+        });
+    }
+    if (filter.type.includes('Lot') || filter.type.length < 1 ){
+      lots.features && filteredLots.forEach(function(lot) {
         // create the marker
         var el = document.createElement('div');
-        el.className = 'marker';
+        el.className = 'lot';
         // add event listener
         el.addEventListener('click', () => {
-          headTo(spot.properties.id);
+          headTo(lot.properties.id);
           mapDirection.setOrigin([longitude, latitude]);
-          mapDirection.setDestination(spot.geometry.coordinates);
+          mapDirection.setDestination(lot.geometry.coordinates);
         });
           // create the popup
           var popup = new mapboxgl.Popup()
-          .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
+          .setHTML(`<div>${lot.place_name}</div>`);
           new mapboxgl.Marker(el)
-          .setLngLat(spot.geometry.coordinates)
+          .setLngLat(lot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
       });
-    lots.features && lots.features.forEach(function(lot) {
-      // create the marker
-      var el = document.createElement('div');
-      el.className = 'lot';
-      // add event listener
-      el.addEventListener('click', () => {
-        headTo(lot.properties.id);
-        mapDirection.setOrigin([longitude, latitude]);
-        mapDirection.setDestination(lot.geometry.coordinates);
-      });
-        // create the popup
-        var popup = new mapboxgl.Popup()
-        .setHTML(`<div>${lot.place_name}</div>`);
-        new mapboxgl.Marker(el)
-        .setLngLat(lot.geometry.coordinates)
-        .setPopup(popup) // sets a popup on this marker
-        .addTo(map);
-    });
+    }
+  }
   }
 
   handleAddSpotGeo() {
-    console.log('add via geo')
     this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
     // this.props.getMap(this);
   }
 
   handleAddSpotMarker(){
-    console.log('add via marker')
     //location of marker is returned by the .getSource function below
     let spot = {
       longitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[0],
@@ -107,7 +125,8 @@ const mapState = (state) => {
     id: state.user.id,
     spots: state.streetspots,
     map: state.map,
-    lots: state.lots
+    lots: state.lots,
+    filter: state.filter
   };
 };
 

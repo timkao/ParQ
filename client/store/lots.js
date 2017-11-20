@@ -38,7 +38,6 @@ export const fetchLots = () =>
         return GeoJSON.parse(spotLatLong, {Point: ['latitude', 'longitude']});
       })
       .then(lots => {
-        console.log(lots);
         // remove existing marker (we can optimize it later)
         const currentMarkers = document.getElementsByClassName('lot');
         while (currentMarkers.length > 0) {
