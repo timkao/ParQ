@@ -232,6 +232,7 @@ function spotValidation(coor){
       const onStreet = distances[0].currentStreet;
       const street1 = distances[0].crossStreet;
       const street2 = distances[1].crossStreet;
+      console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
       // find the corresponding rules
       return axios.put('/api/rules', {onStreet, street1, street2})
       .then(result => result.data);
@@ -240,12 +241,12 @@ function spotValidation(coor){
       console.log(totalSigns);
       const rangeSmall = distanceToClosestStreet - 100 > 0 ? distanceToClosestStreet - 100 : 0;
       const rangeBig = distanceToClosestStreet + 100;
-      console.log(rangeSmall, rangeBig);
+      console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
       const qualifiedSigns = [];
       totalSigns.forEach( signs => {
         qualifiedSigns.push(signs.filter( sign => parseInt(sign.distance) >= rangeSmall && parseInt(sign.distance) <= rangeBig))
       });
-      console.log(qualifiedSigns);
+      console.log('following are possible parking rules in this area', qualifiedSigns);
       return qualifiedSigns;
     })
     .catch(err => console.log(err));
