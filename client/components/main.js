@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {withRouter, Link} from 'react-router-dom'
-import {logout} from '../store'
+import { connect } from 'react-redux'
+import { withRouter, Link } from 'react-router-dom'
+import { logout } from '../store'
 
 
 /**
@@ -12,7 +12,7 @@ import {logout} from '../store'
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const {children, handleClick, isLoggedIn} = props;
+  const { children, handleClick, isLoggedIn } = props;
 
   return (
     <div>
@@ -22,8 +22,11 @@ const Main = (props) => {
           isLoggedIn
             ? <div>
               {/* The navbar will show these NavLinks after you log in */}
-              <Link style={{position: "relative"}} to='/home'>Home</Link>
-              <Link to={`/home/profile/${1}`} className="pull-right">Profile</Link>
+              <Link to='/home'>Home</Link>
+              <Link to={`/home/profile/${1}`} className="pull-right">
+                <img style={{ width: "3%"}} className="tip pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
+                <span>you</span>
+              </Link>
               {/* For easier socket.io testing */}
               <Link to='/login'>Login</Link>
               <Link to='/signup'>Sign Up</Link>
@@ -53,7 +56,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch, ownProps) => {
   return {
-    handleClick () {
+    handleClick() {
       dispatch(logout(ownProps.history))
     }
   }

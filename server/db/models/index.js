@@ -5,7 +5,7 @@ const Reward = require('./reward');
 /* Associations ================================== */
 Streetspots.belongsTo(User)
 User.hasMany(Streetspots)
-Reward.belongsTo(User);
+User.belongsTo(Reward);   // will add rewardId to user
 
 
 /**

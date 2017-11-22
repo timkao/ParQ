@@ -8,7 +8,7 @@ module.exports = router
 router.get('/', (req, res, next) => {
   User.findAll({
     attributes: ['id', 'email'],
-    include: [{model: Reward}]
+    include: [{model: Reward}]    // include reward
   })
     .then(users => res.json(users))
     .catch(next)

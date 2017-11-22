@@ -72,10 +72,10 @@ export const fetchSpots = (map) =>
 
 
               // these spots will be taken after 5 seconds
-              if (spot.properties.id * 1 % 2 === 0) {
+              if (spot.properties.id * 1 % 2 !== 0 && spot.properties.id * 1 < 4) {     // for 1 and 3 ids
                 setTimeout(() => {
                   const popup = new mapboxgl.Popup()
-                    .setHTML('<h2><strong>This spot has been taken</strong></h2>')
+                    .setHTML('<button>Take this spot</button>')
                   new mapboxgl.Marker(el)
                     .setLngLat(spot.geometry.coordinates)
                     .setPopup(popup) // sets a popup on this marker
