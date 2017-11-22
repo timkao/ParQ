@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
-import store, { updateSpotsTaken, fetchSpots, getHeadingTo } from './';
+import store, { fetchLots, fetchSpots } from './';
 
 /**
  * API ACCESS
@@ -180,7 +180,8 @@ export const fetchMap = (component) => {
         component.map.scrollZoom.disable();
         component.map.addControl(new mapboxgl.NavigationControl());
         dispatch(getMap(component.map));
-        return dispatch(fetchSpots(component.map))
+        dispatch(fetchLots());
+        dispatch(fetchSpots());
       })
       .then(() => {
         // add search box
@@ -188,7 +189,7 @@ export const fetchMap = (component) => {
         // place a marker when the search result comes out and remove the previous one if any
         mapGeocoder.on('result', (ev) => {
           component.map.getSource('single-point').setData(ev.result.geometry);
-        })
+        });
 
         // add mapDirection
         component.map.addControl(mapDirection, 'top-right');
