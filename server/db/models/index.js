@@ -1,4 +1,3 @@
-
 const User = require('./user')
 const Streetspots = require('./streetspots')
 const Reward = require('./reward');
