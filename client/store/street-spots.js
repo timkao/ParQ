@@ -3,7 +3,7 @@ import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { getUserLocation } from '../helpers';
 import socket from '../socket';
-import store, { getHeadingTo, mapDirection } from './';
+import { mapDirection } from './';
 
 
 /**
@@ -42,14 +42,6 @@ export const fetchSpots = () =>
         return GeoJSON.parse(spotLatLong, {Point: ['latitude', 'longitude']});
       })
       .then(spots => {
-        // remove existing marker (we can optimize it later)
-        // const currentMarkers = document.getElementsByClassName("marker");
-        // while (currentMarkers.length > 0) {
-        //   currentMarkers[0].remove();
-        // }
-        //This has been changed so that we're only returning the spots
-        //and their addresses appended onto the object in the store
-        //markers are now created in the front-end component
         spots.features.forEach(function(spot) {
             fetchAddress(spot.geometry.coordinates)
             .then( place => spot.place_name = place.place_name)
@@ -68,9 +60,8 @@ export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
         spotValidation([longitude, latitude]);
 
         const spot = { longitude, latitude, size: defaultVehicle || null } //eventually need to pull in default vehicle
-        return axios.post(`/api/streetspots/${ userId }`, spot)
-      })
-      .then( () => dispatch(fetchSpots(map)))
+        return axios.post(`/api/streetspots/${ userId }`, spot)})
+      .then( () => dispatch(fetchSpots()))
       .catch(err => console.log(err));
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
@@ -209,6 +200,7 @@ function spotValidation(coor){
       const onStreet = distances[0].currentStreet;
       const street1 = distances[0].crossStreet;
       const street2 = distances[1].crossStreet;
+      console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
       // find the corresponding rules
       return axios.put('/api/rules', {onStreet, street1, street2})
       .then(result => result.data);
@@ -217,12 +209,12 @@ function spotValidation(coor){
       console.log(totalSigns);
       const rangeSmall = distanceToClosestStreet - 100 > 0 ? distanceToClosestStreet - 100 : 0;
       const rangeBig = distanceToClosestStreet + 100;
-      console.log(rangeSmall, rangeBig);
+      console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
       const qualifiedSigns = [];
       totalSigns.forEach( signs => {
         qualifiedSigns.push(signs.filter( sign => parseInt(sign.distance) >= rangeSmall && parseInt(sign.distance) <= rangeBig))
       });
-      console.log(qualifiedSigns);
+      console.log('following are possible parking rules in this area', qualifiedSigns);
       return qualifiedSigns;
     })
     .catch(err => console.log(err));
