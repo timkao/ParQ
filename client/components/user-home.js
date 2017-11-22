@@ -82,7 +82,7 @@ export class UserHome extends Component {
             </div>
           </div>
         </div>
-        {mapView === true ? <Map onRef={(ref) => {this.map = ref; }} /> : <List />}
+        {mapView === true ? <Map ref={(ref) => {this.map = ref;}} /> : <List />}
       </div>
     );
   }
