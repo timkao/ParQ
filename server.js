@@ -72,8 +72,13 @@ const startListening = () => {
 //original code is line above
 //used for tesitng feel free to modify
 const syncDb = () => {
-  return db.sync({force: true})
-  .then(() => db.seed())
+  // do not need to seed "intersection, rule and sign" everytime
+  return db.sync()
+  .then( () => db.models.user.sync({force: true}))
+  .then(() => db.models.streetspots.sync({force: true}))
+  .then( () => {
+    return db.seed();
+  })
 };
 
 // This evaluates as true when this file is run directly from the command line,

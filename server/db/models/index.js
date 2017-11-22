@@ -1,5 +1,9 @@
-const User = require('./user');
-const Streetspots = require('./streetspots');
+
+const User = require('./user')
+const Streetspots = require('./streetspots')
+const Intersection = require('./intersection')
+const Rule = require('./rule');
+const Sign = require('./sign');
 const Lots = require('./lots');
 
 /* Associations ================================== */
@@ -15,5 +19,8 @@ User.hasMany(Streetspots)
 module.exports = {
   User,
   Streetspots,
+  Intersection,
+  Rule,
+  Sign,
   Lots
 }

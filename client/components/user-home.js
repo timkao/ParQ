@@ -41,6 +41,13 @@ export class UserHome extends Component {
     });
   }
 
+  componentDidUpdate() {
+    const spotsTaken = this.props.spotsTaken;
+    if (spotsTaken > 0) {
+      this.props.updateUserSpotsTaken(this, spotsTaken)
+    }
+  }
+
   handleSpotTaken() {
     if (this.props.headingTo) {
       this.props.occupySpot(this.props.headingTo, this.props.map);
@@ -97,8 +104,16 @@ const mapDispatch = (dispatch) => {
       const thunk = takeSpot(id, map);
       dispatch(thunk);
     },
-    updateUserSpotsTaken() {
-      dispatch(updateSpotsTaken());
+    updateUserSpotsTaken(comp, spots) {
+      dispatch(updateSpotsTaken())
+        .then(() => {
+          comp.setState({
+            showNotification: { isShow: true, message: `${spots} spot${spots > 1 ? 's' : ''} you reported ${spots > 1 ? 'are' : 'is'} taken! You earned ${spots * 100} points` }
+          });
+          setTimeout(() => {
+            comp.setState({ showNotification: { isShow: false, message: '' } });
+          }, 4000);
+        })
     },
     createSpot(component, id){
       dispatch(addSpotOnServer(component, id));
