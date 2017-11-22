@@ -1,6 +1,11 @@
+
 const User = require('./user')
 const Streetspots = require('./streetspots')
 const Reward = require('./reward');
+const Intersection = require('./intersection')
+const Rule = require('./rule');
+const Sign = require('./sign');
+const Lots = require('./lots');
 
 /* Associations ================================== */
 Streetspots.belongsTo(User)
@@ -17,5 +22,9 @@ User.belongsTo(Reward);   // will add rewardId to user
 module.exports = {
   User,
   Streetspots,
-  Reward
+  Reward,
+  Intersection,
+  Rule,
+  Sign,
+  Lots
 }

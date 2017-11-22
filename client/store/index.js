@@ -6,18 +6,24 @@ import user from './user';
 import streetspots from './street-spots';
 import map from './map';
 import headingTo from './headingTo';
+import filter from './filter';
+import lots from './lots';
+import {loadState} from './localStorage';
 
+const persistedState = loadState();
 const reducer = combineReducers(
 	{
     user,
     streetspots,
     map,
-    headingTo
+    headingTo,
+    filter,
+    lots
 	}
 );
 
 const store = createStore(
-  reducer,
+  reducer, persistedState,
   composeWithDevTools(applyMiddleware(
     thunkMiddleware,
     createLogger()
@@ -30,3 +36,6 @@ export * from './user';
 export * from './map';
 export * from './street-spots';
 export * from './headingTo';
+export * from './filter';
+export * from './localStorage';
+export * from './lots';
