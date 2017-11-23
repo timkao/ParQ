@@ -5,7 +5,6 @@ import { getUserLocation } from '../helpers';
 import socket from '../socket';
 import { mapDirection, getSigns, getReportSpot } from './';
 
-
 /**
  * ACTION TYPES
  */
@@ -113,6 +112,14 @@ export const takeSpot = (id, map) =>
       mapDirection.removeRoutes();
     })
     .catch( err => console.log(err));
+
+export const updateSpotSize = (id, size) => {
+  return (dispatch) => {
+    return axios.put(`/api/streetspots/${ id }/size`, {size})
+    .then( () => dispatch(fetchSpots()))
+    .catch(err => console.log(err));
+  }
+}
 
 /**
  * REDUCER

@@ -18,7 +18,6 @@
   cursor: pointer;
 }
 .marker {
-  /* background-image: url('/public/images/suv.png'); */
   background-size: cover;
   width: 30px;
   height: 24px;

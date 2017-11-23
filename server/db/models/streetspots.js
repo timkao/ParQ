@@ -19,7 +19,8 @@ const Streetspots = db.define('streetspots', {
     defaultValue: 'open'
   },
   size: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    defaultValue: 'mid-size car'
   }
 },
 {
