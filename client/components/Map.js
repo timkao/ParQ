@@ -16,7 +16,6 @@ export class Map extends Component {
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
-    this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
   }
 
   componentDidMount() {
@@ -100,11 +99,15 @@ export class Map extends Component {
 
   handleAddSpotMarker(){
     //location of marker is returned by the .getSource function below
+    this.setState({loaded: false});
     let spot = {
       longitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[0],
       latitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[1],
     }
-    this.props.addSpotMarker(this.map, this.props.id, null, spot) //eventually pass in users default vehicle size
+    return this.props.addSpotMarker(this.map, this.props.id, null, spot)
+    .then( () => {
+      this.setState({loaded: true});
+    }) //eventually pass in users default vehicle size
     // this.props.getMap(this);
   }
 
@@ -142,7 +145,7 @@ const mapDispatch = (dispatch) => {
       dispatch(addSpotOnServerGeo(component, id));
     },
     addSpotMarker(component, id, defaultVehicle, spot){
-      dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
+      return dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
     },
     renewSpots() {
       dispatch(fetchSpots());

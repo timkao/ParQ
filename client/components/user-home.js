@@ -29,7 +29,10 @@ export class UserHome extends Component {
 
   triggerHandleAddSpotMarker(){
     //same as above
-    this.map.handleAddSpotMarker();
+    this.map.handleAddSpotMarker()
+    .then( () => {
+      this.props.toReportForm();
+    });
   }
 
   componentDidMount() {
@@ -82,7 +85,7 @@ export class UserHome extends Component {
             </div>
           </div>
         </div>
-        {mapView === true ? <Map ref={(ref) => {this.map = ref;}} /> : <List />}
+        {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
       </div>
     );
   }
@@ -98,7 +101,7 @@ const mapState = (state) => {
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, ownProps) => {
   return {
     occupySpot(id, map) {
       const thunk = takeSpot(id, map);
@@ -117,6 +120,9 @@ const mapDispatch = (dispatch) => {
     },
     createSpot(component, id){
       dispatch(addSpotOnServer(component, id));
+    },
+    toReportForm() {
+      console.log(ownProps);
     }
   };
 };

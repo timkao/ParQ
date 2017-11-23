@@ -94,6 +94,7 @@ const seedIntersection = function () {
           if (data[0] === 'M') {
             const curr = data[2].trim();
             const intersect = data[3].trim();
+            const intersect2 = data[4].trim();
 
             const pair = [streetNameTransform(curr), streetNameTransform(intersect)]
             let notDuplicate = true;
@@ -104,6 +105,17 @@ const seedIntersection = function () {
               }
             }
             if (notDuplicate) { pairs.push(pair) }
+
+            const pair2 = [streetNameTransform(curr), streetNameTransform(intersect2)]
+            let notDuplicate2 = true
+            for (var j = 0; j < pairs.length; j++) {
+              if (pairs[j][0] == pair2[0] && pairs[j][1] == pair2[1]) {
+                notDuplicate2 = false;
+                break;
+              }
+            }
+            if (notDuplicate2) { pairs.push(pair2) }
+
           }
         })
         .on('end', function (data) {
@@ -176,9 +188,8 @@ const seedSign = function () {
           }
         })
         .on('end', function (data) {
-          console.log(signs.length);
           Promise.all(signs.map(sign => {
-            Sign.create(sign)  // bulkcreate could work
+            Sign.create(sign)
           }))
             .then(() => {
               console.log('Signs Store Finished');
@@ -194,4 +205,3 @@ seedRule()
 seedSign()
 
 module.exports = { seedIntersection, seedRule, seedSign }
-
