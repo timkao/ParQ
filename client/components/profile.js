@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 const _Profile = (props) => {
-  // console.log("CHECK user: ", props.user);
+  console.log("Checking user on profile component: ", props.user);
   return (
     <center>
       <img
         src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432"
+        alt= "Profile Photo"
         name="aboutme"
         style={{ width: "40%", border: "1px solid" }}
         className="img-circle image-responsive"
