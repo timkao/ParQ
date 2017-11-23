@@ -23,8 +23,15 @@ const streetspots = [
   { latitude: 40.21892624348152, longitude: -74.00692526212578, size: 'full-size SUV'}
 ];
 
+const parkingLots = [
+  { latitude: 40.746761510630904, longitude: -74.03633671585777, spotsAvailable: true},
+  { latitude: 40.74536344788464, longitude: -74.02640181367153, spotsAvailable: false},
+  { latitude: 40.74295718029131, longitude: -73.99603504488482, spotsAvailable: true},
+  { latitude: 40.75125142382677, longitude: -73.98424684750455, spotsAvailable: true}
+];
+
 //Export
-module.exports = (User, Streetspots) => {
+module.exports = (User, Streetspots, Lots) => {
   let user1, user2;
     //user creation
   return Promise.all(
@@ -37,7 +44,7 @@ module.exports = (User, Streetspots) => {
       streetspots.map((location) => Streetspots.create(location))
     );
   })
-  .then(([_lot1, _lot2, _lot3, _lot4, _lot5, _lot6, _lot7, _lot8, _lot9, _lot10]) => {
+  .then(([_lot1, _lot2, _lot3, _lot4, _lot5, _lot6, _lot7, _lot8, _lot9, _lot10, _lot11, _lot12, _lot13, _lot14]) => {
     return Promise.all([
       _lot1.setUser(user1),
       _lot2.setUser(user1),
@@ -48,8 +55,17 @@ module.exports = (User, Streetspots) => {
       _lot7.setUser(user2),
       _lot8.setUser(user2),
       _lot9.setUser(user1),
-      _lot10.setUser(user1)
+      _lot10.setUser(user1),
+      _lot11.setUser(user1),
+      _lot12.setUser(user2),
+      _lot13.setUser(user2),
+      _lot14.setUser(user1)
     ])
+  .then(() => {
+    Promise.all(
+      parkingLots.map((location) => Lots.create(location))
+    );
+  })
   .then(() => console.log(chalk.green('DB is synced and seeded')));
   })
   .catch((err) => {

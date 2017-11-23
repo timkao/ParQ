@@ -8,3 +8,4 @@
 export {default as Main} from './Main';
 export {default as UserHome} from './User-home';
 export {Login, Signup} from './Auth-form';
+export {SpotInfo} from './spot-info';
