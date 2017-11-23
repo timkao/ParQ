@@ -54,6 +54,9 @@ export class Map extends Component {
           // create the marker
           var el = document.createElement('div');
           el.className = 'marker';
+          // add picture base on car size
+          el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
+
           // add event listener
           el.addEventListener('click', () => {
             headTo(spot.properties.id);

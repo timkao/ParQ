@@ -18,10 +18,10 @@
   cursor: pointer;
 }
 .marker {
-  background-image: url('/public/images/car.png');
+  /* background-image: url('/public/images/suv.png'); */
   background-size: cover;
-  width: 40px;
-  height: 20px;
+  width: 30px;
+  height: 24px;
   cursor: pointer;
 }
 .mapboxgl-popup {
@@ -36,3 +36,9 @@
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+#report-form{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: grey;
+}

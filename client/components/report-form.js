@@ -7,7 +7,7 @@ export class ReportForm extends Component {
 
   constructor(){
     super()
-    this.state = {sizeValue: 'medium'}
+    this.state = {sizeValue: 'full-size car'}
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -38,9 +38,10 @@ export class ReportForm extends Component {
           <div className="form-group">
             <label htmlFor="size-choice">Space Size</label>
             <select onChange={handleChange} id="size-choice" className="form-control" value={this.state.sizeValue}>
-              <option value='large'>Large (SUV)</option>
-              <option value='medium'>Medium (WAGON)</option>
-              <option value='small'>Small (COMPACT)</option>
+              <option value='full-size SUV'>Full-Size (SUV)</option>
+              <option value='full-size car'>Full-Size (CAR)</option>
+              <option value='mid-size car'>Mid-Size (CAR)</option>
+              <option value='compact car'>Small-Size (COMPACT)</option>
             </select>
           </div>
           <div className="form-group">
