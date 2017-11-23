@@ -179,6 +179,7 @@ export const fetchMap = (component) => {
         }));
         component.map.scrollZoom.disable();
         component.map.addControl(new mapboxgl.NavigationControl());
+        // console.log('getUserLocationBtn[0]', getUserLocationBtn);
         dispatch(getMap(component.map));
         dispatch(fetchLots());
         dispatch(fetchSpots());
@@ -231,10 +232,8 @@ export const fetchMap = (component) => {
         // remove profile and direction panel
         document.getElementsByClassName('mapbox-directions-clearfix')[0].remove();
         document.getElementsByClassName('mapbox-directions-component-keyline')[0].remove();
-
         // stop loading icon when everything is done
         component.setState({ loaded: true });
-
       })
       .catch((err) => {
         console.error(err.message);
