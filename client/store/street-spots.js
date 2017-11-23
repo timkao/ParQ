@@ -3,7 +3,7 @@ import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { getUserLocation } from '../helpers';
 import socket from '../socket';
-import { mapDirection } from './';
+import { mapDirection, getSigns, getReportSpot } from './';
 
 
 /**
@@ -72,8 +72,17 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
     const { longitude, latitude } = spot;
     return spotValidation([longitude, latitude])
     .then( signs => {
-      console.log('========= hit post spot', signs);
+      let signsForDispatch = [];
+      if (signs) {
+        signsForDispatch = signs.reduce(function(acc, sign){
+          acc = acc.concat(sign);
+          return acc;
+        }, [])
+      }
+      dispatch(getSigns(signsForDispatch));
+      console.log('all signs together: ', signsForDispatch)
       return axios.post(`/api/streetspots/${ userId }`, spot)
+      .then( newSpot => dispatch(getReportSpot(newSpot.data)))
       .then( () => dispatch(fetchSpots()))
       .catch(err => console.log(err))
     })
@@ -117,7 +126,6 @@ export default function (state = defaultSpots, action) {
       return state;
   }
 }
-
 
 
 /**
@@ -241,7 +249,8 @@ function spotValidation(coor){
 
     })
     .then( totalSigns => {
-      console.log(totalSigns);
+      // maybe rule too...
+      console.log('all signs: ', totalSigns);
       const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
       const rangeBig = distanceToClosestStreet + 70;
       console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);

@@ -122,7 +122,7 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(addSpotOnServer(component, id));
     },
     toReportForm() {
-      console.log(ownProps);
+      ownProps.history.push('/reportForm');
     }
   };
 };
