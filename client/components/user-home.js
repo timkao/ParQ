@@ -6,6 +6,8 @@ import socket from '../socket';
 import Map from './Map';
 import List from './List';
 import Filter from './Filter';
+import { Route } from 'React-router-dom';
+import reportForm from './report-form';
 
 export class UserHome extends Component {
 
@@ -86,6 +88,7 @@ export class UserHome extends Component {
           </div>
         </div>
         {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
+        <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );
   }
@@ -122,7 +125,7 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(addSpotOnServer(component, id));
     },
     toReportForm() {
-      ownProps.history.push('/reportForm');
+      ownProps.history.push('/home/reportForm');
     }
   };
 };
