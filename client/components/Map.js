@@ -24,7 +24,9 @@ export class Map extends Component {
     socket.on('A Spot Taken', () => {
       this.renewSpotsWithMap();
     });
-
+    socket.on('A New Spot', () => {
+      this.renewSpotsWithMap();
+    })
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -52,7 +54,7 @@ export class Map extends Component {
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       spots.features &&
       filteredSpots.forEach(function(spot) {
-          // create the marker
+          // create the marker element
           var el = document.createElement('div');
           el.className = 'marker';
           // add event listener
@@ -61,18 +63,19 @@ export class Map extends Component {
             mapDirection.setOrigin([longitude, latitude]);
             mapDirection.setDestination(spot.geometry.coordinates);
           });
-            // create the popup
-            var popup = new mapboxgl.Popup()
-            .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
-            new mapboxgl.Marker(el)
-            .setLngLat(spot.geometry.coordinates)
-            .setPopup(popup) // sets a popup on this marker
-            .addTo(map);
+          // create the popup
+          var popup = new mapboxgl.Popup()
+          .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
+          // create the marker
+          new mapboxgl.Marker(el)
+          .setLngLat(spot.geometry.coordinates)
+          .setPopup(popup) // sets a popup on this marker
+          .addTo(map);
         });
     }
     if (filter.type.includes('Lot') || filter.type.length < 1 ){
       lots.features && filteredLots.forEach(function(lot) {
-        // create the marker
+        // create the marker element
         var el = document.createElement('div');
         el.className = 'lot';
         // add event listener
@@ -81,13 +84,14 @@ export class Map extends Component {
           mapDirection.setOrigin([longitude, latitude]);
           mapDirection.setDestination(lot.geometry.coordinates);
         });
-          // create the popup
-          var popup = new mapboxgl.Popup()
-          .setHTML(`<div>${lot.place_name}</div>`);
-          new mapboxgl.Marker(el)
-          .setLngLat(lot.geometry.coordinates)
-          .setPopup(popup) // sets a popup on this marker
-          .addTo(map);
+        // create the popup
+        var popup = new mapboxgl.Popup()
+        .setHTML(`<div>${lot.place_name}</div>`);
+        //create the marker
+        new mapboxgl.Marker(el)
+        .setLngLat(lot.geometry.coordinates)
+        .setPopup(popup) // sets a popup on this marker
+        .addTo(map);
       });
     }
     const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
