@@ -24,6 +24,7 @@ export class Map extends Component {
     socket.on('A Spot Taken', () => {
       this.renewSpotsWithMap();
     });
+
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -89,6 +90,8 @@ export class Map extends Component {
           .addTo(map);
       });
     }
+    const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
+    getUserLocationBtn.click();
   }
   }
 
@@ -113,6 +116,7 @@ export class Map extends Component {
   }
 
   render() {
+
     return (
       <div id="map">
         <Loader loaded={this.state.loaded} className="loader" />
