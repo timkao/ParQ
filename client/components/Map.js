@@ -20,7 +20,7 @@ export class Map extends Component {
   }
 
   componentDidMount() {
-    console.log(this)
+    this.props.onRef(this);
     this.props.getMap(this);
     socket.on('A Spot Taken', () => {
       this.renewSpotsWithMap();
