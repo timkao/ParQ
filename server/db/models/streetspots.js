@@ -22,7 +22,7 @@ const Streetspots = db.define('streetspots', {
   size: {
     type: Sequelize.STRING
   },
-  timer: {
+  timer: {                        // I needed this to run the program, even though I don't have any user case :(
     type: Sequelize.TIME
   }
 },
@@ -36,23 +36,9 @@ const Streetspots = db.define('streetspots', {
     }
   });
 
-// instance method is not working because this.save is not a function, why?
-Streetspots.prototype.statusController = () => {
-  console.log("inside of statusController");
-  const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
-  watch.start();                      // count down starts
-
-  // Fires when the timer is done 
-  watch.onDone(function () {
-    console.log('Watch is complete');
-    this.status = "occupied";
-    return this.save();
-  });
-}
-
 // class method to control the status of a given instance
 Streetspots.statusController = (spot) => {
-  const watch = new Stopwatch(10000); // A new countdown timer with 10 seconds
+  const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
   watch.start();                      // count down starts
 
   // Fires when the timer is done 
@@ -70,7 +56,7 @@ Streetspots.addSpotOnServer = function (spot, id) {
   return Streetspots.create(spot)
     .then((_spot) => {
       newSpot = _spot
-      // run count down on user reported spot
+      // run countdown on user reported spot
       return Streetspots.statusController(newSpot);
     })
     .then(() => {
