@@ -23,7 +23,6 @@ module.exports = (io, User) => {
       socket.broadcast.emit('A New Spot');
     })
 
-
   //User's reported spot is claimed
     socket.on('spot-taken-online', socketId => {
       console.log('--------------------on');

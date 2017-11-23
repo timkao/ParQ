@@ -22,11 +22,9 @@ export class Map extends Component {
     this.props.onRef(this);
     this.props.getMap(this);
     socket.on('A Spot Taken', () => {
-      console.log('spot taken... renewing spots')
       this.renewSpotsWithMap();
     });
     socket.on('A New Spot', () => {
-      console.log('spot reported... rewnewing spots')
       this.renewSpotsWithMap();
     })
   }
