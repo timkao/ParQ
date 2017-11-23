@@ -9,6 +9,8 @@ import headingTo from './headingTo';
 import filter from './filter';
 import lots from './lots';
 import {loadState} from './localStorage';
+import signs from './signs';
+import reportspot from './report-spot';
 
 const persistedState = loadState();
 const reducer = combineReducers(
@@ -18,7 +20,9 @@ const reducer = combineReducers(
     map,
     headingTo,
     filter,
-    lots
+    lots,
+    signs,
+    reportspot
 	}
 );
 
@@ -39,3 +43,6 @@ export * from './headingTo';
 export * from './filter';
 export * from './localStorage';
 export * from './lots';
+export * from './signs';
+export * from './report-spot';
+

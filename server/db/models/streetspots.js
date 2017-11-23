@@ -19,7 +19,8 @@ const Streetspots = db.define('streetspots', {
     defaultValue: 'open'
   },
   size: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    defaultValue: 'mid-size car'
   }
 },
 {
@@ -27,6 +28,22 @@ const Streetspots = db.define('streetspots', {
     bothCoordsOrNone() {
       if ((this.latitude === null) !== (this.longitude === null)) {
         throw new Error('Require either both latitude and longitude or neither')
+      }
+    }
+  },
+  getterMethods: {
+    sizeUrl: function() {
+      switch (this.size) {
+        case 'full-size SUV':
+          return '/public/images/suv.png';
+        case 'full-size car':
+          return '/public/images/fullcar.png';
+        case 'mid-size car':
+          return '/public/images/midcar.png';
+        case 'compact car':
+          return '/public/images/compact.png';
+        default:
+          return '/public/images/midcar.png';
       }
     }
   }

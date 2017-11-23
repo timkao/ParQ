@@ -23,4 +23,5 @@ router.put('/distance', (req, res, next) => {
   .then( data => {
     res.send(data);
   })
+  .catch(err => console.log(err))
 })

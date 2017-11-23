@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {HashRouter as Router, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Main, Login, Signup, UserHome} from './components'
+import {Main, Login, Signup, UserHome } from './components'
 import { me } from './store'
 
 /**

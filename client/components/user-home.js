@@ -6,6 +6,8 @@ import socket from '../socket';
 import Map from './Map';
 import List from './List';
 import Filter from './Filter';
+import { Route } from 'React-router-dom';
+import reportForm from './report-form';
 
 export class UserHome extends Component {
 
@@ -24,12 +26,18 @@ export class UserHome extends Component {
   }
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
-    this.map.handleAddSpotGeo();
+    this.map.handleAddSpotGeo()
+    .then( () => {
+      this.props.toReportForm();
+    });
   }
 
   triggerHandleAddSpotMarker(){
     //same as above
-    this.map.handleAddSpotMarker();
+    this.map.handleAddSpotMarker()
+    .then( () => {
+      this.props.toReportForm();
+    });
   }
 
   componentDidMount() {
@@ -82,7 +90,8 @@ export class UserHome extends Component {
             </div>
           </div>
         </div>
-        {mapView === true ? <Map onRef={(ref) => {this.map = ref; }} /> : <List />}
+        {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
+        <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );
   }
@@ -98,7 +107,7 @@ const mapState = (state) => {
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, ownProps) => {
   return {
     occupySpot(id, map) {
       const thunk = takeSpot(id, map);
@@ -117,6 +126,9 @@ const mapDispatch = (dispatch) => {
     },
     createSpot(component, id){
       dispatch(addSpotOnServer(component, id));
+    },
+    toReportForm() {
+      ownProps.history.push('/home/reportForm');
     }
   };
 };
