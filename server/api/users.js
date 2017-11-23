@@ -4,7 +4,6 @@ const { Reward } = require('../db/models')
 module.exports = router
 
 // route: /api/users
-
 router.get('/', (req, res, next) => {
   User.findAll({
     attributes: ['id', 'email'],

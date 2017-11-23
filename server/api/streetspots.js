@@ -19,6 +19,7 @@ router.get('/:spotId', (req, res, next) => {
 
 //POST to create a new spot
 router.post('/:userId', (req, res, next) => {
+  console.log("Checking the spot adding route");   // no logging at all yet
   Streetspots.addSpotOnServer(req.body, req.params.userId) //class method
   .then(() => res.sendStatus(201))
   .catch(next)
