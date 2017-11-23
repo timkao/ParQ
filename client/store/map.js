@@ -179,7 +179,6 @@ export const fetchMap = (component) => {
         }));
         component.map.scrollZoom.disable();
         component.map.addControl(new mapboxgl.NavigationControl());
-        // console.log('getUserLocationBtn[0]', getUserLocationBtn);
         dispatch(getMap(component.map));
         dispatch(fetchLots());
         dispatch(fetchSpots());
