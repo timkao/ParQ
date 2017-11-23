@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 const _Profile = (props) => {
-  console.log("CHECK user: ", props.user);
+  // console.log("CHECK user: ", props.user);
   return (
     <center>
       <img

@@ -24,7 +24,7 @@ const Main = (props) => {
               {/* The navbar will show these NavLinks after you log in */}
               <Link to='/home'>Home</Link>
               <Link to={`/home/profile/${1}`} replace>      {/* replace to use if Link is being used as NavLink */}
-                <img style={{ width: "3.5%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
+                <img style={{ width: "5%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
               </Link>
               {/* For easier socket.io testing */}
               <Link to='/login'>Login</Link>
