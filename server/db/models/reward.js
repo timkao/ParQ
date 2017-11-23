@@ -4,7 +4,7 @@ const db = require('../db')
 const Reward = db.define("reward", {
     points: {
         type: Sequelize.INTEGER,
-        defaultValue: 1
+        defaultValue: 0
     }
 });
 
@@ -28,7 +28,8 @@ const rankings = (points) => {
 
 // instance method for rank
 Reward.prototype.rank = function () {
-    return rankings(this.points);
+    const points = this.points || 0;
+    return rankings(points);
 }
 
 module.exports = Reward;

@@ -26,7 +26,7 @@ export class UserHome extends Component {
   }
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
-    this.map.handleAddSpotGeo();
+    console.log("WHAT'S HAPPENING HERE?", this.map.handleAddSpotGeo());
   }
 
   triggerHandleAddSpotMarker(){

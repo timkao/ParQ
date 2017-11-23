@@ -10,13 +10,6 @@
   background: white;
   z-index: 9999;
 }
-.lot {
-  background-image: url('/public/images/parkinglot.png');
-  background-size: cover;
-  width: 50px;
-  height: 40px;
-  cursor: pointer;
-}
 .marker {
   background-image: url('/public/images/car.png');
   background-size: cover;
@@ -35,4 +28,3 @@
     max-width: 400px;
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
-
