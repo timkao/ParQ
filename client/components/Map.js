@@ -138,7 +138,6 @@ const mapDispatch = (dispatch) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
-      console.log("CHECK addSpotGeo function FIRING AND COMPONENT:", component);
       dispatch(addSpotOnServerGeo(component, id));
     },
     addSpotMarker(component, id, defaultVehicle, spot){

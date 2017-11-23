@@ -1,6 +1,6 @@
 node_modules
-public/locations.CSV
-public/signs.CSV
+server/locations.CSV      // it was public/locations.CSV
+server/signs.CSV          // it was public/signs.CSV
 .DS_Store
 npm-debug.log
 dist/

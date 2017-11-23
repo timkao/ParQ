@@ -18,7 +18,6 @@ router.post('/login', (req, res, next) => {
 })
 
 router.post('/signup', (req, res, next) => {
-  console.log("HELLO THERE WHAT'S GOING ON")
   User.create(req.body)
     .then(user => {
       req.login(user, err => err ? next(err) : res.json(user))
@@ -47,7 +46,7 @@ router.get('/me', (req, res) => {
   if (req.user) {
     User.findById(req.user.id)
       .then( user => {          // just to check 
-        console.log("CHECK USER", user.get());
+        // console.log("CHECK USER at GET /auth/me", user.get());
         return user;
       })
       .then(user => res.json(user))
