@@ -1,11 +1,11 @@
 module.exports = (io, User) => {
   io.on('connection', (socket) => {
     console.log(`A socket connection to the server has been made: ${socket.id}`);
-
+  //Socket disconnection
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     });
-
+  //User logins
     socket.on('user-login', id => {
       User.findById(id)
         .then(user => {
@@ -17,6 +17,14 @@ module.exports = (io, User) => {
         .catch(err => console.log(err));
     })
 
+  //User reports spot
+    socket.on('new-spot-reported', reporterId => {
+      console.log('------------------new spot');
+      socket.broadcast.emit('A New Spot');
+    })
+
+
+  //User's reported spot is claimed
     socket.on('spot-taken-online', socketId => {
       console.log('--------------------on');
       socket.broadcast.to(socketId).emit('notifications', 'Thank you! A spot you reported is taken! You earned 100 point!');

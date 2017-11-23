@@ -61,7 +61,10 @@ export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
 
         const spot = { longitude, latitude, size: defaultVehicle || null } //eventually need to pull in default vehicle
         return axios.post(`/api/streetspots/${ userId }`, spot)})
-      .then( () => dispatch(fetchSpots()))
+      .then( () => {
+        dispatch(fetchSpots())
+        socket.emit('new-spot-reported');
+      })
       .catch(err => console.log(err));
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
@@ -73,7 +76,10 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
     spotValidation([longitude, latitude])
 
     axios.post(`/api/streetspots/${ userId }`, spot)
-        .then( () => dispatch(fetchSpots()))
+        .then( () => {
+          dispatch(fetchSpots())
+          socket.emit('new-spot-reported');
+        })
         .catch(err => console.log(err))
   }
 
