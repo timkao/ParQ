@@ -102,7 +102,7 @@ export class Map extends Component {
   }
 
   handleAddSpotGeo() {
-    this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
+    return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
     // this.props.getMap(this);
   }
 
@@ -152,9 +152,11 @@ const mapDispatch = (dispatch) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
-      dispatch(addSpotOnServerGeo(component, id));
+      // add return for promise chain
+      return dispatch(addSpotOnServerGeo(component, id));
     },
     addSpotMarker(component, id, defaultVehicle, spot){
+      // add return for promise chain
       return dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
     },
     renewSpots() {

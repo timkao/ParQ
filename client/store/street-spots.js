@@ -49,28 +49,37 @@ export const fetchSpots = () =>
       })
       .catch(err => console.log(err));
 
-export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
-  dispatch =>
-    getUserLocation()
+export const addSpotOnServerGeo = (map, userId) =>
+  dispatch => {
+    return getUserLocation()
       .then(position => {
         const { longitude, latitude } = position.coords;
-
+        const spot = { longitude, latitude}
         // spot validation here
-        spotValidation([longitude, latitude]);
-
-        const spot = { longitude, latitude, size: defaultVehicle || null } //eventually need to pull in default vehicle
-        return axios.post(`/api/streetspots/${userId}`, spot)
-      })
-      .then(() => {
-        dispatch(fetchSpots())
-        socket.emit('new-spot-reported');
+        return spotValidation([longitude, latitude])
+        .then(signs => {
+          let signsForDispatch = [];
+          if (signs) {
+            signsForDispatch = signs.reduce(function (acc, sign) {
+              acc = acc.concat(sign);
+              return acc;
+            }, [])
+          }
+          dispatch(getSigns(signsForDispatch));
+          return axios.post(`/api/streetspots/${userId}`, spot)
+        })
+        .then(newSpot => dispatch(getReportSpot(newSpot.data)))
+        .then(() => {
+          dispatch(fetchSpots())
+          socket.emit('new-spot-reported');
+        })
       })
       .catch(err => console.log(err));
+    }
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
   dispatch => {
     console.log(spot);
-
     // spot validation here
     const { longitude, latitude } = spot;
     return spotValidation([longitude, latitude])
@@ -83,15 +92,14 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
           }, [])
         }
         dispatch(getSigns(signsForDispatch));
-        console.log('all signs together: ', signsForDispatch)
         return axios.post(`/api/streetspots/${userId}`, spot)
           .then(newSpot => dispatch(getReportSpot(newSpot.data)))
           .then(() => {
             dispatch(fetchSpots())
             socket.emit('new-spot-reported');
           })
-          .catch(err => console.log(err))
       })
+      .catch(err => console.log(err))
   }
 
 
@@ -260,7 +268,6 @@ function spotValidation(coor) {
                   .then(result => result.data);
               }
             })
-
         })
         .then(totalSigns => {
           // maybe rule too...

@@ -31,16 +31,25 @@ export class ReportForm extends Component {
   }
 
   render() {
-    const { handleChange, handleCancel, handleSubmit } = this
+    const { handleChange, handleCancel, handleSubmit } = this;
+    const { signs } = this.props;
     return (
       <div id="report-form">
-        <div>
-          <h4>Rules Around the Spot</h4>
-          <ul className="list-group">
-            <li className="list-group-item">test</li>
-            <li className="list-group-item">test2</li>
-          </ul>
-        </div>
+        {
+          signs.length > 0 &&
+          <div>
+            <div>Rules Around the Spot</div>
+            <ul className="list-group">
+              {
+                signs.map(sign => {
+                  return (
+                    <li key={sign.id} className="list-group-item">{sign.description}</li>
+                  )
+                })
+              }
+            </ul>
+          </div>
+        }
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="size-choice">Space Size</label>
