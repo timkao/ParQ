@@ -26,8 +26,8 @@ const createDraggablePoint = (map, event) => {
   //First we check to see if user is trying to create
   //another point on map and instead of dragging current one
   let exists = map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
-  // let exitsSpot = map.queryRenderedFeatures({layers:['streetspots']})
-  // console.log('exitsSpot',exitsSpot)
+  let exitsSpot = map.getSource('streetspots') || null
+  console.log('exitsSpot',exitsSpot)
   //If so, we remove the point so we can create a new one
   //note we need to remove the source as well
   if (exists) {
