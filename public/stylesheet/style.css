@@ -40,3 +40,16 @@
   left: 50%;
   background-color: grey;
 }
+
+#auth {
+  width: 20em;
+  margin-left: 5em;
+}
+
+#auth #form-submit {
+  width: 10em;
+}
+
+#auth-google {
+  margin-left: 1em
+}

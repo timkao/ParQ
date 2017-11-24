@@ -26,7 +26,6 @@ export class UserHome extends Component {
   }
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
-    console.log('--------------');
     this.map.handleAddSpotGeo()
     .then( () => {
       this.props.toReportForm();
