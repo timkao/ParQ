@@ -34,7 +34,7 @@ export class UserHome extends Component {
 
   triggerHandleAddSpotMarker(){
     //same as above
-    this.map.handleAddSpotMarker()
+    this.map.handleAddSpotMarker()           // not working for me
     .then( () => {
       this.props.toReportForm();
     });

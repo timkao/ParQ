@@ -19,7 +19,10 @@ router.get('/:spotId', (req, res, next) => {
 //POST to create a new spot
 router.post('/:userId', (req, res, next) => {
   Streetspots.addSpotOnServer(req.body, req.params.userId) //class method
-  .then( newSpot => res.send(newSpot))
+  .then( newSpot => {
+    // testing purpose
+    return res.send(newSpot)
+  })
   //.then(() => res.sendStatus(201))
   .catch(next)
 })
