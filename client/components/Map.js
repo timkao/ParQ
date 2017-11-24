@@ -51,6 +51,19 @@ export class Map extends Component {
     let filteredSpots = filterSpots(currentFilter, spots.features);
     let filteredLots = filterSpots(currentFilter, lots.features);
 
+    //Create a source from our streetspots
+    map.addSource('streetspots', {
+        "type": "geojson",
+        "data": spots
+    })
+    //Add a layer on the map
+    map.addLayer({
+      id: 'streetspots',
+      type: 'symbol',
+      // Add a GeoJSON source containing place coordinates and information.
+      source: "streetspots"
+    });
+
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       spots.features &&
       filteredSpots.forEach(function(spot) {

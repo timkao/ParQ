@@ -18,21 +18,23 @@ const getUserLocation = function (options) {
 
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {
-
-  //First we check to see if user is trying to create
-  //another point on map and instead of dragging current one
-  let exits = map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
-  //If so, we remove the point so we can create a new one
-  //note we need to remove the source as well
-  if (exits) {
-    map.removeLayer(exits.id)
-    map.removeSource(exits.id)
-  }
-
   // Holds mousedown state for events. if this
   // flag is active, we move the point on `mousemove`.
   var isDragging;
   var coords = event.lngLat;
+  console.log('current map layers:',map.getStyle().layers) //testing
+  //First we check to see if user is trying to create
+  //another point on map and instead of dragging current one
+  let exists = map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
+  // let exitsSpot = map.queryRenderedFeatures({layers:['streetspots']})
+  // console.log('exitsSpot',exitsSpot)
+  //If so, we remove the point so we can create a new one
+  //note we need to remove the source as well
+  if (exists) {
+    map.removeLayer(exists.id)
+    map.removeSource(exists.id)
+  }
+
 
   // Is the cursor over a point? if this
   // flag is active, we listen for a mousedown event.
