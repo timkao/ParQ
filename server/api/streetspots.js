@@ -21,7 +21,7 @@ router.post('/:userId', (req, res, next) => {
   Streetspots.addSpotOnServer(req.body, req.params.userId) //class method
   .then( newSpot => {
     // testing purpose
-    res.send(newSpot)
+    return res.send(newSpot)
   })
   //.then(() => res.sendStatus(201))
   .catch(next)
