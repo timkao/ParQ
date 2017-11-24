@@ -3,8 +3,7 @@ import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { getUserLocation } from '../helpers';
 import socket from '../socket';
-import { mapDirection } from './';
-
+import { mapDirection, getSigns, getReportSpot } from './';
 
 /**
  * ACTION TYPES
@@ -50,31 +49,56 @@ export const fetchSpots = () =>
       })
       .catch(err => console.log(err));
 
-export const addSpotOnServerGeo = (map, userId, defaultVehicle) =>
-  dispatch =>
-    getUserLocation()
+export const addSpotOnServerGeo = (map, userId) =>
+  dispatch => {
+    return getUserLocation()
       .then(position => {
         const { longitude, latitude } = position.coords;
-
+        const spot = { longitude, latitude}
         // spot validation here
-        spotValidation([longitude, latitude]);
-
-        const spot = { longitude, latitude, size: defaultVehicle || null } //eventually need to pull in default vehicle
-        return axios.post(`/api/streetspots/${userId}`, spot)
+        return spotValidation([longitude, latitude])
+        .then(signs => {
+          let signsForDispatch = [];
+          if (signs) {
+            signsForDispatch = signs.reduce(function (acc, sign) {
+              acc = acc.concat(sign);
+              return acc;
+            }, [])
+          }
+          dispatch(getSigns(signsForDispatch));
+          return axios.post(`/api/streetspots/${userId}`, spot)
+        })
+        .then(newSpot => dispatch(getReportSpot(newSpot.data)))
+        .then(() => {
+          dispatch(fetchSpots())
+          socket.emit('new-spot-reported');
+        })
       })
-      .then(() => dispatch(fetchSpots()))
       .catch(err => console.log(err));
+    }
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
   dispatch => {
     console.log(spot);
-
     // spot validation here
     const { longitude, latitude } = spot;
-    spotValidation([longitude, latitude])
-
-    axios.post(`/api/streetspots/${userId}`, spot)
-      .then(() => dispatch(fetchSpots()))
+    return spotValidation([longitude, latitude])
+      .then(signs => {
+        let signsForDispatch = [];
+        if (signs) {
+          signsForDispatch = signs.reduce(function (acc, sign) {
+            acc = acc.concat(sign);
+            return acc;
+          }, [])
+        }
+        dispatch(getSigns(signsForDispatch));
+        return axios.post(`/api/streetspots/${userId}`, spot)
+          .then(newSpot => dispatch(getReportSpot(newSpot.data)))
+          .then(() => {
+            dispatch(fetchSpots())
+            socket.emit('new-spot-reported');
+          })
+      })
       .catch(err => console.log(err))
   }
 
@@ -104,6 +128,14 @@ export const takeSpot = (id, map) =>
       })
       .catch(err => console.log(err));
 
+export const updateSpotSize = (id, size) => {
+  return (dispatch) => {
+    return axios.put(`/api/streetspots/${id}/size`, { size })
+      .then(() => dispatch(fetchSpots()))
+      .catch(err => console.log(err));
+  }
+}
+
 /**
  * REDUCER
  */
@@ -116,7 +148,6 @@ export default function (state = defaultSpots, action) {
       return state;
   }
 }
-
 
 
 /**
@@ -136,8 +167,10 @@ function reverseGoogleAddress(current, cross) {
   return axios.get(queryString)
     .then(result => result.data.results[0])
     .then(results => {
-      results.currentStreet = current;
-      results.intersectStreet = cross;
+      if (results) {
+        results.currentStreet = current;
+        results.intersectStreet = cross;
+      }
       return results;
     })
 }
@@ -162,19 +195,37 @@ function parseFtAndMile(str) {
   return parseFloat(arr[0]);
 }
 
+function findClosestStreets(tempArr) {
+  const longestDistance = parseFtAndMile(tempArr[1].elements[0].distance.text);
+  console.log('the longest distance: ', longestDistance);
+  // validate longest distance
+  const onStreet = tempArr[0].currentStreet;
+  const street1 = tempArr[0].crossStreet;
+  const street2 = tempArr[1].crossStreet;
+  const origin = `${onStreet} and ${street1}, new york, new york`.split(' ').join('.');
+  const destination = `${onStreet} and ${street2}, new york, new york`.split(' ').join('.');
+  return getIntersectionDistance(origin, destination)
+    .then(distanceObj => {
+      const sectionLength = parseFtAndMile(distanceObj.elements[0].distance.text);
+      console.log('the longest distance should be smaller than', sectionLength);
+      return sectionLength >= longestDistance;
+    })
+}
+
+
 function spotValidation(coor) {
   let standPoint;
   let distanceToClosestStreet;
   return fetchGoogleAddress(coor)
     .then(place => {
-      console.log(place);
+      console.log('current locaiton: ', place);
       standPoint = place.formatted_address;
       const currentOn = place.address_components[1].long_name.toUpperCase();
       // find all intersections
-      axios.get(`/api/intersections/${currentOn}`)
+      return axios.get(`/api/intersections/${currentOn}`)
         .then(result => result.data)
         .then(intersections => {
-          console.log(intersections);
+          console.log('all intersections: ', intersections);
           // query google geocoding api to find coor of all intersection
           return Promise.all(
             intersections.map(section => {
@@ -182,7 +233,8 @@ function spotValidation(coor) {
             }))
         })
         .then(streetsAndCoords => {
-          console.log(streetsAndCoords);
+          console.log('streets and coord: ', streetsAndCoords);
+          streetsAndCoords = streetsAndCoords.filter(ele => ele !== undefined);
           const origins = standPoint.split(' ').join('+');
           return Promise.all(
             streetsAndCoords.map(dest => {
@@ -191,25 +243,37 @@ function spotValidation(coor) {
             }))
         })
         .then(distances => {
-          // find the cloest two streets
           distances.sort(function (aDist, bDist) {
             return aDist.elements[0].distance.value - bDist.elements[0].distance.value
           })
-          console.log(distances);
-          distanceToClosestStreet = distances[0].elements[0].distance.text;
-          distanceToClosestStreet = parseFtAndMile(distanceToClosestStreet);
+          console.log('sort by distances: ', distances);
+          distanceToClosestStreet = parseFtAndMile(distances[0].elements[0].distance.text);
+
+          // if (distances.length > 3)
           const onStreet = distances[0].currentStreet;
           const street1 = distances[0].crossStreet;
           const street2 = distances[1].crossStreet;
-          console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
-          // find the corresponding rules
-          return axios.put('/api/rules', { onStreet, street1, street2 })
-            .then(result => result.data);
+          const street3 = distances[2].crossStreet;
+
+          // find the cloest two streets
+          return findClosestStreets(distances)
+            .then(bool => {
+              if (bool) {
+                console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
+                return axios.put('/api/rules', { onStreet, street1, street2 })
+                  .then(result => result.data);
+              } else {
+                console.log(`you are on ${onStreet} between ${street1} and ${street3}`)
+                return axios.put('/api/rules', { onStreet, street1, street3 })
+                  .then(result => result.data);
+              }
+            })
         })
         .then(totalSigns => {
-          console.log(totalSigns);
-          const rangeSmall = distanceToClosestStreet - 100 > 0 ? distanceToClosestStreet - 100 : 0;
-          const rangeBig = distanceToClosestStreet + 100;
+          // maybe rule too...
+          console.log('all signs: ', totalSigns);
+          const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
+          const rangeBig = distanceToClosestStreet + 70;
           console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
           const qualifiedSigns = [];
           totalSigns.forEach(signs => {
@@ -221,7 +285,3 @@ function spotValidation(coor) {
         .catch(err => console.log(err));
     })
 }
-
-// even number => south
-// odd number => north
-// idea to improve accuracy => check total length between intersections

@@ -24,6 +24,9 @@ export class Map extends Component {
     socket.on('A Spot Taken', () => {
       this.renewSpotsWithMap();
     });
+    socket.on('A New Spot', () => {
+      this.renewSpotsWithMap();
+    })
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -51,27 +54,30 @@ export class Map extends Component {
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       spots.features &&
       filteredSpots.forEach(function(spot) {
-          // create the marker
+          // create the marker element
           var el = document.createElement('div');
           el.className = 'marker';
+          // add picture base on car size
+          el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
           // add event listener
           el.addEventListener('click', () => {
             headTo(spot.properties.id);
             mapDirection.setOrigin([longitude, latitude]);
             mapDirection.setDestination(spot.geometry.coordinates);
           });
-            // create the popup
-            var popup = new mapboxgl.Popup()
-            .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
-            new mapboxgl.Marker(el)
-            .setLngLat(spot.geometry.coordinates)
-            .setPopup(popup) // sets a popup on this marker
-            .addTo(map);
+          // create the popup
+          var popup = new mapboxgl.Popup()
+          .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
+          // create the marker
+          new mapboxgl.Marker(el)
+          .setLngLat(spot.geometry.coordinates)
+          .setPopup(popup) // sets a popup on this marker
+          .addTo(map);
         });
     }
     if (filter.type.includes('Lot') || filter.type.length < 1 ){
       lots.features && filteredLots.forEach(function(lot) {
-        // create the marker
+        // create the marker element
         var el = document.createElement('div');
         el.className = 'lot';
         // add event listener
@@ -80,30 +86,37 @@ export class Map extends Component {
           mapDirection.setOrigin([longitude, latitude]);
           mapDirection.setDestination(lot.geometry.coordinates);
         });
-          // create the popup
-          var popup = new mapboxgl.Popup()
-          .setHTML(`<div>${lot.place_name}</div>`);
-          new mapboxgl.Marker(el)
-          .setLngLat(lot.geometry.coordinates)
-          .setPopup(popup) // sets a popup on this marker
-          .addTo(map);
+        // create the popup
+        var popup = new mapboxgl.Popup()
+        .setHTML(`<div>${lot.place_name}</div>`);
+        //create the marker
+        new mapboxgl.Marker(el)
+        .setLngLat(lot.geometry.coordinates)
+        .setPopup(popup) // sets a popup on this marker
+        .addTo(map);
       });
     }
+    const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
+    getUserLocationBtn.click();
   }
   }
 
   handleAddSpotGeo() {
-    this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
+    return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
     // this.props.getMap(this);
   }
 
   handleAddSpotMarker(){
     //location of marker is returned by the .getSource function below
+    this.setState({loaded: false});
     let spot = {
       longitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[0],
       latitude: this.map.getSource('createdPoint')._data.features[0].geometry.coordinates[1],
     }
-    this.props.addSpotMarker(this.map, this.props.id, null, spot) //eventually pass in users default vehicle size
+    return this.props.addSpotMarker(this.map, this.props.id, null, spot)
+    .then( () => {
+      this.setState({loaded: true});
+    }) //eventually pass in users default vehicle size
     // this.props.getMap(this);
   }
 
@@ -113,6 +126,7 @@ export class Map extends Component {
   }
 
   render() {
+
     return (
       <div id="map">
         <Loader loaded={this.state.loaded} className="loader" />
@@ -138,10 +152,12 @@ const mapDispatch = (dispatch) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
-      dispatch(addSpotOnServerGeo(component, id));
+      // add return for promise chain
+      return dispatch(addSpotOnServerGeo(component, id));
     },
     addSpotMarker(component, id, defaultVehicle, spot){
-      dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
+      // add return for promise chain
+      return dispatch(addSpotOnServerMarker(component, id, defaultVehicle, spot))
     },
     renewSpots() {
       dispatch(fetchSpots());

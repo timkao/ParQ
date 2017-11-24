@@ -5,9 +5,9 @@ import { takeSpot, updateSpotsTaken, addSpotOnServer } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
-import { timer } from '../helpers';
-import moment from 'moment';
 import Filter from './Filter';
+import { Route } from 'React-router-dom';
+import reportForm from './report-form';
 
 export class UserHome extends Component {
 
@@ -16,7 +16,7 @@ export class UserHome extends Component {
     this.state = {
       currentLong: 0,  // this two might not be neccessary
       currentLat: 0,   // this might not be neccessary
-      showNotification: { isShow: false, message: '' },
+      showNotification: {isShow: false, message: ''},
       mapView: true
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
@@ -26,19 +26,25 @@ export class UserHome extends Component {
   }
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
-   this.map.handleAddSpotGeo();
+    this.map.handleAddSpotGeo()
+    .then( () => {
+      this.props.toReportForm();
+    });
   }
 
-  triggerHandleAddSpotMarker() {
+  triggerHandleAddSpotMarker(){
     //same as above
-    this.map.handleAddSpotMarker();
+    this.map.handleAddSpotMarker()           // not working for me
+    .then( () => {
+      this.props.toReportForm();
+    });
   }
 
   componentDidMount() {
     socket.on('notifications', message => {
-      this.setState({ showNotification: { isShow: true, message: message } });
+      this.setState({showNotification: {isShow: true, message: message}});
       setTimeout(() => {
-        this.setState({ showNotification: { isShow: false, message: '' } });
+        this.setState({ showNotification: {isShow: false, message: ''}});
       }, 4000);
     });
   }
@@ -56,17 +62,13 @@ export class UserHome extends Component {
     }
   }
 
-  setMapView(bool) {
-    this.setState({ mapView: bool });
+  setMapView(bool){
+    this.setState({mapView: bool});
   }
 
   render() {
-    // const now = new Date().getTime();
-    // const fiveMinutesLater = now + 5;
-    // console.dir(this.props.spots.features);
-
     const { email } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker } = this;
+    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker} = this;
     const { showNotification, mapView } = this.state;
     return (
       <div className="container">
@@ -83,12 +85,13 @@ export class UserHome extends Component {
           <div className="col-md-4 col-md-offset-4 pull-right">
             <div className="pull-right">
               <Filter />
-              <button onClick={() => setMapView(true)} className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
-              <button onClick={() => setMapView(false)} className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
+              <button onClick={() => setMapView(true) } className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
+              <button onClick={() => setMapView(false) } className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
             </div>
           </div>
         </div>
-        {mapView === true ? <Map onRef={(ref) => { this.map = ref; }} /> : <List />}
+        {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
+        <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );
   }
@@ -100,12 +103,11 @@ const mapState = (state) => {
     email: state.user.email,
     spotsTaken: state.user.spotsTaken,
     headingTo: state.headingTo,
-    map: state.map,
-    spots: state.streetspots,
+    map: state.map
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, ownProps) => {
   return {
     occupySpot(id, map) {
       const thunk = takeSpot(id, map);
@@ -122,8 +124,11 @@ const mapDispatch = (dispatch) => {
           }, 4000);
         })
     },
-    createSpot(component, id) {
+    createSpot(component, id){
       dispatch(addSpotOnServer(component, id));
+    },
+    toReportForm() {
+      ownProps.history.push('/home/reportForm');
     }
   };
 };

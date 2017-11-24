@@ -6,17 +6,19 @@ module.exports = router
 
 router.put('/', (req, res, next) => {
   const {onStreet, street1, street2} = req.body;
+  let rulesObjs;
   Rule.findAll({where: {
     mainStreet: onStreet,
     fromStreet: street1,
     toStreet: street2
   }})
   .then( totalRules => {
+    rulesObjs = totalRules
     return Promise.all(totalRules.map( rule => {
       return Sign.findAll({where: {rule: rule.rule}})
     }))
   })
-  .then( ruleObjs => {
-    res.send(ruleObjs)
+  .then( signsObjs => {
+    res.send(signsObjs);
   })
 })
