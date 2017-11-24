@@ -57,13 +57,13 @@ const Streetspots = db.define('streetspots', {
 
 // class method to control the status of a given instance
 Streetspots.statusController = (spot) => {
-  const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
+  const watch = new Stopwatch(240000); // A new countdown timer with 60 seconds
   watch.start();                      // count down starts
 
   // Fires when the timer is done 
   return watch.onDone(function () {
     console.log('Watch is complete, Changing status');
-    spot.status = "occupied";
+    spot.status = "expired";
     return spot.save();
   });
 }
