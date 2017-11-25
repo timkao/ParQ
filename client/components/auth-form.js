@@ -20,21 +20,21 @@ const AuthForm = (props) => {
     <div id="auth" className="flat-form">
       <ul className="tabs">
         <li>
-          <Link to="/login" className={displayName == 'Login' ? 'active' : null}>Login</Link>
+          <Link to="/login" className={displayName === 'Login' ? 'active' : null}>Login</Link>
         </li>
         <li>
-          <Link to="/signup" className={displayName == 'Sign Up' ? 'active' : null}>Sign Up</Link>
+          <Link to="/signup" className={displayName === 'Sign Up' ? 'active' : null}>Sign Up</Link>
         </li>
       </ul>
       <div id="login" className="form-action show">
 
-        {displayName == 'Login'
+        {displayName === 'Login'
           ? <h1>Welcome Back</h1>
-          : <h1>Start Using Parq</h1>}
+          : <h1>Become a Member</h1>}
         <form onSubmit={handleSubmit} name={name}>
           <ul>
             <li>
-            <input value="Email" name='email' type="email" required />
+            <input name='email' type="email" required />
             </li>
             <li>
               {displayName == 'Sign Up' ?
