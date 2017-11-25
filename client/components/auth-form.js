@@ -9,27 +9,41 @@ import { auth } from '../store'
 const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error, handleFocus, handleBlur, handleKeyup } = props
 
-
+  console.log('displayname:',displayName)
   return (
-    <div id="auth">
-      <form onSubmit={handleSubmit} name={name}>
-        <div className="form-group">
-          <label htmlFor='email'><small>Email</small></label>
-          <input className="form-control" name='email' type="email" required />
-        </div>
-        <div className="form-group">
-          <label htmlFor='psw'><small>Password</small></label>
-          {displayName == 'Sign Up' ?
-            <input className="form-control" type="password" id="psw" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" onFocus={handleFocus} onBlur={handleBlur} onKeyUp={handleKeyup} required />
-            : <input className="form-control" type="password" id="psw" name="password" required />
-          }
-        </div>
-        <div className="form-group">
-          <input id="form-submit" className="btn btn-default" type='submit' value={displayName} />
-          <a id="auth-google" href='/auth/google'>Login with Google</a>
-        </div>
-        {error && error.response && <div className="form-group alert alert-danger"> {error.response.data} </div>}
-      </form>
+    <div id="auth" className="flat-form">
+      <ul className="tabs">
+        <li>
+          <a href="#login" className={displayName == 'Login' ? 'active' : null}>Login</a>
+        </li>
+        <li>
+          <a href="#register">Register</a>
+        </li>
+        <li>
+          <a href="#reset">Reset Password</a>
+        </li>
+      </ul>
+      <div id="login" className="form-action show">
+        <h1>Welcome Back</h1>
+        <form onSubmit={handleSubmit} name={name}>
+          <ul>
+            <li>
+            <input placeholer="Email" name='email' type="email" required />
+            </li>
+            <li>
+              {displayName == 'Sign Up' ?
+               <input type="password" id="psw" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" onFocus={handleFocus} onBlur={handleBlur} onKeyUp={handleKeyup} required />
+                : <input className="form-control" type="password" id="psw" name="password" required />
+               }
+            </li>
+            <li>
+              <input id="form-submit" className="btn btn-default" type='submit' value={displayName} />
+              <a id="auth-google" href='/auth/google'>Login with Google</a>
+            </li>
+          {error && error.response && <div className="form-group alert alert-danger"> {error.response.data} </div>}
+          </ul>
+        </form>
+      </div>
       <div id="message">
         <h3>Password must contain the following:</h3>
         <p id="letter" className="invalid">A <b>lowercase</b> letter</p>

@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:100);
+
 body {
   background: url(/public/images/streets-background-min.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -48,7 +50,7 @@ body {
   background-color: lightblue;
 }
 
-#auth {
+/*#auth {
   width: 25em;
   margin-left: 5em;
   margin-top: 3em;
@@ -60,7 +62,7 @@ body {
   max-width: 960px;
   border-radius: 5px;
   padding: 50px;
-}
+}*/
 
 #auth #form-submit {
   width: 12.5em;
@@ -104,4 +106,151 @@ body {
   position: relative;
   left: -35px;
   content: "✖";
+}
+
+
+/* Auth Form =================================== */
+form ul {
+  padding-left:0;
+}
+form ul li {
+  display: block;
+}
+.flat-form {
+  background: rgba(51, 51, 51, 0.87);
+  color: white;
+  margin: 25px auto;
+  width: 390px;
+  height: 340px;
+  position: relative;
+  font-family: 'Roboto';
+}
+.flat-form .tabs {
+  display: block;
+  background: rgba(204, 204, 204, 0.33);
+  width: 100%;
+  height: 46px;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  position: relative;
+  list-style-type: none;
+}
+.flat-form .tabs li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+.flat-form .tabs li a {
+  display: block;
+  /*background: rgba(204, 204, 204, 0.33);*/
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  float: left;
+  padding: 12px 22px;
+}
+.flat-form .tabs li a.active {
+  background: rgba(51, 51, 51, 0.87);
+  border-right: none;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+.flat-form .tabs li a:hover {
+  background: #999;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  -webkit-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+.flat-form .tabs li:last-child a {
+  text-align: center;
+  width: 174px;
+  padding-left: 0;
+  padding-right: 0;
+  border-right: none;
+}
+.flat-form .form-action {
+  padding: 0 20px;
+  position: relative;
+}
+.flat-form h1 {
+  font-size: 42px;
+  padding-bottom: 10px;
+}
+.flat-form p {
+  font-size: 12px;
+  padding-bottom: 10px;
+  line-height: 25px;
+}
+.flat-form a {
+  color: yellow;
+  text-decoration: none;
+}
+.flat-form a:hover {
+  text-decoration: underline;
+}
+.flat-form form {
+  padding-right: 20px !important;
+}
+.flat-form form input {
+  font-family: 'Roboto';
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  background: #fff;
+  border: none;
+  color: #333333;
+  outline: none;
+}
+.flat-form form input.button {
+  border: none;
+  display: block;
+  background: #136899;
+  height: 40px;
+  width: 80px;
+  color: #ffffff;
+  text-align: center;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0px 3px 1px #2075aa;
+  -webkit-box-shadow: 0px 3px 1px #2075aa;
+  box-shadow: 0px 3px 1px #2075aa;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  -webkit-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+}
+.flat-form form input.button:hover {
+  background: #1e75aa;
+  -moz-box-shadow: 0 3px 1px #237bb2;
+  -webkit-box-shadow: 0 3px 1px #237bb2;
+  box-shadow: 0 3px 1px #237bb2;
+}
+.flat-form form input.button:active {
+  background: #136899;
+  @inclue box-shadow( 0 3px 1px #0f608c );
+}
+.flat-form form input::-webkit-input-placeholder {
+  color: #333333;
+}
+.flat-form form input:-moz-placeholder {
+  color: #333333;
+}
+.flat-form form input::-moz-placeholder {
+  color: #333333;
+}
+.flat-form form input:-ms-input-placeholder {
+  color: #333333;
+}
+.flat-form .show {
+  display: block;
+}
+.flat-form .hide {
+  display: none;
 }
