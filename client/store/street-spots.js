@@ -57,10 +57,13 @@ export const addSpotOnServerGeo = (map, userId) =>
         const spot = { longitude, latitude }
         // spot validation here
         return spotValidation([longitude, latitude])
-          .then(signs => {
+          .then(({totalSigns, mainStreet, crossStreet1, crossStreet2}) => {
+            spot.mainStreet = mainStreet;
+            spot.crossStreet1 = crossStreet1;
+            spot.crossStreet2 = crossStreet2;
             let signsForDispatch = [];
-            if (signs) {
-              signsForDispatch = signs.reduce(function (acc, sign) {
+            if (totalSigns) {
+              signsForDispatch = totalSigns.reduce(function (acc, sign) {
                 acc = acc.concat(sign);
                 return acc;
               }, [])
@@ -83,10 +86,14 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
     // spot validation here
     const { longitude, latitude } = spot;
     return spotValidation([longitude, latitude])
-      .then(signs => {
+      .then(({totalSigns, mainStreet, crossStreet1, crossStreet2}) => {
+        spot.mainStreet = mainStreet;
+        spot.crossStreet1 = crossStreet1;
+        spot.crossStreet2 = crossStreet2;
+        console.log('spot with streets', spot);
         let signsForDispatch = [];
-        if (signs) {
-          signsForDispatch = signs.reduce(function (acc, sign) {
+        if (totalSigns) {
+          signsForDispatch = totalSigns.reduce(function (acc, sign) {
             acc = acc.concat(sign);
             return acc;
           }, [])
@@ -247,6 +254,9 @@ function spotValidation(coor) {
             }))
         })
         .then(distances => {
+
+          if (distances.length > 1) {
+
           distances.sort(function (aDist, bDist) {
             return aDist.elements[0].distance.value - bDist.elements[0].distance.value
           })
@@ -357,10 +367,14 @@ function spotValidation(coor) {
               allsigns2 = allsigns2.filter(sign => parseInt(sign.distance) <= upperlimit2)
               return allsigns.concat(allsigns2);
             })
+          }
+          else {
+            return [];
+          }
         })
         .then(totalSigns => {
           console.log('following are possible parking rules in this area', totalSigns);
-          return totalSigns
+          return {totalSigns, mainStreet, crossStreet1, crossStreet2}
         })
         .catch(err => console.log(err));
     })
