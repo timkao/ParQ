@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { deleteSpotOnServer, updateSpotSize } from '../store';
+import LoadImage from './uploadImage';
 
 
 export class ReportForm extends Component {
 
   constructor() {
     super()
-    this.state = { sizeValue: 'full-size car' }
+    this.state = { sizeValue: 'full-size car', isUpload: false }
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showUpload = this.showUpload.bind(this);
   }
 
   handleChange(ev) {
@@ -30,9 +32,17 @@ export class ReportForm extends Component {
     confirmReportSpot(reportspot.id, this.state.sizeValue);
   }
 
+  showUpload(ev) {
+    ev.preventDefault();
+    this.setState({isUpload: !this.state.isUpload});
+  }
+
   render() {
-    const { handleChange, handleCancel, handleSubmit } = this;
+    const { handleChange, handleCancel, handleSubmit, showUpload } = this;
+    const { isUpload } = this.state;
     const { signs, reportspot } = this.props;
+    const uploadButton = isUpload ? 'Go Back' : 'Upload Picture (Optional)';
+
     return (
       <div id="report-form">
         {reportspot.mainStreet &&
@@ -62,8 +72,10 @@ export class ReportForm extends Component {
         }
         <form onSubmit={handleSubmit} className="spot-location">
           <div className="form-group">
-            <label htmlFor="upload-picture">Upload Picture (optional)</label>
-
+            <button className="form-control" onClick={showUpload} type="button">{uploadButton}</button>
+            {
+              isUpload && <LoadImage />
+            }
           </div>
           <div className="form-group">
             <label htmlFor="size-choice">Space Size</label>
