@@ -5,9 +5,9 @@ import { deleteSpotOnServer, updateSpotSize } from '../store';
 
 export class ReportForm extends Component {
 
-  constructor(){
+  constructor() {
     super()
-    this.state = {sizeValue: 'full-size car'}
+    this.state = { sizeValue: 'full-size car' }
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,30 +15,40 @@ export class ReportForm extends Component {
 
   handleChange(ev) {
     ev.preventDefault();
-    this.setState({sizeValue: ev.target.value})
+    this.setState({ sizeValue: ev.target.value })
   }
 
   handleCancel(ev) {
     ev.preventDefault();
-    const {cancelReportSpot, reportspot} = this.props;
+    const { cancelReportSpot, reportspot } = this.props;
     cancelReportSpot(reportspot.id);
   }
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { confirmReportSpot, reportspot} = this.props;
+    const { confirmReportSpot, reportspot } = this.props;
     confirmReportSpot(reportspot.id, this.state.sizeValue);
   }
 
   render() {
     const { handleChange, handleCancel, handleSubmit } = this;
-    const { signs } = this.props;
+    const { signs, reportspot } = this.props;
     return (
       <div id="report-form">
+        {reportspot.mainStreet &&
+          <div id="spot-description" className="spot-location">
+            <div className="text-center">
+              The Spot is on <strong>{reportspot.mainStreet}</strong>
+            </div>
+            <div className="text-center">
+              Between <strong>{reportspot.crossStreet1}</strong> and <strong>{reportspot.crossStreet2}</strong>
+            </div>
+          </div>
+        }
         {
           signs.length > 0 &&
-          <div>
-            <div>Rules Around the Spot</div>
+          <div className="spot-location">
+            <label>Rules Around the Spot</label>
             <ul className="list-group">
               {
                 signs.map(sign => {
@@ -50,7 +60,11 @@ export class ReportForm extends Component {
             </ul>
           </div>
         }
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="spot-location">
+          <div className="form-group">
+            <label htmlFor="upload-picture">Upload Picture (optional)</label>
+
+          </div>
           <div className="form-group">
             <label htmlFor="size-choice">Space Size</label>
             <select name="size" onChange={handleChange} id="size-choice" className="form-control" value={this.state.sizeValue}>
@@ -61,8 +75,9 @@ export class ReportForm extends Component {
             </select>
           </div>
           <div className="form-group">
-            <button>Report</button>
-            <button onClick={handleCancel} type="button">Cancel</button>
+            <button className="form-control">Report (Spot location is accurate)</button>
+            <button className="form-control">Report (Spot location is not accurate)</button>
+            <button className="form-control" onClick={handleCancel} type="button">Cancel</button>
           </div>
         </form>
       </div>
@@ -81,15 +96,15 @@ const mapDispatch = (dispatch, ownProps) => {
   return {
     cancelReportSpot(id) {
       dispatch(deleteSpotOnServer(id))
-      .then(() => {
-        ownProps.history.push('/home');
-      })
+        .then(() => {
+          ownProps.history.push('/home');
+        })
     },
     confirmReportSpot(id, size) {
       dispatch(updateSpotSize(id, size))
-      .then( () => {
-        ownProps.history.push('/home');
-      })
+        .then(() => {
+          ownProps.history.push('/home');
+        })
     }
   }
 }
