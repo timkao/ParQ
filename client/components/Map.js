@@ -135,6 +135,11 @@ export class Map extends Component {
     }
     return this.props.addSpotMarker(this.map, this.props.id, null, spot)
     .then( () => {
+      //Remove click marker once created
+      let marker = this.map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
+      this.map.removeLayer(marker.id)
+      this.map.removeSource(marker.id)
+      //Update state
       this.setState({loaded: true});
     }) //eventually pass in users default vehicle size
     // this.props.getMap(this);
