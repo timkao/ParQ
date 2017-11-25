@@ -1,3 +1,10 @@
+body {
+  background: url(/public/images/streets-background-min.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 #map {
   height: 100vh;
 }
@@ -44,6 +51,15 @@
 #auth {
   width: 25em;
   margin-left: 5em;
+  margin-top: 3em;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  margin: 40px auto;
+  background: rgba(23, 23, 23, 0.61);
+  max-width: 960px;
+  border-radius: 5px;
+  padding: 50px;
 }
 
 #auth #form-submit {
