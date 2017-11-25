@@ -218,6 +218,7 @@ function spotValidation(coor) {
   let distanceToClosestStreet;
   let distanceToFarStreet;
   let allsigns = [];
+  let allsigns2 = [];
   let mainStreet, crossStreet1, crossStreet2;
   return fetchGoogleAddress(coor)
     .then(place => {
@@ -280,47 +281,85 @@ function spotValidation(coor) {
               }
             })
             .then(signsFromCloseToFar => {
-              console.log('all signs: ', signsFromCloseToFar);
-              const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
-              const rangeBig = distanceToClosestStreet + 70;
+              console.log('all signs from close to far: ', signsFromCloseToFar);
+              const rangeSmall = distanceToClosestStreet - 50 > 0 ? distanceToClosestStreet - 50 : 0;
+              const rangeBig = distanceToClosestStreet + 50;
               console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
               // find remove the signs smaller than lower limit
               signsFromCloseToFar.forEach(signs => {
                 allsigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
               });
+              if (allsigns[0]) {
+                allsigns = allsigns[0];
+                // sort by distance
+                allsigns.sort(function (aSign, bSign) {
+                  return parseInt(aSign.distance) - parseInt(bSign.distance);
+                })
+              } else {
+                allsigns = [];
+              }
+              console.log('sorted signs:', allsigns);
               // find the upper limit
-              let upperlimit = allsigns[0].reduce(function(memo, sign){
-                const newDistance = parseInt(sign.distance);
-                if (memo == rangeBig) {
-                  return rangeBig
-                } else if (newDistance - rangeBig > 0){
-                  if ((newDistance - rangeBig) < (memo - rangeBig)) {
-                    return newDistance
-                  } else {
-                    return memo
-                  }
-                } else {
-                  return memo
+              let upperlimit;
+              for (var i = 0; i < allsigns.length; i++) {
+                const newDistance = parseInt(allsigns[i].distance);
+                if (newDistance === rangeBig) {
+                  upperlimit = rangeBig;
+                  break;
+                } else if (newDistance > rangeBig) {
+                  upperlimit = newDistance;
+                  break;
                 }
-              }, rangeSmall);
-              upperlimit = upperlimit < rangeBig ? rangeBig : upperlimit;
-              console.log('upper limit: ', upperlimit);
-              allsigns = allsigns[0].filter(sign => parseInt(sign.distance) <= upperlimit)
+              }
+              upperlimit = upperlimit <= rangeBig ? rangeBig : upperlimit;
+              allsigns = allsigns.filter(sign => parseInt(sign.distance) <= upperlimit)
               return allsigns;
+            })
+            .then(() => {
+              return axios.put('/api/rules', {
+                mainStreet: mainStreet,
+                crossStreet1: crossStreet2,
+                crossStreet2: crossStreet1
+              })
+                .then(result => result.data);
+            })
+            .then(signsFromFarToClose => {
+              console.log('all signs from far to close: ', signsFromFarToClose);
+              const rangeSmall2 = distanceToFarStreet - 50 > 0 ? distanceToFarStreet - 50 : 0;
+              const rangeBig2 = distanceToFarStreet + 50;
+              console.log(`the accuracy is between ${rangeSmall2}ft and ${rangeBig2}ft`);
+              // find remove the signs smaller than lower limit
+              signsFromFarToClose.forEach(signs => {
+                allsigns2.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall2))
+              });
+              if (allsigns2[0]) {
+                allsigns2 = allsigns2[0];
+                // sort by distance
+                allsigns2.sort(function (aSign2, bSign2) {
+                  return parseInt(aSign2.distance) - parseInt(bSign2.distance);
+                })
+              } else {
+                allsigns2 = [];
+              }
+              // find the upper limit
+              let upperlimit2;
+              for (var i = 0; i < allsigns2.length; i++) {
+                const newDistance = parseInt(allsigns2[i].distance);
+                if (newDistance === rangeBig2) {
+                  upperlimit2 = rangeBig2;
+                  break;
+                } else if (newDistance > rangeBig2) {
+                  upperlimit2 = newDistance;
+                  break;
+                }
+              }
+              upperlimit2 = upperlimit2 <= rangeBig2 ? rangeBig2 : upperlimit2;
+              allsigns2 = allsigns2.filter(sign => parseInt(sign.distance) <= upperlimit2)
+              return allsigns.concat(allsigns2);
             })
         })
         .then(totalSigns => {
-          // maybe rule too...
-          // console.log('all signs: ', totalSigns);
-          // const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
-          // const rangeBig = distanceToClosestStreet + 70;
-          // console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
-          // const qualifiedSigns = [];
-          // totalSigns.forEach(signs => {
-          //   qualifiedSigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall && parseInt(sign.distance) <= rangeBig))
-          // });
           console.log('following are possible parking rules in this area', totalSigns);
-          // return qualifiedSigns;
           return totalSigns
         })
         .catch(err => console.log(err));

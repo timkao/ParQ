@@ -15,7 +15,7 @@ const AuthForm = (props) => {
       <form onSubmit={handleSubmit} name={name}>
         <div className="form-group">
           <label htmlFor='email'><small>Email</small></label>
-          <input className="form-control" name='email' type='text' />
+          <input className="form-control" name='email' type="email" required />
         </div>
         <div className="form-group">
           <label htmlFor='psw'><small>Password</small></label>

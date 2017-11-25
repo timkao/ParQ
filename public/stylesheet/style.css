@@ -36,9 +36,9 @@
 }
 #report-form{
   position: fixed;
-  top: 50%;
-  left: 50%;
-  background-color: grey;
+  top: 20%;
+  left: 30%;
+  background-color: lightblue;
 }
 
 #auth {
