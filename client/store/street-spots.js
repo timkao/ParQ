@@ -54,28 +54,28 @@ export const addSpotOnServerGeo = (map, userId) =>
     return getUserLocation()
       .then(position => {
         const { longitude, latitude } = position.coords;
-        const spot = { longitude, latitude}
+        const spot = { longitude, latitude }
         // spot validation here
         return spotValidation([longitude, latitude])
-        .then(signs => {
-          let signsForDispatch = [];
-          if (signs) {
-            signsForDispatch = signs.reduce(function (acc, sign) {
-              acc = acc.concat(sign);
-              return acc;
-            }, [])
-          }
-          dispatch(getSigns(signsForDispatch));
-          return axios.post(`/api/streetspots/${userId}`, spot)
-        })
-        .then(newSpot => dispatch(getReportSpot(newSpot.data)))
-        .then(() => {
-          dispatch(fetchSpots())
-          socket.emit('new-spot-reported');
-        })
+          .then(signs => {
+            let signsForDispatch = [];
+            if (signs) {
+              signsForDispatch = signs.reduce(function (acc, sign) {
+                acc = acc.concat(sign);
+                return acc;
+              }, [])
+            }
+            dispatch(getSigns(signsForDispatch));
+            return axios.post(`/api/streetspots/${userId}`, spot)
+          })
+          .then(newSpot => dispatch(getReportSpot(newSpot.data)))
+          .then(() => {
+            dispatch(fetchSpots())
+            socket.emit('new-spot-reported');
+          })
       })
       .catch(err => console.log(err));
-    }
+  }
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
   dispatch => {
@@ -216,6 +216,9 @@ function findClosestStreets(tempArr) {
 function spotValidation(coor) {
   let standPoint;
   let distanceToClosestStreet;
+  let distanceToFarStreet;
+  let allsigns = [];
+  let mainStreet, crossStreet1, crossStreet2;
   return fetchGoogleAddress(coor)
     .then(place => {
       console.log('current locaiton: ', place);
@@ -260,27 +263,65 @@ function spotValidation(coor) {
             .then(bool => {
               if (bool) {
                 console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
-                return axios.put('/api/rules', { onStreet, street1, street2 })
+                distanceToFarStreet = parseFtAndMile(distances[1].elements[0].distance.text);
+                mainStreet = onStreet;
+                crossStreet1 = street1;
+                crossStreet2 = street2;
+                return axios.put('/api/rules', { mainStreet, crossStreet1, crossStreet2 })
                   .then(result => result.data);
               } else {
                 console.log(`you are on ${onStreet} between ${street1} and ${street3}`)
-                return axios.put('/api/rules', { onStreet, street1, street3 })
+                distanceToFarStreet = parseFtAndMile(distances[2].elements[0].distance.text);
+                mainStreet = onStreet;
+                crossStreet1 = street1;
+                crossStreet2 = street3;
+                return axios.put('/api/rules', { mainStreet, crossStreet1, crossStreet2 })
                   .then(result => result.data);
               }
+            })
+            .then(signsFromCloseToFar => {
+              console.log('all signs: ', signsFromCloseToFar);
+              const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
+              const rangeBig = distanceToClosestStreet + 70;
+              console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
+              // find remove the signs smaller than lower limit
+              signsFromCloseToFar.forEach(signs => {
+                allsigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
+              });
+              // find the upper limit
+              let upperlimit = allsigns[0].reduce(function(memo, sign){
+                const newDistance = parseInt(sign.distance);
+                if (memo == rangeBig) {
+                  return rangeBig
+                } else if (newDistance - rangeBig > 0){
+                  if ((newDistance - rangeBig) < (memo - rangeBig)) {
+                    return newDistance
+                  } else {
+                    return memo
+                  }
+                } else {
+                  return memo
+                }
+              }, rangeSmall);
+              upperlimit = upperlimit < rangeBig ? rangeBig : upperlimit;
+              console.log('upper limit: ', upperlimit);
+              allsigns = allsigns[0].filter(sign => parseInt(sign.distance) <= upperlimit)
+              return allsigns;
             })
         })
         .then(totalSigns => {
           // maybe rule too...
-          console.log('all signs: ', totalSigns);
-          const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
-          const rangeBig = distanceToClosestStreet + 70;
-          console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
-          const qualifiedSigns = [];
-          totalSigns.forEach(signs => {
-            qualifiedSigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall && parseInt(sign.distance) <= rangeBig))
-          });
-          console.log('following are possible parking rules in this area', qualifiedSigns);
-          return qualifiedSigns;
+          // console.log('all signs: ', totalSigns);
+          // const rangeSmall = distanceToClosestStreet - 70 > 0 ? distanceToClosestStreet - 70 : 0;
+          // const rangeBig = distanceToClosestStreet + 70;
+          // console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
+          // const qualifiedSigns = [];
+          // totalSigns.forEach(signs => {
+          //   qualifiedSigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall && parseInt(sign.distance) <= rangeBig))
+          // });
+          console.log('following are possible parking rules in this area', totalSigns);
+          // return qualifiedSigns;
+          return totalSigns
         })
         .catch(err => console.log(err));
     })
