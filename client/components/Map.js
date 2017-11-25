@@ -51,6 +51,26 @@ export class Map extends Component {
     let filteredSpots = filterSpots(currentFilter, spots.features);
     let filteredLots = filterSpots(currentFilter, lots.features);
 
+    //Create a source & layer from our streetspots
+    //Check to see if source & layer exist from inital load
+    let exists = map.getSource('streetspots')
+    if (exists) {
+      //Source exists, eenewing the data
+      map.getSource('streetspots').setData(spots)
+    } else {
+      map.addSource('streetspots', {
+          "type": "geojson",
+          "data": spots
+        })
+        //Add a layer on the map
+        map.addLayer({
+          id: 'streetspots',
+          type: 'symbol',
+          // Add a GeoJSON source containing place coordinates and information.
+          source: "streetspots"
+        });
+    }
+
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       spots.features &&
       filteredSpots.forEach(function(spot) {
@@ -115,6 +135,11 @@ export class Map extends Component {
     }
     return this.props.addSpotMarker(this.map, this.props.id, null, spot)
     .then( () => {
+      //Remove click marker once created
+      let marker = this.map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
+      this.map.removeLayer(marker.id)
+      this.map.removeSource(marker.id)
+      //Update state
       this.setState({loaded: true});
     }) //eventually pass in users default vehicle size
     // this.props.getMap(this);
