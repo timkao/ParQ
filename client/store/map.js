@@ -1,21 +1,12 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
 import store, { fetchLots, fetchSpots } from './';
-import {getDistanceFromLatLng} from '../helpers';
+import { getDistanceFromLatLng, getUserLocation} from '../helpers';
 
 /**
  * API ACCESS
  */
 mapboxgl.accessToken = process.env.mapboxKey;
-
-/**
- * HELPER FUNCTIONS
- */
-const getUserLocation = function (options) {
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  });
-};
 
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {
@@ -49,7 +40,6 @@ const createDraggablePoint = (map, event) => {
     map.removeLayer(exists.id)
     map.removeSource(exists.id)
   }
-
 
   // Is the cursor over a point? if this
   // flag is active, we listen for a mousedown event.
