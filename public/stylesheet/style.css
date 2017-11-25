@@ -108,6 +108,14 @@ body {
   content: "✖";
 }
 
+/* Signup/Login Logo Box ======================= */
+.logo-box {
+  width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  /* For smaller mobile phones < 350px: */
+  max-width: 100%;
+}
 
 /* Auth Form =================================== */
 form ul {
@@ -154,25 +162,28 @@ form ul li {
 .flat-form .tabs li a.active {
   background: rgba(51, 51, 51, 0.87);
   border-right: none;
-  -moz-transition: all 0.5s linear;
-  -o-transition: all 0.5s linear;
-  -webkit-transition: all 0.5s linear;
-  transition: all 0.5s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 .flat-form .tabs li a:hover {
   background: #999;
-  -moz-transition: all 0.5s linear;
-  -o-transition: all 0.5s linear;
-  -webkit-transition: all 0.5s linear;
-  transition: all 0.5s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
-.flat-form .tabs li:last-child a {
+/* If we implement reset pass, there's
+   additional space here in the tab
+*/
+/*.flat-form .tabs li:last-child a {
   text-align: center;
   width: 174px;
   padding-left: 0;
   padding-right: 0;
   border-right: none;
-}
+}*/
 .flat-form .form-action {
   padding: 0 20px;
   position: relative;

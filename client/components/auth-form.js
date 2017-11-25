@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { auth } from '../store'
+import { Link } from 'react-router-dom'
+
 
 /**
  * COMPONENT
@@ -11,24 +13,28 @@ const AuthForm = (props) => {
 
   console.log('displayname:',displayName)
   return (
+  <div>
+    <div className="logo-box">
+      <img src="http://via.placeholder.com/350x150?text=Parq_Logo" />
+    </div>
     <div id="auth" className="flat-form">
       <ul className="tabs">
         <li>
-          <a href="#login" className={displayName == 'Login' ? 'active' : null}>Login</a>
+          <Link to="/login" className={displayName == 'Login' ? 'active' : null}>Login</Link>
         </li>
         <li>
-          <a href="#register">Register</a>
-        </li>
-        <li>
-          <a href="#reset">Reset Password</a>
+          <Link to="/signup" className={displayName == 'Sign Up' ? 'active' : null}>Sign Up</Link>
         </li>
       </ul>
       <div id="login" className="form-action show">
-        <h1>Welcome Back</h1>
+
+        {displayName == 'Login'
+          ? <h1>Welcome Back</h1>
+          : <h1>Start Using Parq</h1>}
         <form onSubmit={handleSubmit} name={name}>
           <ul>
             <li>
-            <input placeholer="Email" name='email' type="email" required />
+            <input value="Email" name='email' type="email" required />
             </li>
             <li>
               {displayName == 'Sign Up' ?
@@ -52,6 +58,7 @@ const AuthForm = (props) => {
         <p id="length" className="invalid">Minimum <b>8 characters</b></p>
       </div>
     </div>
+  </div>
   )
 }
 
