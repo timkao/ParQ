@@ -1,6 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import '../../secrets';
 import store, { fetchLots, fetchSpots } from './';
+import {getDistanceFromLatLng} from '../helpers';
 
 /**
  * API ACCESS
@@ -22,13 +23,27 @@ const createDraggablePoint = (map, event) => {
   // flag is active, we move the point on `mousemove`.
   var isDragging;
   var coords = event.lngLat;
-  console.log('current map layers:',map.getStyle().layers) //testing
+
   //First we check to see if user is trying to create
   //another point on map and instead of dragging current one
   let exists = map.getStyle().layers.find((layer) => layer.id === 'createdPoint')
-  let exitsSpot = map.getSource('streetspots') || null
-  console.log('exitsSpot',exitsSpot)
-  //If so, we remove the point so we can create a new one
+
+  //Then we check to see if the user is clicking on a currently labeled open spot (no need for a click marker)
+  let streetSpotLayer = map.getSource('streetspots') || null //Making sure the streetspots layer was added
+  // let existsSpot
+  //We look through the layer data and search the straight-lin distance between the click and the spot
+  //More information about these functions in ../helpers
+  if (streetSpotLayer) {
+   let existsSpot =
+    streetSpotLayer._data.features
+      .filter((source) => {
+          return getDistanceFromLatLng(coords.lat,coords.lng,source.geometry.coordinates[1],source.geometry.coordinates[0]) === 0
+        })
+    //If the clicked point vs streetspot distance is 0, we break out of the entire function
+    //as to not create another click point
+    if (existsSpot.length) return
+  }
+  //If exists is true, we remove the created click point to create a new one
   //note we need to remove the source as well
   if (exists) {
     map.removeLayer(exists.id)
