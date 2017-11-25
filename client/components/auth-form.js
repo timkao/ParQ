@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { auth } from '../store'
 import { Link } from 'react-router-dom'
+import LoginLogo from './LoginLogo';
 
 
 /**
@@ -14,9 +15,7 @@ const AuthForm = (props) => {
   console.log('displayname:',displayName)
   return (
   <div>
-    <div className="logo-box">
-      <img src="http://via.placeholder.com/350x150?text=Parq_Logo" />
-    </div>
+    <LoginLogo />
     <div id="auth" className="flat-form">
       <ul className="tabs">
         <li>
