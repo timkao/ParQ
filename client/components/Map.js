@@ -117,7 +117,9 @@ export class Map extends Component {
       });
     }
     const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
-    getUserLocationBtn.click();
+    if (this.state.loaded && getUserLocationBtn.getAttribute('aria-pressed') === 'false'){
+      getUserLocationBtn.click();
+    }
   }
   }
 
