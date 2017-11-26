@@ -6,7 +6,7 @@ import socket from '../socket';
 import Map from './Map';
 import List from './List';
 import Filter from './Filter';
-import { Route } from 'React-router-dom';
+import { Route } from 'react-router-dom';
 import reportForm from './report-form';
 
 export class UserHome extends Component {
