@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteSpotOnServer, updateSpotSize } from '../store';
-import LoadImage from './uploadImage';
-
+import { deleteSpotOnServer, updateSpotSizeAndPic } from '../store';
+import Dropzone from 'react-dropzone';
 
 export class ReportForm extends Component {
 
   constructor() {
     super()
-    this.state = { sizeValue: 'full-size car', isUpload: false }
+    this.state = {
+      sizeValue: 'full-size car',
+      isUpload: false,
+      data_uri: '',
+      filename: '',
+      processing: false,
+      pictures: []
+    }
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOnDrop = this.handleOnDrop.bind(this);
     this.showUpload = this.showUpload.bind(this);
   }
 
@@ -28,18 +35,45 @@ export class ReportForm extends Component {
 
   handleSubmit(ev) {
     ev.preventDefault();
+    this.setState({ processing: true });
     const { confirmReportSpot, reportspot } = this.props;
-    confirmReportSpot(reportspot.id, this.state.sizeValue);
+    const { sizeValue, pictures } = this.state;
+    if (pictures.length > 0) {
+      confirmReportSpot(reportspot.id, sizeValue, pictures);
+    } else {
+      confirmReportSpot(reportspot.id, sizeValue);
+    }
   }
 
   showUpload(ev) {
     ev.preventDefault();
-    this.setState({isUpload: !this.state.isUpload});
+    const currentStat = this.state.isUpload;
+    if (currentStat) {
+      this.setState({ isUpload: !currentStat, picturess: [] });
+    } else {
+      this.setState({ isUpload: !currentStat });
+    }
+  }
+
+  handleOnDrop(files) {
+    files.map(function (file) {
+      const reader = new FileReader();
+      reader.onload = (upload) => {
+        const uploadedFile = {
+          data_uri: upload.target.result,
+          filename: file.name,
+          filetype: file.type
+        }
+        document.getElementById('drop-zone').style.backgroundImage = `url(${reader.result})`;
+        this.setState(prevState => ({ pictures: [...prevState.pictures, uploadedFile] }))
+      };
+      reader.readAsDataURL(file);
+    }, this);
   }
 
   render() {
-    const { handleChange, handleCancel, handleSubmit, showUpload } = this;
-    const { isUpload } = this.state;
+    const { handleChange, handleCancel, handleSubmit, showUpload, handleOnDrop } = this;
+    const { isUpload, processing } = this.state;
     const { signs, reportspot } = this.props;
     const uploadButton = isUpload ? 'Go Back' : 'Upload Picture (Optional)';
 
@@ -74,7 +108,10 @@ export class ReportForm extends Component {
           <div className="form-group">
             <button className="form-control" onClick={showUpload} type="button">{uploadButton}</button>
             {
-              isUpload && <LoadImage />
+              isUpload &&
+              <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "300px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "cover", backgroundImage: "url(/public/images/noimage.png)" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
+                <p>Try dropping some files here, or click to select files to upload.</p>
+              </Dropzone>
             }
           </div>
           <div className="form-group">
@@ -112,8 +149,8 @@ const mapDispatch = (dispatch, ownProps) => {
           ownProps.history.push('/home');
         })
     },
-    confirmReportSpot(id, size) {
-      dispatch(updateSpotSize(id, size))
+    confirmReportSpot(id, size, pictures) {
+      dispatch(updateSpotSizeAndPic(id, size, pictures))
         .then(() => {
           ownProps.history.push('/home');
         })

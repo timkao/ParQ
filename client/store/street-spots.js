@@ -57,7 +57,7 @@ export const addSpotOnServerGeo = (map, userId) =>
         const spot = { longitude, latitude }
         // spot validation here
         return spotValidation([longitude, latitude])
-          .then(({totalSigns, mainStreet, crossStreet1, crossStreet2}) => {
+          .then(({ totalSigns, mainStreet, crossStreet1, crossStreet2 }) => {
             spot.mainStreet = mainStreet;
             spot.crossStreet1 = crossStreet1;
             spot.crossStreet2 = crossStreet2;
@@ -86,7 +86,7 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
     // spot validation here
     const { longitude, latitude } = spot;
     return spotValidation([longitude, latitude])
-      .then(({totalSigns, mainStreet, crossStreet1, crossStreet2}) => {
+      .then(({ totalSigns, mainStreet, crossStreet1, crossStreet2 }) => {
         spot.mainStreet = mainStreet;
         spot.crossStreet1 = crossStreet1;
         spot.crossStreet2 = crossStreet2;
@@ -135,9 +135,16 @@ export const takeSpot = (id, map) =>
       })
       .catch(err => console.log(err));
 
-export const updateSpotSize = (id, size) => {
+export const updateSpotSizeAndPic = (id, size, pictures) => {
   return (dispatch) => {
     return axios.put(`/api/streetspots/${id}/size`, { size })
+      .then(() => {
+        if (pictures) {
+          return axios.put(`/api/streetspots/${id}/pictures`, { pictures })
+        } else {
+          return null
+        }
+      })
       .then(() => dispatch(fetchSpots()))
       .catch(err => console.log(err));
   }
@@ -257,116 +264,116 @@ function spotValidation(coor) {
 
           if (distances.length > 1) {
 
-          distances.sort(function (aDist, bDist) {
-            return aDist.elements[0].distance.value - bDist.elements[0].distance.value
-          })
-          console.log('sort by distances: ', distances);
-          distanceToClosestStreet = parseFtAndMile(distances[0].elements[0].distance.text);
-
-          // if (distances.length > 3)
-          const onStreet = distances[0].currentStreet;
-          const street1 = distances[0].crossStreet;
-          const street2 = distances[1].crossStreet;
-          const street3 = distances[2].crossStreet;
-
-          // find the cloest two streets
-          return findClosestStreets(distances)
-            .then(bool => {
-              if (bool) {
-                console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
-                distanceToFarStreet = parseFtAndMile(distances[1].elements[0].distance.text);
-                mainStreet = onStreet;
-                crossStreet1 = street1;
-                crossStreet2 = street2;
-                return axios.put('/api/rules', { mainStreet, crossStreet1, crossStreet2 })
-                  .then(result => result.data);
-              } else {
-                console.log(`you are on ${onStreet} between ${street1} and ${street3}`)
-                distanceToFarStreet = parseFtAndMile(distances[2].elements[0].distance.text);
-                mainStreet = onStreet;
-                crossStreet1 = street1;
-                crossStreet2 = street3;
-                return axios.put('/api/rules', { mainStreet, crossStreet1, crossStreet2 })
-                  .then(result => result.data);
-              }
+            distances.sort(function (aDist, bDist) {
+              return aDist.elements[0].distance.value - bDist.elements[0].distance.value
             })
-            .then(signsFromCloseToFar => {
-              console.log('all signs from close to far: ', signsFromCloseToFar);
-              const rangeSmall = distanceToClosestStreet - 50 > 0 ? distanceToClosestStreet - 50 : 0;
-              const rangeBig = distanceToClosestStreet + 50;
-              console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
-              // find remove the signs smaller than lower limit
-              signsFromCloseToFar.forEach(signs => {
-                allsigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
-              });
-              if (allsigns[0]) {
-                allsigns = allsigns[0];
-                // sort by distance
-                allsigns.sort(function (aSign, bSign) {
-                  return parseInt(aSign.distance) - parseInt(bSign.distance);
-                })
-              } else {
-                allsigns = [];
-              }
-              console.log('sorted signs:', allsigns);
-              // find the upper limit
-              let upperlimit;
-              for (var i = 0; i < allsigns.length; i++) {
-                const newDistance = parseInt(allsigns[i].distance);
-                if (newDistance === rangeBig) {
-                  upperlimit = rangeBig;
-                  break;
-                } else if (newDistance > rangeBig) {
-                  upperlimit = newDistance;
-                  break;
+            console.log('sort by distances: ', distances);
+            distanceToClosestStreet = parseFtAndMile(distances[0].elements[0].distance.text);
+
+            // if (distances.length > 3)
+            const onStreet = distances[0].currentStreet;
+            const street1 = distances[0].crossStreet;
+            const street2 = distances[1].crossStreet;
+            const street3 = distances[2].crossStreet;
+
+            // find the cloest two streets
+            return findClosestStreets(distances)
+              .then(bool => {
+                if (bool) {
+                  console.log(`you are on ${onStreet} between ${street1} and ${street2}`)
+                  distanceToFarStreet = parseFtAndMile(distances[1].elements[0].distance.text);
+                  mainStreet = onStreet;
+                  crossStreet1 = street1;
+                  crossStreet2 = street2;
+                  return axios.put('/api/rules', { mainStreet, crossStreet1, crossStreet2 })
+                    .then(result => result.data);
+                } else {
+                  console.log(`you are on ${onStreet} between ${street1} and ${street3}`)
+                  distanceToFarStreet = parseFtAndMile(distances[2].elements[0].distance.text);
+                  mainStreet = onStreet;
+                  crossStreet1 = street1;
+                  crossStreet2 = street3;
+                  return axios.put('/api/rules', { mainStreet, crossStreet1, crossStreet2 })
+                    .then(result => result.data);
                 }
-              }
-              upperlimit = upperlimit <= rangeBig ? rangeBig : upperlimit;
-              allsigns = allsigns.filter(sign => parseInt(sign.distance) <= upperlimit)
-              return allsigns;
-            })
-            .then(() => {
-              return axios.put('/api/rules', {
-                mainStreet: mainStreet,
-                crossStreet1: crossStreet2,
-                crossStreet2: crossStreet1
               })
-                .then(result => result.data);
-            })
-            .then(signsFromFarToClose => {
-              console.log('all signs from far to close: ', signsFromFarToClose);
-              const rangeSmall2 = distanceToFarStreet - 50 > 0 ? distanceToFarStreet - 50 : 0;
-              const rangeBig2 = distanceToFarStreet + 50;
-              console.log(`the accuracy is between ${rangeSmall2}ft and ${rangeBig2}ft`);
-              // find remove the signs smaller than lower limit
-              signsFromFarToClose.forEach(signs => {
-                allsigns2.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall2))
-              });
-              if (allsigns2[0]) {
-                allsigns2 = allsigns2[0];
-                // sort by distance
-                allsigns2.sort(function (aSign2, bSign2) {
-                  return parseInt(aSign2.distance) - parseInt(bSign2.distance);
-                })
-              } else {
-                allsigns2 = [];
-              }
-              // find the upper limit
-              let upperlimit2;
-              for (var i = 0; i < allsigns2.length; i++) {
-                const newDistance = parseInt(allsigns2[i].distance);
-                if (newDistance === rangeBig2) {
-                  upperlimit2 = rangeBig2;
-                  break;
-                } else if (newDistance > rangeBig2) {
-                  upperlimit2 = newDistance;
-                  break;
+              .then(signsFromCloseToFar => {
+                console.log('all signs from close to far: ', signsFromCloseToFar);
+                const rangeSmall = distanceToClosestStreet - 50 > 0 ? distanceToClosestStreet - 50 : 0;
+                const rangeBig = distanceToClosestStreet + 50;
+                console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
+                // find remove the signs smaller than lower limit
+                signsFromCloseToFar.forEach(signs => {
+                  allsigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
+                });
+                if (allsigns[0]) {
+                  allsigns = allsigns[0];
+                  // sort by distance
+                  allsigns.sort(function (aSign, bSign) {
+                    return parseInt(aSign.distance) - parseInt(bSign.distance);
+                  })
+                } else {
+                  allsigns = [];
                 }
-              }
-              upperlimit2 = upperlimit2 <= rangeBig2 ? rangeBig2 : upperlimit2;
-              allsigns2 = allsigns2.filter(sign => parseInt(sign.distance) <= upperlimit2)
-              return allsigns.concat(allsigns2);
-            })
+                console.log('sorted signs:', allsigns);
+                // find the upper limit
+                let upperlimit;
+                for (var i = 0; i < allsigns.length; i++) {
+                  const newDistance = parseInt(allsigns[i].distance);
+                  if (newDistance === rangeBig) {
+                    upperlimit = rangeBig;
+                    break;
+                  } else if (newDistance > rangeBig) {
+                    upperlimit = newDistance;
+                    break;
+                  }
+                }
+                upperlimit = upperlimit <= rangeBig ? rangeBig : upperlimit;
+                allsigns = allsigns.filter(sign => parseInt(sign.distance) <= upperlimit)
+                return allsigns;
+              })
+              .then(() => {
+                return axios.put('/api/rules', {
+                  mainStreet: mainStreet,
+                  crossStreet1: crossStreet2,
+                  crossStreet2: crossStreet1
+                })
+                  .then(result => result.data);
+              })
+              .then(signsFromFarToClose => {
+                console.log('all signs from far to close: ', signsFromFarToClose);
+                const rangeSmall2 = distanceToFarStreet - 50 > 0 ? distanceToFarStreet - 50 : 0;
+                const rangeBig2 = distanceToFarStreet + 50;
+                console.log(`the accuracy is between ${rangeSmall2}ft and ${rangeBig2}ft`);
+                // find remove the signs smaller than lower limit
+                signsFromFarToClose.forEach(signs => {
+                  allsigns2.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall2))
+                });
+                if (allsigns2[0]) {
+                  allsigns2 = allsigns2[0];
+                  // sort by distance
+                  allsigns2.sort(function (aSign2, bSign2) {
+                    return parseInt(aSign2.distance) - parseInt(bSign2.distance);
+                  })
+                } else {
+                  allsigns2 = [];
+                }
+                // find the upper limit
+                let upperlimit2;
+                for (var i = 0; i < allsigns2.length; i++) {
+                  const newDistance = parseInt(allsigns2[i].distance);
+                  if (newDistance === rangeBig2) {
+                    upperlimit2 = rangeBig2;
+                    break;
+                  } else if (newDistance > rangeBig2) {
+                    upperlimit2 = newDistance;
+                    break;
+                  }
+                }
+                upperlimit2 = upperlimit2 <= rangeBig2 ? rangeBig2 : upperlimit2;
+                allsigns2 = allsigns2.filter(sign => parseInt(sign.distance) <= upperlimit2)
+                return allsigns.concat(allsigns2);
+              })
           }
           else {
             return [];
@@ -374,7 +381,7 @@ function spotValidation(coor) {
         })
         .then(totalSigns => {
           console.log('following are possible parking rules in this area', totalSigns);
-          return {totalSigns, mainStreet, crossStreet1, crossStreet2}
+          return { totalSigns, mainStreet, crossStreet1, crossStreet2 }
         })
         .catch(err => console.log(err));
     })

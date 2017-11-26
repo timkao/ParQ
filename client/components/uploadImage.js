@@ -42,7 +42,7 @@ class LoadImage extends Component {
           filename: file.name,
           filetype: file.type
         }
-        console.log(uploadedFile);
+        console.log(uploadedFile)
         this.setState(prevState => ({ files: [...prevState.files, uploadedFile] }))
       };
 
