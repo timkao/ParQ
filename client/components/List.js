@@ -29,7 +29,7 @@ export class List extends Component{
       <div id="list">
         <ul className="list-group">
           {filteredSpotsAndLots.map(spot => {
-            return <li key={spot.properties.id} className="list-group-item">{spot.place_name}</li>;
+            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name}</li>;
           })}
         </ul>
       </div>

@@ -53,23 +53,26 @@ export class Map extends Component {
 
       //Create a source & layer from our streetspots
       //Check to see if source & layer exist from inital load
-      let exists = map.getSource('streetspots')
-      if (exists) {
-        //Source exists, eenewing the data
-        map.getSource('streetspots').setData(spots)
-      } else {
-        map.addSource('streetspots', {
-            "type": "geojson",
-            "data": spots
-          })
-          //Add a layer on the map
-          map.addLayer({
-            id: 'streetspots',
-            type: 'symbol',
-            // Add a GeoJSON source containing place coordinates and information.
-            source: "streetspots"
-          });
-      }
+      map.on('load', function(){
+        let exists = map.getSource('streetspots')
+        if (exists) {
+          //Source exists, eenewing the data
+          map.getSource('streetspots').setData(spots)
+        } else {
+          map.addSource('streetspots', {
+              "type": "geojson",
+              "data": spots
+            })
+            //Add a layer on the map
+            map.addLayer({
+              id: 'streetspots',
+              type: 'symbol',
+              // Add a GeoJSON source containing place coordinates and information.
+              source: "streetspots"
+            });
+        }
+
+      })
 
       if (filter.type.includes('Street') || filter.type.length < 1 ){
         spots.features &&
@@ -150,7 +153,7 @@ export class Map extends Component {
   }
 
   renewSpotsWithMap() {
-    const { renewSpots, map } = this.props
+    const { renewSpots, map } = this.props;
     renewSpots(map);
   }
 
