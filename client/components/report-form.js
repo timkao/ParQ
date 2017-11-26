@@ -106,12 +106,14 @@ export class ReportForm extends Component {
         }
         <form onSubmit={handleSubmit} className="spot-location">
           <div className="form-group">
-            <button className="form-control" onClick={showUpload} type="button">{uploadButton}</button>
+            <button id="upload-button" className="form-control" onClick={showUpload} type="button">{uploadButton}</button>
             {
               isUpload &&
-              <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "300px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "cover", backgroundImage: "url(/public/images/noimage.png)" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
-                <p>Try dropping some files here, or click to select files to upload.</p>
-              </Dropzone>
+              <div>
+                <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "300px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "contain", backgroundImage: "url(/public/images/noimage.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
+                </Dropzone>
+                <div className="text-center">Drop Picture in the box, or click to select pictures to upload.</div>
+              </div>
             }
           </div>
           <div className="form-group">
