@@ -57,10 +57,12 @@ export const addSpotOnServerGeo = (map, userId) =>
         const spot = { longitude, latitude }
         // spot validation here
         return spotValidation([longitude, latitude])
-          .then(({ totalSigns, mainStreet, crossStreet1, crossStreet2 }) => {
+          .then(({ totalSigns, mainStreet, crossStreet1, crossStreet2, fromS, gotoS }) => {
             spot.mainStreet = mainStreet;
             spot.crossStreet1 = crossStreet1;
             spot.crossStreet2 = crossStreet2;
+            spot.fromStreet = fromS;
+            spot.gotoStreet = gotoS;
             let signsForDispatch = [];
             if (totalSigns) {
               signsForDispatch = totalSigns.reduce(function (acc, sign) {
@@ -86,10 +88,12 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
     // spot validation here
     const { longitude, latitude } = spot;
     return spotValidation([longitude, latitude])
-      .then(({ totalSigns, mainStreet, crossStreet1, crossStreet2 }) => {
+      .then(({ totalSigns, mainStreet, crossStreet1, crossStreet2, fromS, gotoS }) => {
         spot.mainStreet = mainStreet;
         spot.crossStreet1 = crossStreet1;
         spot.crossStreet2 = crossStreet2;
+        spot.fromStreet = fromS;
+        spot.gotoStreet = gotoS;
         console.log('spot with streets', spot);
         let signsForDispatch = [];
         if (totalSigns) {
@@ -233,7 +237,7 @@ function spotValidation(coor) {
   let distanceToFarStreet;
   let allsigns = [];
   let allsigns2 = [];
-  let mainStreet, crossStreet1, crossStreet2;
+  let mainStreet, crossStreet1, crossStreet2, fromS, gotoS;
   return fetchGoogleAddress(coor)
     .then(place => {
       console.log('current locaiton: ', place);
@@ -262,8 +266,7 @@ function spotValidation(coor) {
         })
         .then(distances => {
 
-          if (distances.length > 1) {
-
+          if (distances.length > 2) {
             distances.sort(function (aDist, bDist) {
               return aDist.elements[0].distance.value - bDist.elements[0].distance.value
             })
@@ -298,16 +301,31 @@ function spotValidation(coor) {
                 }
               })
               .then(signsFromCloseToFar => {
-                console.log('all signs from close to far: ', signsFromCloseToFar);
+                if (signsFromCloseToFar.length > 0) {
+                  fromS = crossStreet1;
+                  gotoS = crossStreet2;
+                }
+
                 const rangeSmall = distanceToClosestStreet - 50 > 0 ? distanceToClosestStreet - 50 : 0;
                 const rangeBig = distanceToClosestStreet + 50;
                 console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
                 // find remove the signs smaller than lower limit
                 signsFromCloseToFar.forEach(signs => {
-                  allsigns.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
+                   let side;
+                   for (var i = 0; i < signs.length; i++) {
+                     if (["W", "E", "N", "S"].includes(signs[i].side.trim())){
+                       side = signs[i].side.trim();
+                       break
+                     }
+                   }
+                   signs.forEach(sign => {
+                     sign.side = side;
+                     sign.fromStreet = fromS;
+                     sign.gotoStreet = gotoS;
+                    });
+                   allsigns = allsigns.concat(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
                 });
-                if (allsigns[0]) {
-                  allsigns = allsigns[0];
+                if (allsigns.length > 0) {
                   // sort by distance
                   allsigns.sort(function (aSign, bSign) {
                     return parseInt(aSign.distance) - parseInt(bSign.distance);
@@ -342,15 +360,30 @@ function spotValidation(coor) {
               })
               .then(signsFromFarToClose => {
                 console.log('all signs from far to close: ', signsFromFarToClose);
+                if (signsFromFarToClose.length > 0) {
+                  fromS = crossStreet2;
+                  gotoS = crossStreet1;
+                }
                 const rangeSmall2 = distanceToFarStreet - 50 > 0 ? distanceToFarStreet - 50 : 0;
                 const rangeBig2 = distanceToFarStreet + 50;
                 console.log(`the accuracy is between ${rangeSmall2}ft and ${rangeBig2}ft`);
                 // find remove the signs smaller than lower limit
                 signsFromFarToClose.forEach(signs => {
-                  allsigns2.push(signs.filter(sign => parseInt(sign.distance) >= rangeSmall2))
+                  let side;
+                  for (var i = 0; i < signs.length; i++) {
+                    if (["W", "E", "N", "S"].includes(signs[i].side.trim())){
+                      side = signs[i].side.trim();
+                      break
+                    }
+                  }
+                  signs.forEach(sign => {
+                    sign.side = side;
+                    sign.fromStreet = fromS;
+                    sign.gotoStreet = gotoS;
+                   });
+                  allsigns2 = allsigns2.concat(signs.filter(sign => parseInt(sign.distance) >= rangeSmall2))
                 });
-                if (allsigns2[0]) {
-                  allsigns2 = allsigns2[0];
+                if (allsigns2.length > 0) {
                   // sort by distance
                   allsigns2.sort(function (aSign2, bSign2) {
                     return parseInt(aSign2.distance) - parseInt(bSign2.distance);
@@ -381,7 +414,7 @@ function spotValidation(coor) {
         })
         .then(totalSigns => {
           console.log('following are possible parking rules in this area', totalSigns);
-          return { totalSigns, mainStreet, crossStreet1, crossStreet2 }
+          return { totalSigns, mainStreet, crossStreet1, crossStreet2, fromS, gotoS }
         })
         .catch(err => console.log(err));
     })

@@ -38,6 +38,12 @@ const Streetspots = db.define('streetspots', {
   images: {
     type: Sequelize.ARRAY(Sequelize.STRING),
     defaultValue: ['/public/images/noimage.png']
+  },
+  fromStreet: {
+    type: Sequelize.STRING
+  },
+  gotoStreet: {
+    type: Sequelize.STRING
   }
 },
 {
