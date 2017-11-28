@@ -1,21 +1,21 @@
-import {moment} from 'moment'
+import { moment } from 'moment'
 import axios from 'axios';
 
-export function timer(createdAt){
+export function timer(createdAt) {
   return moment().startOf(createdAt).fromNow()
 }
 
-export function getUserLocation (options) {
+export function getUserLocation(options) {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 }
 
-export function filterSpots(filter, spots){
-  return Object.keys(filter).length < 1 ? spots : spots.filter( spot => {
-    for (var key in filter){
+export function filterSpots(filter, spots) {
+  return Object.keys(filter).length < 1 ? spots : spots.filter(spot => {
+    for (var key in filter) {
       //when time left is a property then include something like spot.properties[key] < filter[key][0]
-      if (filter[key].includes(spot.properties[key]) ){
+      if (filter[key].includes(spot.properties[key])) {
         return true;
       }
       return false;
@@ -47,7 +47,7 @@ function deg2rad(deg) {
 }
 //Mini function used in above formula
 function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 }
 
 
@@ -112,15 +112,15 @@ function findClosestStreets(tempArr) {
 
 function getIntersections(standOnStreet) {
   return axios.get(`/api/intersections/${standOnStreet}`)
-  .then(result => result.data)
-  .then(intersections => {
-    console.log('all intersections: ', intersections);
-    // query google geocoding api to find coor of all intersection
-    return Promise.all(
-      intersections.map(section => {
-        return reverseGoogleAddress(section.currentStreet, section.intersectStreet)
-      }))
-  })
+    .then(result => result.data)
+    .then(intersections => {
+      console.log('all intersections: ', intersections);
+      // query google geocoding api to find coor of all intersection
+      return Promise.all(
+        intersections.map(section => {
+          return reverseGoogleAddress(section.currentStreet, section.intersectStreet)
+        }))
+    })
 }
 
 export function spotValidation(coor) {
@@ -135,7 +135,7 @@ export function spotValidation(coor) {
       console.log('current locaiton: ', place);
       standPoint = place.formatted_address;
       const currentOn = place.address_components[1].long_name.toUpperCase();
-        return getIntersections(currentOn)
+      return getIntersections(currentOn)
         .then(streetsAndCoords => {
           console.log('streets and coord: ', streetsAndCoords);
           streetsAndCoords = streetsAndCoords.filter(ele => ele !== undefined);
@@ -192,19 +192,19 @@ export function spotValidation(coor) {
                 console.log(`the accuracy is between ${rangeSmall}ft and ${rangeBig}ft`);
                 // find remove the signs smaller than lower limit
                 signsFromCloseToFar.forEach(signs => {
-                   let side;
-                   for (var i = 0; i < signs.length; i++) {
-                     if (["W", "E", "N", "S"].includes(signs[i].side.trim())){
-                       side = signs[i].side.trim();
-                       break
-                     }
-                   }
-                   signs.forEach(sign => {
-                     sign.side = side;
-                     sign.fromStreet = fromS;
-                     sign.gotoStreet = gotoS;
-                    });
-                   allsigns = allsigns.concat(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
+                  let side;
+                  for (var i = 0; i < signs.length; i++) {
+                    if (["W", "E", "N", "S"].includes(signs[i].side.trim())) {
+                      side = signs[i].side.trim();
+                      break
+                    }
+                  }
+                  signs.forEach(sign => {
+                    sign.side = side;
+                    sign.fromStreet = fromS;
+                    sign.gotoStreet = gotoS;
+                  });
+                  allsigns = allsigns.concat(signs.filter(sign => parseInt(sign.distance) >= rangeSmall))
                 });
                 if (allsigns.length > 0) {
                   // sort by distance
@@ -252,7 +252,7 @@ export function spotValidation(coor) {
                 signsFromFarToClose.forEach(signs => {
                   let side;
                   for (var i = 0; i < signs.length; i++) {
-                    if (["W", "E", "N", "S"].includes(signs[i].side.trim())){
+                    if (["W", "E", "N", "S"].includes(signs[i].side.trim())) {
                       side = signs[i].side.trim();
                       break
                     }
@@ -261,7 +261,7 @@ export function spotValidation(coor) {
                     sign.side = side;
                     sign.fromStreet = fromS;
                     sign.gotoStreet = gotoS;
-                   });
+                  });
                   allsigns2 = allsigns2.concat(signs.filter(sign => parseInt(sign.distance) >= rangeSmall2))
                 });
                 if (allsigns2.length > 0) {

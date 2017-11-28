@@ -67,6 +67,10 @@
   margin-bottom: 0.7em;
 }
 
+#report-form .list-group-item {
+  font-size: 10px;
+}
+
 #report-form .form-group .text-center {
   margin-top: 0.7em;
 }

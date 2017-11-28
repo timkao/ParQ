@@ -76,6 +76,31 @@ export class ReportForm extends Component {
     const { isUpload, processing } = this.state;
     const { signs, reportspot } = this.props;
     const uploadButton = isUpload ? 'Go Back' : 'Upload Picture (Optional)';
+    const sideGroup = {};
+    let sideA = '';
+    let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
+    let sideB = '';
+    signs.forEach(sign => {
+      if (sideGroup[sign.side]) {
+        sideGroup[sign.side].push(sign);
+      } else {
+        sideGroup[sign.side] = [sign];
+      }
+    })
+    const groupkey = Object.keys(sideGroup);
+    if (groupkey.length === 1) {
+      sideA = groupkey[0];
+      fromStreetA = sideGroup[sideA][0].fromStreet;
+      gotoStreetA = sideGroup[sideA][0].gotoStreet;
+    } else if (groupkey.length === 2) {
+      sideA = groupkey[0];
+      fromStreetA = sideGroup[sideA][0].fromStreet;
+      gotoStreetA = sideGroup[sideA][0].gotoStreet;
+      sideB = groupkey[1];
+      fromStreetB = sideGroup[sideB][0].fromStreet;
+      gotoStreetB = sideGroup[sideB][0].gotoStreet;
+    }
+
 
     return (
       <div id="report-form">
@@ -90,14 +115,41 @@ export class ReportForm extends Component {
           </div>
         }
         {
-          signs.length > 0 &&
+          sideA !== '' &&
           <div className="spot-location">
-            <label>Rules Around the Spot</label>
+              <div>{`Rules Around the Spot - from ${fromStreetA} to ${gotoStreetA}`}
+              {
+                sideA ? <span className="pull-right">{sideA} SIDE</span> : null
+              }
+            </div>
             <ul className="list-group">
               {
-                signs.map(sign => {
+                sideGroup[sideA].map(sign => {
                   return (
-                    <li key={sign.id} className="list-group-item">{sign.description}</li>
+                    <li key={sign.id} className="list-group-item">
+                      <div>{sign.description} <span className="pull-right">{`${sign.distance}ft`}</span></div>
+                    </li>
+                  )
+                })
+              }
+            </ul>
+          </div>
+        }
+        {
+          sideB !== '' &&
+          <div className="spot-location">
+            <div>{`Rules Around the Spot - from ${fromStreetB} to ${gotoStreetB}`}
+              {
+                sideB ? <span className="pull-right">{sideB} SIDE</span> : null
+              }
+            </div>
+            <ul className="list-group">
+              {
+                sideGroup[sideB].map(sign => {
+                  return (
+                    <li key={sign.id} className="list-group-item">
+                      <div>{sign.description} <span className="pull-right">{`${sign.distance}ft`}</span></div>
+                    </li>
                   )
                 })
               }
@@ -126,8 +178,7 @@ export class ReportForm extends Component {
             </select>
           </div>
           <div className="form-group">
-            <button className="form-control">Report (Spot location is accurate)</button>
-            <button className="form-control">Report (Spot location is not accurate)</button>
+            <button className="form-control">Report</button>
             <button className="form-control" onClick={handleCancel} type="button">Cancel</button>
           </div>
         </form>
