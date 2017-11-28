@@ -31,7 +31,6 @@ const Main = (props) => {
             : null //Will auto load from auth-form.js
         }
       </nav>
-      <hr />
       {children}
     </div>
   )

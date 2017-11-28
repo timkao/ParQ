@@ -33,17 +33,17 @@ const AuthForm = (props) => {
         <form onSubmit={handleSubmit} name={name}>
           <ul>
             <li>
-            <input name='email' type="email" required />
+            <input name='email' type="email" placeholder="Email" required />
             </li>
             <li>
               {displayName == 'Sign Up' ?
-               <input type="password" id="psw" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" onFocus={handleFocus} onBlur={handleBlur} onKeyUp={handleKeyup} required />
-                : <input className="form-control" type="password" id="psw" name="password" required />
+               <input type="password" id="psw" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" onFocus={handleFocus} onBlur={handleBlur} onKeyUp={handleKeyup} placeholder="Password" required />
+                : <input className="form-control" type="password" id="psw" name="password" placeholder="Password" required />
                }
             </li>
             <li>
               <input id="form-submit" className="btn btn-default" type='submit' value={displayName} />
-              <a id="auth-google" href='/auth/google'>Login with Google</a>
+              <a href='/auth/google' id="auth-google" className="loginBtn loginBtn--google">Login with Google</a>
             </li>
           {error && error.response && <div className="form-group alert alert-danger"> {error.response.data} </div>}
           </ul>
