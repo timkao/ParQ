@@ -36,9 +36,47 @@
 }
 #report-form{
   position: fixed;
-  top: 20%;
+  top: 30%;
   left: 30%;
-  background-color: lightblue;
+  width: 60em;
+  background-color: #887C64;
+  border-radius: 1em;
+}
+
+#report-form .spot-location {
+  color: #DCE1CB;
+  margin: 1em 1em 1em 1em;
+}
+
+#report-form .spot-location li {
+  color: black;
+}
+
+#report-form .spot-location button {
+  margin-bottom: 0.1em;
+}
+
+
+#report-form #spot-description {
+  border-bottom: 0.1em solid #DCE1CB;
+  padding-bottom: 2px;
+  font-size: 20px;
+}
+
+#report-form #upload-button {
+  margin-bottom: 0.7em;
+}
+
+#report-form .list-group-item {
+  font-size: 10px;
+}
+
+#report-form .form-group .text-center {
+  margin-top: 0.7em;
+}
+
+.spot-location strong {
+  color: #C7E7E6;
 }
 
 #auth {
