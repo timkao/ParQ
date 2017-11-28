@@ -26,19 +26,11 @@ const Main = (props) => {
               <Link to={`/profile/${1}`} replace>      {/* replace to use if Link is being used as NavLink */}
                 <img style={{ width: "5%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
               </Link>
-              {/* For easier socket.io testing */}
-              <Link to='/login'>Login</Link>
-              <Link to='/signup'>Sign Up</Link>
               <a href='#' onClick={handleClick}>Logout</a>
             </div>
-            : <div>
-              {/* The navbar will show these links before you log in */}
-              <Link to='/login'>Login</Link>
-              <Link to='/signup'>Sign Up</Link>
-            </div>
+            : null //Will auto load from auth-form.js
         }
       </nav>
-      <hr />
       {children}
     </div>
   )

@@ -27,6 +27,9 @@ export class Map extends Component {
     socket.on('A New Spot', () => {
       this.renewSpotsWithMap();
     })
+    //Removes class from body node (outside of our React app)
+    //to remove body defined background image
+    document.body.classList.toggle('login-body', false)
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -51,25 +54,28 @@ export class Map extends Component {
     let filteredSpots = filterSpots(currentFilter, spots.features);
     let filteredLots = filterSpots(currentFilter, lots.features);
 
-    //Create a source & layer from our streetspots
-    //Check to see if source & layer exist from inital load
-    let exists = map.getSource('streetspots')
-    if (exists) {
-      //Source exists, eenewing the data
-      map.getSource('streetspots').setData(spots)
-    } else {
-      map.addSource('streetspots', {
-          "type": "geojson",
-          "data": spots
-        })
-        //Add a layer on the map
-        map.addLayer({
-          id: 'streetspots',
-          type: 'symbol',
-          // Add a GeoJSON source containing place coordinates and information.
-          source: "streetspots"
-        });
-    }
+      //Create a source & layer from our streetspots
+      //Check to see if source & layer exist from inital load
+      map.on('load', function(){
+        let exists = map.getSource('streetspots')
+        if (exists) {
+          //Source exists, eenewing the data
+          map.getSource('streetspots').setData(spots)
+        } else {
+          map.addSource('streetspots', {
+              "type": "geojson",
+              "data": spots
+            })
+            //Add a layer on the map
+            map.addLayer({
+              id: 'streetspots',
+              type: 'symbol',
+              // Add a GeoJSON source containing place coordinates and information.
+              source: "streetspots"
+            });
+        }
+      })
+
 
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       spots.features &&
@@ -119,6 +125,11 @@ export class Map extends Component {
     const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
     getUserLocationBtn.click();
   }
+  }
+
+  componentWillUnmount(){
+    //Brings back our full-page login background image
+    document.body.classList.toggle('login-body', true)
   }
 
   handleAddSpotGeo() {
