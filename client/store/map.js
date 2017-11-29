@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import '../../secrets';
+//import '../../secrets';
 import store, { fetchLots, fetchSpots } from './';
 import { getDistanceFromLatLng, getUserLocation} from '../helpers';
 
