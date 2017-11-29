@@ -79,13 +79,29 @@ function reverseGoogleAddress(current, cross) {
 function getIntersectionDistance(ori, dest, currStreet, crossStreet) {
   const _ori = ori.replace('&', 'and');
   const _dest = dest.replace('&', 'and');
-  return axios.put('/api/intersections/distance', { origin: _ori, destination: _dest })
+  return axios.put('/api/intersections/distance', { origin: _ori, destination: _dest, mode: 'walking' })
     .then(result => result.data.rows[0])
     .then(distanceObj => {
       distanceObj.currentStreet = currStreet;
       distanceObj.crossStreet = crossStreet;
       return distanceObj;
     })
+}
+
+export function getDrivingDistance(origin, destination) {
+  const [orgLong, orgLat] = origin;
+  const [destLong, destLat] = destination;
+  return axios.put('/api/distance', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
+    .then(result => result.data.rows[0])
+    .then(distanceObj => {
+      console.log('distance', distanceObj)
+      return distanceObj.elements[0].distance;
+    })
+}
+
+export function compareByDistance(spot1, spot2){
+  return spot1.distanceFromOrigin.value - spot2.distanceFromOrigin.value;
+
 }
 
 function parseFtAndMile(str) {
@@ -304,29 +320,3 @@ export function spotValidation(coor) {
     })
 }
 
-//function to calculate driving distance in miles
-export function drivingDistance(currentlongitude, currentlatitude, spotCoors){
-  const mapDirectionAPI = new MapboxDirections({
-    accessToken: mapboxgl.accessToken,
-    interactive: false,
-    profile: 'driving',
-    controls: {
-      profileSwitcher: false
-    }
-  });
-  return new Promise((resolve, reject) => {
-    mapDirection.setOrigin([currentlongitude, currentlatitude]);
-    mapDirection.setDestination(spotCoors);
-    mapDirection.on('route', function(e){
-      console.log(e)
-      const distanceInMeters = e.route[0].distance;
-      resolve(distanceInMeters);
-      // console.log('routed', distanceInMiles)
-    });
-  })
-  .then( (meters) => {
-    const distanceInMiles = meters * 0.000621371192;
-    return distanceInMiles;
-  })
-
-}

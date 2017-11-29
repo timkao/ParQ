@@ -51,7 +51,6 @@ export class Map extends Component {
           currentFilter[key] = filter[key];
         }
       }
-    }
 
     let filteredSpots = filterSpots(currentFilter, spots.features);
     let filteredLots = filterSpots(currentFilter, lots.features);

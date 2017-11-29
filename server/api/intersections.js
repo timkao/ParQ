@@ -15,12 +15,13 @@ router.get('/:currentStreet', (req, res, next) => {
 
 // should change to restful route later
 router.put('/distance', (req, res, next) => {
-  //console.log(req.body);
-  const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=walking&units=imperial&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
+  console.log(req.body);
+  const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=${req.body.mode}&units=imperial&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
 
   axios.get(queryString)
   .then( result => result.data )
   .then( data => {
+    console.log(data);
     res.send(data);
   })
   .catch(err => console.log(err))

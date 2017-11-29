@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {filterSpots, drivingDistance} from '../helpers';
+import {filterSpots, getDrivingDistance, compareByDistance} from '../helpers';
 import {longitude, latitude} from '../store';
 
 export class List extends Component{
@@ -29,21 +29,22 @@ export class List extends Component{
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       filteredSpotsAndLots.push(...filteredSpots);
     }
-    // const test = [{coordinates: [-74.0373, 40.748328], place_name: 'BOOBOO', properties: {id: 1}}];
     let filteredSpotAndLotsWithDistance = filteredSpotsAndLots.map(spot => {
-      return drivingDistance(longitude, latitude, spot.geometry.coordinates)
-      .then( distance => {
-        spot.distanceFromOrigin = distance;
-        return spot;
+      const currentPosition = [longitude, latitude];
+      return getDrivingDistance(currentPosition, spot.geometry.coordinates)
+        .then(distanceObj => {
+          spot.distanceFromOrigin = distanceObj;
+          return spot;
+
+        })
+    });
+      Promise.all(filteredSpotAndLotsWithDistance)
+      .then((spotsArray) => {
+        spotsArray.sort(compareByDistance);
+        this.setState({filteredSpotAndLotsWithDistance: spotsArray});
       });
-    });
-    //funcs.reduce((prev, cur) => prev.then(cur), starting_promise);
-    // filteredSpotAndLotsWithDistance.reduce((prevPromise, currPromise) =>
-    //   prevPromise.then(currPromise));
-    Promise.all(filteredSpotAndLotsWithDistance)
-    .then( array => {
-      this.setState({filteredSpotAndLotsWithDistance: array});
-    });
+
+
   }
   componentWillMount(){
     this.createSpotsArray();
@@ -57,7 +58,7 @@ export class List extends Component{
       <div id="list">
         <ul className="list-group">
           {filteredSpotAndLotsWithDistance.map(spot => {
-            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name} Distance: {spot.distanceFromOrigin}</li>;
+            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name} Distance: {spot.distanceFromOrigin.text}</li>;
           })}
         </ul>
         <div id="distance"></div>
