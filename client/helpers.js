@@ -94,9 +94,8 @@ export function getDrivingDistance(origin, destination) {
   return axios.put('/api/distance', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
     .then(result => result.data.rows[0])
     .then(distanceObj => {
-      console.log('distance', distanceObj)
       return distanceObj.elements[0].distance;
-    })
+    });
 }
 
 export function compareByDistance(spot1, spot2){

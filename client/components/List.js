@@ -58,7 +58,8 @@ export class List extends Component{
       <div id="list">
         <ul className="list-group">
           {filteredSpotAndLotsWithDistance.map(spot => {
-            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name} Distance: {spot.distanceFromOrigin.text}</li>;
+            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name}
+             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: less than a minute ago</li>;
           })}
         </ul>
         <div id="distance"></div>
