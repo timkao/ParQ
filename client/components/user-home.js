@@ -14,8 +14,8 @@ export class UserHome extends Component {
   constructor() {
     super();
     this.state = {
-      currentLong: 0,  // this two might not be neccessary
-      currentLat: 0,   // this might not be neccessary
+      // currentLong: 0,  // this two might not be neccessary
+      // currentLat: 0,   // this might not be neccessary
       showNotification: {isShow: false, message: ''},
       mapView: true
     };

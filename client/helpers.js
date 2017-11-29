@@ -1,4 +1,7 @@
-import {moment} from 'moment'
+import {moment} from 'moment';
+import mapboxgl from 'mapbox-gl';
+import { mapDirection } from './store/index';
+mapboxgl.accessToken = process.env.mapboxKey;
 
 export function timer(createdAt){
   return moment().startOf(createdAt).fromNow()
@@ -47,4 +50,31 @@ function deg2rad(deg) {
 //Mini function used in above formula
 function round(value, decimals) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+
+//function to calculate driving distance in miles
+export function drivingDistance(currentlongitude, currentlatitude, spotCoors){
+  const mapDirectionAPI = new MapboxDirections({
+    accessToken: mapboxgl.accessToken,
+    interactive: false,
+    profile: 'driving',
+    controls: {
+      profileSwitcher: false
+    }
+  });
+  return new Promise((resolve, reject) => {
+    mapDirection.setOrigin([currentlongitude, currentlatitude]);
+    mapDirection.setDestination(spotCoors);
+    mapDirection.on('route', function(e){
+      console.log(e)
+      const distanceInMeters = e.route[0].distance;
+      resolve(distanceInMeters);
+      // console.log('routed', distanceInMiles)
+    });
+  })
+  .then( (meters) => {
+    const distanceInMiles = meters * 0.000621371192;
+    return distanceInMiles;
+  })
+
 }

@@ -45,13 +45,13 @@ router.post('/logout', (req, res) => {
 router.get('/me', (req, res) => {
   if (req.user) {
     User.findById(req.user.id)
-      .then( user => {          // just to check 
+      .then( user => {          // just to check
         // console.log("CHECK USER at GET /auth/me", user.get());
         return user;
       })
       .then(user => res.json(user))
     // test code
-    // .then( user => {                    // testing 
+    // .then( user => {                    // testing
     //   return Reward.create({points: 20})
     //     .then( reward=>{
     //       return user.setReward(reward);      // set new reward to the user
@@ -67,7 +67,7 @@ router.get('/me', (req, res) => {
     //     })
     // })
   } else {
-    res.send(204);
+    res.sendStatus(204);
   }
 })
 

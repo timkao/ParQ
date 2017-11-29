@@ -7,6 +7,7 @@ import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
 import {filterSpots} from '../helpers';
 
+
 export class Map extends Component {
 
   constructor() {
@@ -27,6 +28,9 @@ export class Map extends Component {
     socket.on('A New Spot', () => {
       this.renewSpotsWithMap();
     })
+    //Removes class from body node (outside of our React app)
+    //to remove body defined background image
+    document.body.classList.toggle('login-body', false)
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -47,9 +51,10 @@ export class Map extends Component {
           currentFilter[key] = filter[key];
         }
       }
+    }
 
-      let filteredSpots = filterSpots(currentFilter, spots.features);
-      let filteredLots = filterSpots(currentFilter, lots.features);
+    let filteredSpots = filterSpots(currentFilter, spots.features);
+    let filteredLots = filterSpots(currentFilter, lots.features);
 
       //Create a source & layer from our streetspots
       //Check to see if source & layer exist from inital load
@@ -71,7 +76,6 @@ export class Map extends Component {
               source: "streetspots"
             });
         }
-
       })
 
       if (filter.type.includes('Street') || filter.type.length < 1 ){
@@ -126,6 +130,11 @@ export class Map extends Component {
         }
       }
     }
+  }
+
+  componentWillUnmount(){
+    //Brings back our full-page login background image
+    document.body.classList.toggle('login-body', true)
   }
 
   handleAddSpotGeo() {

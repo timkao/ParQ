@@ -25,6 +25,25 @@ const Streetspots = db.define('streetspots', {
   },
   timer: {                        // I needed this to run the program, even though I don't have any user case :(
     type: Sequelize.TIME
+  },
+  mainStreet: {
+    type: Sequelize.STRING
+  },
+  crossStreet1: {
+    type: Sequelize.STRING
+  },
+  crossStreet2: {
+    type: Sequelize.STRING
+  },
+  images: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    defaultValue: ['/public/images/noimage.png']
+  },
+  fromStreet: {
+    type: Sequelize.STRING
+  },
+  gotoStreet: {
+    type: Sequelize.STRING
   }
 },
 {
@@ -60,7 +79,7 @@ Streetspots.statusController = (spot) => {
   const watch = new Stopwatch(240000); // A new countdown timer with 60 seconds
   watch.start();                      // count down starts
 
-  // Fires when the timer is done 
+  // Fires when the timer is done
   return watch.onDone(function () {
     console.log('Watch is complete, Changing status');
     spot.status = "expired";
