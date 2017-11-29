@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@mapbox/react-geocoder": "^2.5.0",
+    "aws-sdk": "^2.156.0",
     "axios": "^0.17.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -37,6 +38,7 @@
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.1.1",
+    "react-dropzone": "^4.2.3",
     "react-loader": "^2.4.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
@@ -47,6 +49,7 @@
     "sequelize": "^4.22.0",
     "socket.io": "^2.0.4",
     "supertest": "^3.0.0",
+    "timer-stopwatch": "^0.2.0",
     "webpack": "^3.8.1"
   }
 }

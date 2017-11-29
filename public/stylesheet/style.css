@@ -1,3 +1,29 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:100);
+
+/* Login Page ================================== */
+.login-body {
+  background: url(/public/images/streets-background-min.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+/* Signup/Login Logo Box ======================= */
+.logo-box{
+  width: 100%;
+  text-align: center;
+  margin-top: 4em;
+}
+.logo {
+  width: 332px;
+  margin-left: auto;
+  margin-right: auto;
+  /* For smaller mobile phones < 350px: */
+  max-width: 100%;
+}
+
+/* Map  ========================================= */
 #map {
   height: 100vh;
 }
@@ -35,9 +61,299 @@
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
+/* Report Form =================================== */
+
 #report-form{
   position: fixed;
-  top: 50%;
-  left: 50%;
-  background-color: grey;
+  top: 30%;
+  left: 30%;
+  width: 60em;
+  background-color: #887C64;
+  border-radius: 1em;
+}
+
+#report-form .spot-location {
+  color: #DCE1CB;
+  margin: 1em 1em 1em 1em;
+}
+
+#report-form .spot-location li {
+  color: black;
+}
+
+#report-form .spot-location button {
+  margin-bottom: 0.1em;
+}
+
+
+#report-form #spot-description {
+  border-bottom: 0.1em solid #DCE1CB;
+  padding-bottom: 2px;
+  font-size: 20px;
+}
+
+#report-form #upload-button {
+  margin-bottom: 0.7em;
+}
+
+#report-form .list-group-item {
+  font-size: 10px;
+}
+
+#report-form .form-group .text-center {
+  margin-top: 0.7em;
+}
+
+.spot-location strong {
+  color: #C7E7E6;
+}
+
+/*#auth {
+  width: 25em;
+  margin-left: 5em;
+  margin-top: 3em;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  margin: 40px auto;
+  background: rgba(23, 23, 23, 0.61);
+  max-width: 960px;
+  border-radius: 5px;
+  padding: 50px;
+}*/
+
+
+/* Auth Form =================================== */
+
+#auth #form-submit {
+  width: 13.5em;
+}
+
+/* The message box is shown when the user clicks on the password field */
+#message {
+  display:none;
+  background: #f1f1f1;
+  color: #000;
+  position: relative;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+#message p {
+  padding: 10px 35px;
+  font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+  content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+  content: "✖";
+}
+
+form ul {
+  padding-left:0;
+}
+form ul li {
+  display: block;
+}
+.flat-form {
+  background: rgba(51, 51, 51, 0.87);
+  color: white;
+  margin: 25px auto;
+  width: 390px;
+  height: 340px;
+  position: relative;
+  font-family: 'Roboto';
+}
+.flat-form .tabs {
+  display: block;
+  background: rgba(204, 204, 204, 0.33);
+  width: 100%;
+  height: 46px;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  position: relative;
+  list-style-type: none;
+}
+.flat-form .tabs li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+.flat-form .tabs li a {
+  display: block;
+  /*background: rgba(204, 204, 204, 0.33);*/
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  float: left;
+  padding: 12px 22px;
+}
+.flat-form .tabs li a.active {
+  background: rgba(51, 51, 51, 0.87);
+  border-right: none;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+.flat-form .tabs li a:hover {
+  background: #999;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+/* If we implement reset pass, there's
+   additional space here in the tab
+*/
+/*.flat-form .tabs li:last-child a {
+  text-align: center;
+  width: 174px;
+  padding-left: 0;
+  padding-right: 0;
+  border-right: none;
+}*/
+.flat-form .form-action {
+  padding: 0 20px;
+  position: relative;
+}
+.flat-form h1 {
+  font-size: 42px;
+  padding-bottom: 10px;
+  color: #00A0B0;
+}
+.flat-form p {
+  font-size: 12px;
+  padding-bottom: 10px;
+  line-height: 25px;
+}
+.flat-form a {
+  color: #fff;
+  text-decoration: none;
+}
+.flat-form form {
+  padding-right: 20px !important;
+}
+.flat-form form input {
+  font-family: 'Roboto';
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  background: #fff;
+  border: none;
+  color: #333333;
+  outline: none;
+}
+.flat-form form input.button {
+  border: none;
+  display: block;
+  background: #136899;
+  height: 40px;
+  width: 80px;
+  color: #ffffff;
+  text-align: center;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0px 3px 1px #2075aa;
+  -webkit-box-shadow: 0px 3px 1px #2075aa;
+  box-shadow: 0px 3px 1px #2075aa;
+  -moz-transition: all 0.15s linear;
+  -o-transition: all 0.15s linear;
+  -webkit-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+}
+.flat-form form input.button:hover {
+  background: #1e75aa;
+  -moz-box-shadow: 0 3px 1px #237bb2;
+  -webkit-box-shadow: 0 3px 1px #237bb2;
+  box-shadow: 0 3px 1px #237bb2;
+}
+.flat-form form input.button:active {
+  background: #136899;
+  @inclue box-shadow( 0 3px 1px #0f608c );
+}
+.flat-form form input::-webkit-input-placeholder {
+  color: #333333;
+}
+.flat-form form input:-moz-placeholder {
+  color: #333333;
+}
+.flat-form form input::-moz-placeholder {
+  color: #333333;
+}
+.flat-form form input:-ms-input-placeholder {
+  color: #333333;
+}
+.flat-form .show {
+  display: block;
+}
+.flat-form .hide {
+  display: none;
+}
+
+/* Login Button =================================== */
+.loginBtn {
+  box-sizing: border-box;
+  position: relative;
+  /* width: 13em;  - apply for fixed size */
+  margin: 0.2em;
+  padding: 10px 15px 10px 46px;
+  border: none;
+  text-align: left;
+  line-height: 34px;
+  white-space: nowrap;
+  border-radius: 0.2em;
+  font-size: 16px;
+  color: #FFF;
+}
+.loginBtn:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 2;
+  left: 0;
+  width: 34px;
+  height: 100%;
+}
+.loginBtn:focus {
+  outline: none;
+}
+.loginBtn:active {
+  box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
+}
+
+/* Google */
+.loginBtn--google {
+  font-family: "Roboto", Roboto, arial, sans-serif;
+  background: #DD4B39;
+}
+.loginBtn--google:before {
+  border-right: #BB3F30 1px solid;
+  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png') 6px 6px no-repeat;
+}
+.loginBtn--google:hover,
+.loginBtn--google:focus {
+  background: #E74B37;
+  text-decoration: none;
 }

@@ -4,6 +4,6 @@ const db = require('./db')
 require('./models');
 
 //seed data for testing (can remove!)
-db.seed = () => require('./models/seed')(require('./models/user'), require('./models/streetspots'), require('./models/lots'));
+db.seed = () => require('./models/seed')(require('./models/user'), require('./models/streetspots'), require('./models/reward'), require('./models/lots'));
 
 module.exports = db;

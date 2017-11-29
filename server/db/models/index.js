@@ -1,5 +1,6 @@
 const User = require('./user')
 const Streetspots = require('./streetspots')
+const Reward = require('./reward');
 const Intersection = require('./intersection')
 const Rule = require('./rule');
 const Sign = require('./sign');
@@ -8,6 +9,8 @@ const Lots = require('./lots');
 /* Associations ================================== */
 Streetspots.belongsTo(User)
 User.hasMany(Streetspots)
+User.belongsTo(Reward);   // will add rewardId to user
+
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -18,6 +21,7 @@ User.hasMany(Streetspots)
 module.exports = {
   User,
   Streetspots,
+  Reward,
   Intersection,
   Rule,
   Sign,

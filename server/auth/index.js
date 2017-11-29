@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const User = require('../db/models/user')
+const User = require('../db/models/user');
+const Reward = require('../db/models/reward');   // just testing it now
 module.exports = router
 
 router.post('/login', (req, res, next) => {
@@ -44,9 +45,29 @@ router.post('/logout', (req, res) => {
 router.get('/me', (req, res) => {
   if (req.user) {
     User.findById(req.user.id)
-    .then( user => res.json(user));
+      .then( user => {          // just to check
+        // console.log("CHECK USER at GET /auth/me", user.get());
+        return user;
+      })
+      .then(user => res.json(user))
+    // test code
+    // .then( user => {                    // testing
+    //   return Reward.create({points: 20})
+    //     .then( reward=>{
+    //       return user.setReward(reward);      // set new reward to the user
+    //     })
+    //     .then(user => {
+    //         return Reward.findById(user.rewardId)
+    //           .then(reward=>{
+    //             console.log(reward.get());
+    //             return reward;
+    //           })
+    //           .then( reward=> res.json(user));
+    //         // res.json(user);
+    //     })
+    // })
   } else {
-    res.send(204);
+    res.sendStatus(204);
   }
 })
 

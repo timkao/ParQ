@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 const User = require('./user')
+const Stopwatch = require('timer-stopwatch');
 
 //Model Definition
 const Streetspots = db.define('streetspots', {
@@ -21,16 +22,38 @@ const Streetspots = db.define('streetspots', {
   size: {
     type: Sequelize.STRING,
     defaultValue: 'mid-size car'
+  },
+  timer: {                        // I needed this to run the program, even though I don't have any user case :(
+    type: Sequelize.TIME
+  },
+  mainStreet: {
+    type: Sequelize.STRING
+  },
+  crossStreet1: {
+    type: Sequelize.STRING
+  },
+  crossStreet2: {
+    type: Sequelize.STRING
+  },
+  images: {
+    type: Sequelize.ARRAY(Sequelize.STRING),
+    defaultValue: ['/public/images/noimage.png']
+  },
+  fromStreet: {
+    type: Sequelize.STRING
+  },
+  gotoStreet: {
+    type: Sequelize.STRING
   }
 },
 {
-  validate: {
-    bothCoordsOrNone() {
-      if ((this.latitude === null) !== (this.longitude === null)) {
-        throw new Error('Require either both latitude and longitude or neither')
+    validate: {
+      bothCoordsOrNone() {
+        if ((this.latitude === null) !== (this.longitude === null)) {
+          throw new Error('Require either both latitude and longitude or neither')
+        }
       }
-    }
-  },
+    },
   getterMethods: {
     sizeUrl: function() {
       switch (this.size) {
@@ -47,18 +70,40 @@ const Streetspots = db.define('streetspots', {
       }
     }
   }
+
 });
 
 
+// class method to control the status of a given instance
+Streetspots.statusController = (spot) => {
+  const watch = new Stopwatch(240000); // A new countdown timer with 60 seconds
+  watch.start();                      // count down starts
+
+  // Fires when the timer is done
+  return watch.onDone(function () {
+    console.log('Watch is complete, Changing status');
+    spot.status = "expired";
+    return spot.save();
+  });
+}
 //Class Methods
-Streetspots.addSpotOnServer = function (spot, id){
+Streetspots.addSpotOnServer = function (spot, id) {
   let newSpot;
   return Streetspots.create(spot)
     .then((_spot) => {
       newSpot = _spot
-      return User.findOne({where: {id}})
+      console.log("CREATING SPOT AT DB HERE AND RUNNING timer")
+      // run countdown on user reported spot
+      return Streetspots.statusController(newSpot);
     })
-    .then((user) => newSpot.setUser(user))
+    .then(() => {
+      return User.findById(id)
+    })
+    .then( user => newSpot.setUser(user))
+    .then( ()=> {
+      return newSpot;
+    })
+
 }
 
 //Export
