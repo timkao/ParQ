@@ -46,7 +46,7 @@ const Streetspots = db.define('streetspots', {
     type: Sequelize.STRING
   }
 },
-{
+  {
     validate: {
       bothCoordsOrNone() {
         if ((this.latitude === null) !== (this.longitude === null)) {
@@ -54,29 +54,29 @@ const Streetspots = db.define('streetspots', {
         }
       }
     },
-  getterMethods: {
-    sizeUrl: function() {
-      switch (this.size) {
-        case 'full-size SUV':
-          return '/public/images/suv.png';
-        case 'full-size car':
-          return '/public/images/fullcar.png';
-        case 'mid-size car':
-          return '/public/images/midcar.png';
-        case 'compact car':
-          return '/public/images/compact.png';
-        default:
-          return '/public/images/midcar.png';
+    getterMethods: {
+      sizeUrl: function () {
+        switch (this.size) {
+          case 'full-size SUV':
+            return '/public/images/suv.png';
+          case 'full-size car':
+            return '/public/images/fullcar.png';
+          case 'mid-size car':
+            return '/public/images/midcar.png';
+          case 'compact car':
+            return '/public/images/compact.png';
+          default:
+            return '/public/images/midcar.png';
+        }
       }
     }
-  }
 
-});
+  });
 
 
 // class method to control the status of a given instance
 Streetspots.statusController = (spot) => {
-  const watch = new Stopwatch(240000); // A new countdown timer with 60 seconds
+  const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
   watch.start();                      // count down starts
 
   // Fires when the timer is done
@@ -92,19 +92,18 @@ Streetspots.addSpotOnServer = function (spot, id) {
   return Streetspots.create(spot)
     .then((_spot) => {
       newSpot = _spot
-      console.log("CREATING SPOT AT DB HERE AND RUNNING timer")
+      console.log("___Creating a spot AND Timer start___")
       // run countdown on user reported spot
       return Streetspots.statusController(newSpot);
     })
     .then(() => {
       return User.findById(id)
     })
-    .then( user => newSpot.setUser(user))
-    .then( ()=> {
+    .then(user => newSpot.setUser(user))
+    .then(() => {
       return newSpot;
     })
-
 }
 
 //Export
-module.exports = Streetspots
+module.exports = Streetspots;

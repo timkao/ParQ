@@ -64,7 +64,7 @@ const startListening = () => {
 
   // set up our socket control center
   const io = socketio(server)
-  require('./server/socket')(io, db.models.user);
+  require('./server/socket')(io, db.models.user, db.models.streetspots);
 }
 
 // const syncDb = () => db.sync({force: true});

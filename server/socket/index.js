@@ -1,11 +1,32 @@
-module.exports = (io, User) => {
+module.exports = (io, User, Streetspots) => {
   io.on('connection', (socket) => {
     console.log(`A socket connection to the server has been made: ${socket.id}`);
   //Socket disconnection
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     });
-  //User logins
+    
+
+    // 
+    socket.on('fetch-spots', ()=>{
+      return Streetspots.findAll({ where: { status: 'open' } })
+        .then(_spots =>{
+          let spots = _spots;
+          // console.log('fetch-spots socket event fired and spots length', spots.length);
+          setInterval(()=>{
+            return  Streetspots.findAll({ where: { status: 'open' } })
+              .then(latest => {
+                    if(latest.length !== spots.length){
+                      // console.log("TELLING FRONT-END TO UPDATE SPOTS OR fetch spots again", latest.length)
+                      socket.emit('Update spots');
+                      spots = latest;
+                   } 
+              })
+          }, 10000);     // run every ten seconds
+        })
+    })
+   
+    //User logins
     socket.on('user-login', id => {
       User.findById(id)
         .then(user => {

@@ -197,6 +197,13 @@ const mapDispatch = (dispatch) => {
     },
     renewSpots() {
       dispatch(fetchSpots());
+
+      // after fetchSpots run, emit a socket event
+      socket.emit('fetch-spots');         // to fire a timer
+      socket.on('Update spots', ()=>{
+        console.log('HAVE TO UPDATE SPOTS _____________');
+        dispatch(fetchSpots());
+      })
     },
     headTo(spotId){
       dispatch(getHeadingTo(spotId));
