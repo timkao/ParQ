@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
@@ -6,6 +7,7 @@ import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
 import {filterSpots} from '../helpers';
+import SpotInfo from './spot-info';
 
 export class Map extends Component {
 
@@ -83,6 +85,13 @@ export class Map extends Component {
           // create the marker element
           var el = document.createElement('div');
           el.className = 'marker';
+          var pop = document.createElement('div');
+            ReactDOM.render(
+              React.createElement(
+                SpotInfo
+              ),
+              pop
+            );
           // add picture base on car size
           el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
           // add event listener
@@ -93,7 +102,7 @@ export class Map extends Component {
           });
           // create the popup
           var popup = new mapboxgl.Popup()
-          .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
+          .setDOMContent(pop);
           // create the marker
           new mapboxgl.Marker(el)
           .setLngLat(spot.geometry.coordinates)
