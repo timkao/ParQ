@@ -85,13 +85,17 @@ export class Map extends Component {
           // create the marker element
           var el = document.createElement('div');
           el.className = 'marker';
+          //create the popup element
           var pop = document.createElement('div');
-            ReactDOM.render(
-              React.createElement(
-                SpotInfo
-              ),
-              pop
-            );
+          //turn our popup element into a react component
+          ReactDOM.render(
+            React.createElement(
+              SpotInfo, {
+                spot
+              }//passes in spot info as props to the spont component
+            ),
+            pop
+          );
           // add picture base on car size
           el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
           // add event listener
@@ -100,10 +104,10 @@ export class Map extends Component {
             mapDirection.setOrigin([longitude, latitude]);
             mapDirection.setDestination(spot.geometry.coordinates);
           });
-          // create the popup
+          // create the popup for mapbox
           var popup = new mapboxgl.Popup()
           .setDOMContent(pop);
-          // create the marker
+          // create the marker for mapbox and set out popup on it
           new mapboxgl.Marker(el)
           .setLngLat(spot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker

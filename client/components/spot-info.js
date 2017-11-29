@@ -1,14 +1,18 @@
 import React, { Component} from 'react';
-
-// export const SpotInfo  = (props) => {
-//     const {time} = props;
-//     return ( <p>marker!{<span>`${time}`</span>}</p>)
-// }
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 class SpotInfo extends Component {
   render(){
-  const { place_name } = this.props;
-    return ( <p>{place_name}stufffff</p>)
+  const { spot } = this.props;
+  const { createdAt } = spot.properties
+
+  return (
+       <div className="">
+        <strong>Reported: </strong>
+        <Moment fromNow>{createdAt}</Moment>
+       </div>
+    )
   }
 }
 
