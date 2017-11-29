@@ -87,6 +87,7 @@ export class Map extends Component {
           el.className = 'marker';
           //create the popup element
           var pop = document.createElement('div');
+          pop.className = 'spot-popup'
           //turn our popup element into a react component
           ReactDOM.render(
             React.createElement(

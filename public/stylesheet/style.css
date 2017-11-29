@@ -357,3 +357,21 @@ form ul li {
   background: #E74B37;
   text-decoration: none;
 }
+
+/* Spot Popup =================================== */
+.spot-popup {
+  background-color: #eeeeee;
+  font-family: "Roboto", Roboto, arial, sans-serif;
+  padding: 15px;
+}
+.spot-popup strong {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+.spot-popup span {
+  font-size: 2.5em;
+}
+/* Overrides default popup padding */
+.mapboxgl-popup-content {
+  padding:0px;
+}

@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import Moment from 'react-moment';
 import 'moment-timezone';
+import { timer } from '../helpers';
 
 class SpotInfo extends Component {
   render(){
@@ -8,9 +9,9 @@ class SpotInfo extends Component {
   const { createdAt } = spot.properties
 
   return (
-       <div className="">
-        <strong>Reported: </strong>
-        <Moment fromNow>{createdAt}</Moment>
+       <div>
+        <strong>Reported</strong><br/>
+        <span className="time"><Moment fromNow>{createdAt}</Moment></span>
        </div>
     )
   }
