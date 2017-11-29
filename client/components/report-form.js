@@ -81,6 +81,8 @@ export class ReportForm extends Component {
     let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
     let sideB = '';
     signs.forEach(sign => {
+      sign.description = sign.description.replace(/ *\([^)]*\) */g, "")
+
       if (sideGroup[sign.side]) {
         sideGroup[sign.side].push(sign);
       } else {
