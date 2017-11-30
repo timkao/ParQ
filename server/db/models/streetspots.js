@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 const User = require('./user')
-const Stopwatch = require('timer-stopwatch');
 
 //Model Definition
 const Streetspots = db.define('streetspots', {
@@ -74,18 +73,6 @@ const Streetspots = db.define('streetspots', {
   });
 
 
-// class method to control the status of a given instance
-Streetspots.statusController = (spot) => {
-  const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
-  watch.start();                      // count down starts
-
-  // Fires when the timer is done
-  return watch.onDone(function () {
-    console.log('Watch is complete, Changing status');
-    spot.status = "expired";
-    return spot.save();
-  });
-}
 //Class Methods
 Streetspots.addSpotOnServer = function (spot, id) {
   let newSpot;

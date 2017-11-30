@@ -197,11 +197,9 @@ const mapDispatch = (dispatch) => {
     },
     renewSpots() {
       dispatch(fetchSpots());
-
-      // after fetchSpots run, emit a socket event
-      socket.emit('fetch-spots');         // to fire a timer
-      socket.on('Update spots', ()=>{
-        console.log('HAVE TO UPDATE SPOTS _____________');
+      // socket listener to fetch spots again
+      socket.on('Update Spots', ()=>{
+        console.log('___________HAVE TO UPDATE SPOTS _____________');
         dispatch(fetchSpots());
       })
     },
