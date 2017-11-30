@@ -12,12 +12,10 @@ module.exports = (io, User, Streetspots) => {
       return Streetspots.findAll({ where: { status: 'open' } })
         .then(_spots =>{
           let spots = _spots;
-          // console.log('fetch-spots socket event fired and spots length', spots.length);
           setInterval(()=>{
             return  Streetspots.findAll({ where: { status: 'open' } })
               .then(latest => {
                     if(latest.length !== spots.length){
-                      // console.log("TELLING FRONT-END TO UPDATE SPOTS OR fetch spots again", latest.length)
                       socket.emit('Update spots');
                       spots = latest;
                    } 
