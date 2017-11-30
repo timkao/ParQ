@@ -6,8 +6,8 @@ module.exports = (io, User, Streetspots) => {
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     });
-    
- 
+
+
     // socket.on('fetch-spots', ()=>{
     //   return Streetspots.findAll({ where: { status: 'open' } })
     //     .then(_spots =>{
@@ -18,7 +18,7 @@ module.exports = (io, User, Streetspots) => {
     //                 if(latest.length !== spots.length){
     //                   socket.emit('Update spots');
     //                   spots = latest;
-    //                } 
+    //                }
     //           })
     //       }, 10000);     // run every ten seconds
     //     })
@@ -26,7 +26,7 @@ module.exports = (io, User, Streetspots) => {
 
       Streetspots.statusController = (spot) => {
         const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
-        watch.start(); 
+        watch.start();
         // Fires when the timer is done
         return watch.onDone(function () {
           console.log('Watch is complete and Changing status');
@@ -38,7 +38,7 @@ module.exports = (io, User, Streetspots) => {
             })
       });
     }
-   
+
     //User logins
     socket.on('user-login', id => {
       User.findById(id)
