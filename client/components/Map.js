@@ -91,6 +91,7 @@ export class Map extends Component {
           timeSince(spot.properties.createdAt, 'min') < 10
             ? pop.className = 'spot-popup fresh'
             : pop.className = 'spot-popup'
+          // pop.className = 'spot-popup'
           //turn our popup element into a react component
           ReactDOM.render(
             React.createElement(
