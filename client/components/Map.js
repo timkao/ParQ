@@ -27,6 +27,10 @@ export class Map extends Component {
     socket.on('A New Spot', () => {
       this.renewSpotsWithMap();
     })
+    socket.on('Update Spots', ()=> {
+      this.renewSpotsWithMap();
+    })
+
     //Removes class from body node (outside of our React app)
     //to remove body defined background image
     document.body.classList.toggle('login-body', false)
