@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import Moment from 'react-moment';
 import 'moment-timezone';
-import { timer } from '../helpers';
+import { timer, timeSince } from '../helpers';
 
 class SpotInfo extends Component {
   render(){

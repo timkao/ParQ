@@ -6,7 +6,7 @@ import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHea
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots} from '../helpers';
+import {filterSpots, timeSince} from '../helpers';
 import SpotInfo from './spot-info';
 
 export class Map extends Component {
@@ -87,7 +87,10 @@ export class Map extends Component {
           el.className = 'marker';
           //create the popup element
           var pop = document.createElement('div');
-          pop.className = 'spot-popup'
+          //Find out how fresh the spot is and apply appropriate background color
+          timeSince(spot.properties.createdAt, 'min') < 10
+            ? pop.className = 'spot-popup fresh'
+            : pop.className = 'spot-popup'
           //turn our popup element into a react component
           ReactDOM.render(
             React.createElement(
