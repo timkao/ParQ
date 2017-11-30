@@ -6,7 +6,7 @@ import { getDistanceFromLatLng, getUserLocation} from '../helpers';
 /**
  * API ACCESS
  */
-mapboxgl.accessToken = process.env.mapboxKey;
+mapboxgl.accessToken = mapboxKey;
 
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {

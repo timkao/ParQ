@@ -8,10 +8,14 @@ const db = require('./server/db')
 const PORT = process.env.PORT || 3000;
 const app = express()
 const socketio = require('socket.io')
+const nunjucks = require('nunjucks')
 module.exports = app
 
 // secrets implementation
 if (process.env.NODE_ENV !== 'production') require('./secrets')
+
+nunjucks.configure('views', {noCache: true})
+
 
 // passport registration
 passport.serializeUser((user, done) => done(null, user.id))
@@ -27,6 +31,15 @@ const createApp = () => {
   // body parsing middleware
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
+
+  // nunjucks setup
+  app.set('view engine', 'html');
+  app.engine('html', nunjucks.render);
+
+  app.use((req, res, next) => {
+    res.locals.mapboxKey = process.env.mapboxKey;
+    next();
+  })
 
   // session middleware with passport
   app.use(session({
@@ -47,8 +60,12 @@ const createApp = () => {
   app.use('/public', express.static(path.join(__dirname, 'public')));
 
   // sends index.html
-  app.get('/', (req, res, next) => res.sendFile(path.join(__dirname, 'index.html')));
+  // app.get('/', (req, res, next) => res.sendFile(path.join(__dirname, 'index.html')));
 
+  // render index.html
+  app.get('/', (req, res, next ) => {
+    res.render('index');
+  })
 
   // error handling endware
   app.use((err, req, res, next) => {
