@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
+import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude, takeSpot } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
@@ -35,7 +35,7 @@ export class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    const { spots, map, headTo, lots, filter } = this.props;
+    const { spots, map, headTo, lots, filter, occupySpot } = this.props;
     // remove existing marker (we can optimize it later)
     if (this.state.loaded === true && spots.features){
     const currentMarkers = document.getElementsByClassName('marker');
@@ -93,11 +93,10 @@ export class Map extends Component {
             : pop.className = 'spot-popup'
           // pop.className = 'spot-popup'
           //turn our popup element into a react component
+          let props = { spot, handleTakeSpot: () => {occupySpot(spot.id, map)} }
           ReactDOM.render(
             React.createElement(
-              SpotInfo, {
-                spot
-              }//passes in spot info as props to the spont component
+              SpotInfo, props//passes in spot info as props to the spont component
             ),
             pop
           );
@@ -218,7 +217,11 @@ const mapDispatch = (dispatch) => {
     },
     headTo(spotId){
       dispatch(getHeadingTo(spotId));
-    }
+    },
+    occupySpot(id, map) {
+      const thunk = takeSpot(id, map);
+      dispatch(thunk);
+    },
   };
 };
 

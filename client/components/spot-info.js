@@ -5,13 +5,14 @@ import { timer, timeSince } from '../helpers';
 
 class SpotInfo extends Component {
   render(){
-  const { spot } = this.props;
+  const { spot, handleTakeSpot } = this.props;
   const { createdAt } = spot.properties
 
   return (
        <div>
         <strong>Reported</strong><br/>
         <span className="time"><Moment fromNow>{createdAt}</Moment></span>
+        <button onClick={handleTakeSpot}>Add</button>
        </div>
     )
   }
