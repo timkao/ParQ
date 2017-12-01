@@ -59,9 +59,6 @@ const createApp = () => {
   app.use('/vendor', express.static(path.join(__dirname, 'node_modules')));
   app.use('/public', express.static(path.join(__dirname, 'public')));
 
-  // sends index.html
-  // app.get('/', (req, res, next) => res.sendFile(path.join(__dirname, 'index.html')));
-
   // render index.html
   app.get('/', (req, res, next ) => {
     res.render('index');
@@ -81,7 +78,7 @@ const startListening = () => {
 
   // set up our socket control center
   const io = socketio(server)
-  require('./server/socket')(io, db.models.user);
+  require('./server/socket')(io, db.models.user, db.models.streetspots);
 }
 
 // const syncDb = () => db.sync({force: true});
@@ -93,6 +90,7 @@ const syncDb = () => {
   return db.sync()
   .then( () => db.models.user.sync({force: true}))
   .then(() => db.models.streetspots.sync({force: true}))
+  .then(() => db.models.lots.sync({force: true}))
   .then( () => {
     return db.seed();
   })

@@ -7,6 +7,7 @@ import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
 import {filterSpots} from '../helpers';
 
+
 export class Map extends Component {
 
   constructor() {
@@ -27,6 +28,10 @@ export class Map extends Component {
     socket.on('A New Spot', () => {
       this.renewSpotsWithMap();
     })
+    socket.on('Update Spots', ()=> {
+      this.renewSpotsWithMap();
+    })
+
     //Removes class from body node (outside of our React app)
     //to remove body defined background image
     document.body.classList.toggle('login-body', false)
@@ -36,20 +41,20 @@ export class Map extends Component {
     const { spots, map, headTo, lots, filter } = this.props;
     // remove existing marker (we can optimize it later)
     if (this.state.loaded === true && spots.features){
-    const currentMarkers = document.getElementsByClassName('marker');
-    const currentLots = document.getElementsByClassName('lot');
-    while (currentMarkers.length > 0 ) {
-      currentMarkers[0].remove();
-    }
-    while (currentLots.length > 0) {
-      currentLots[0].remove();
-    }
-    let currentFilter = {};
-    for (var key in filter){
-      if (filter[key].length > 0 && key !== 'type'){
-        currentFilter[key] = filter[key];
+      const currentMarkers = document.getElementsByClassName('marker');
+      const currentLots = document.getElementsByClassName('lot');
+      while (currentMarkers.length > 0 ) {
+        currentMarkers[0].remove();
       }
-    }
+      while (currentLots.length > 0) {
+        currentLots[0].remove();
+      }
+      let currentFilter = {};
+      for (var key in filter){
+        if (filter[key].length > 0 && key !== 'type'){
+          currentFilter[key] = filter[key];
+        }
+      }
 
     let filteredSpots = filterSpots(currentFilter, spots.features);
     let filteredLots = filterSpots(currentFilter, lots.features);
@@ -76,55 +81,63 @@ export class Map extends Component {
         }
       })
 
-
-    if (filter.type.includes('Street') || filter.type.length < 1 ){
-      spots.features &&
-      filteredSpots.forEach(function(spot) {
+      if (filter.type.includes('Street') || filter.type.length < 1 ){
+        spots.features &&
+        filteredSpots.forEach(function(spot) {
+            // create the marker element
+            var el = document.createElement('div');
+            el.className = 'marker';
+            // add picture base on car size
+            el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
+            // add event listener
+            el.addEventListener('click', () => {
+              headTo(spot.properties.id);
+              mapDirection.setOrigin([longitude, latitude]);
+              mapDirection.setDestination(spot.geometry.coordinates);
+            });
+            // create the popup
+            var popup = new mapboxgl.Popup()
+            .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
+            // create the marker
+            new mapboxgl.Marker(el)
+            .setLngLat(spot.geometry.coordinates)
+            .setPopup(popup) // sets a popup on this marker
+            .addTo(map);
+          });
+      }
+      if (filter.type.includes('Lot') || filter.type.length < 1 ){
+        lots.features && filteredLots.forEach(function(lot) {
           // create the marker element
           var el = document.createElement('div');
-          el.className = 'marker';
-          // add picture base on car size
-          el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
+          el.className = 'lot';
           // add event listener
           el.addEventListener('click', () => {
-            headTo(spot.properties.id);
+            headTo(lot.properties.id);
             mapDirection.setOrigin([longitude, latitude]);
-            mapDirection.setDestination(spot.geometry.coordinates);
+            mapDirection.setDestination(lot.geometry.coordinates);
           });
           // create the popup
           var popup = new mapboxgl.Popup()
-          .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
-          // create the marker
+          .setHTML(`<div>${lot.place_name}</div>`);
+          //create the marker
           new mapboxgl.Marker(el)
-          .setLngLat(spot.geometry.coordinates)
+          .setLngLat(lot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
           .addTo(map);
         });
+      }
+      const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
+      if (this.state.loaded){
+        if (getUserLocationBtn.getAttribute('aria-pressed') === 'false'){
+        getUserLocationBtn.click();
+        }
+      }
     }
-    if (filter.type.includes('Lot') || filter.type.length < 1 ){
-      lots.features && filteredLots.forEach(function(lot) {
-        // create the marker element
-        var el = document.createElement('div');
-        el.className = 'lot';
-        // add event listener
-        el.addEventListener('click', () => {
-          headTo(lot.properties.id);
-          mapDirection.setOrigin([longitude, latitude]);
-          mapDirection.setDestination(lot.geometry.coordinates);
-        });
-        // create the popup
-        var popup = new mapboxgl.Popup()
-        .setHTML(`<div>${lot.place_name}</div>`);
-        //create the marker
-        new mapboxgl.Marker(el)
-        .setLngLat(lot.geometry.coordinates)
-        .setPopup(popup) // sets a popup on this marker
-        .addTo(map);
-      });
-    }
-    const getUserLocationBtn = document.getElementsByClassName('mapboxgl-ctrl-geolocate')[0];
-    getUserLocationBtn.click();
   }
+
+  componentWillUnmount(){
+    //Brings back our full-page login background image
+    document.body.classList.toggle('login-body', true)
   }
 
   componentWillUnmount(){
@@ -157,7 +170,7 @@ export class Map extends Component {
   }
 
   renewSpotsWithMap() {
-    const { renewSpots, map } = this.props
+    const { renewSpots, map } = this.props;
     renewSpots(map);
   }
 

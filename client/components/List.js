@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {filterSpots} from '../helpers';
-
+import {filterSpots, getDrivingDistance, compareByDistance} from '../helpers';
+import {longitude, latitude} from '../store';
 
 export class List extends Component{
   constructor(){
     super();
+    this.state = {
+      filteredSpotAndLotsWithDistance: []
+    }
+    this.createSpotsArray = this.createSpotsArray.bind(this);
   }
-  render(){
+  createSpotsArray(){
     const {spots, lots, filter} = this.props;
     let currentFilter = {};
     for (var key in filter){
@@ -25,14 +29,42 @@ export class List extends Component{
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       filteredSpotsAndLots.push(...filteredSpots);
     }
+    let filteredSpotAndLotsWithDistance = filteredSpotsAndLots.map(spot => {
+      const currentPosition = [longitude, latitude];
+      return getDrivingDistance(currentPosition, spot.geometry.coordinates)
+        .then(distanceObj => {
+          spot.distanceFromOrigin = distanceObj;
+          return spot;
+
+        })
+    });
+      Promise.all(filteredSpotAndLotsWithDistance)
+      .then((spotsArray) => {
+        spotsArray.sort(compareByDistance);
+        this.setState({filteredSpotAndLotsWithDistance: spotsArray});
+      });
+
+
+  }
+  componentWillMount(){
+    this.createSpotsArray();
+  }
+
+  render(){
+    const {filteredSpotAndLotsWithDistance} = this.state;
+
     return (
+
       <div id="list">
         <ul className="list-group">
-          {filteredSpotsAndLots.map(spot => {
-            return <li key={spot.properties.id} className="list-group-item">{spot.place_name}</li>;
+          {filteredSpotAndLotsWithDistance.map(spot => {
+            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name}
+             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: less than a minute ago</li>;
           })}
         </ul>
+        <div id="distance"></div>
       </div>
+
     );
   }
 }
