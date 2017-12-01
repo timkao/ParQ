@@ -76,6 +76,7 @@ const syncDb = () => {
   return db.sync()
   .then( () => db.models.user.sync({force: true}))
   .then(() => db.models.streetspots.sync({force: true}))
+  .then(() => db.models.lots.sync({force: true}))
   .then( () => {
     return db.seed();
   })

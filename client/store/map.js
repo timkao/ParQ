@@ -169,7 +169,7 @@ export const fetchMap = (component) => {
       .then(position => {
         longitude = position.coords.longitude;
         latitude = position.coords.latitude;
-        component.setState({ currentLat: longitude, currentLong: latitude });
+        // component.setState({ currentLat: longitude, currentLong: latitude });
 
         component.map = new mapboxgl.Map({
           container: 'map',
@@ -200,7 +200,6 @@ export const fetchMap = (component) => {
 
         // add mapDirection
         component.map.addControl(mapDirection, 'top-right');
-
         component.map.on('load', function () {
           // source of search marker
           component.map.addSource('single-point', {

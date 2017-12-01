@@ -31,7 +31,7 @@ const parkingLots = [
 ];
 
 //Export
-module.exports = (User, Streetspots, Lots) => {
+module.exports = (User, Streetspots, Reward, Lots) => {
   let user1, user2;
     //user creation
   return Promise.all(
@@ -60,14 +60,14 @@ module.exports = (User, Streetspots, Lots) => {
       _lot12.setUser(user2),
       _lot13.setUser(user2),
       _lot14.setUser(user1)
-    ])
+    ]);
+  })
   .then(() => {
     Promise.all(
       parkingLots.map((location) => Lots.create(location))
     );
   })
-  .then(() => console.log(chalk.green('DB is synced and seeded')));
-  })
+  .then(() => console.log(chalk.green('DB is synced and seeded')))
   .catch((err) => {
     console.log('seed error:');
     console.log(err);

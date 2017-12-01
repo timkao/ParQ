@@ -7,15 +7,15 @@ import Map from './Map';
 import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
-import reportForm from './report-form';
+import reportForm from './Report-form';
 
 export class UserHome extends Component {
 
   constructor() {
     super();
     this.state = {
-      currentLong: 0,  // this two might not be neccessary
-      currentLat: 0,   // this might not be neccessary
+      // currentLong: 0,  // this two might not be neccessary
+      // currentLat: 0,   // this might not be neccessary
       showNotification: {isShow: false, message: ''},
       mapView: true
     };

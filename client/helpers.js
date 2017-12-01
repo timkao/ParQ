@@ -1,4 +1,7 @@
-import { moment } from 'moment'
+import {moment} from 'moment';
+import mapboxgl from 'mapbox-gl';
+import { mapDirection } from './store/index';
+mapboxgl.accessToken = process.env.mapboxKey;
 import axios from 'axios';
 
 export function timer(createdAt) {
@@ -76,13 +79,28 @@ function reverseGoogleAddress(current, cross) {
 function getIntersectionDistance(ori, dest, currStreet, crossStreet) {
   const _ori = ori.replace('&', 'and');
   const _dest = dest.replace('&', 'and');
-  return axios.put('/api/intersections/distance', { origin: _ori, destination: _dest })
+  return axios.put('/api/intersections/distance', { origin: _ori, destination: _dest, mode: 'walking' })
     .then(result => result.data.rows[0])
     .then(distanceObj => {
       distanceObj.currentStreet = currStreet;
       distanceObj.crossStreet = crossStreet;
       return distanceObj;
     })
+}
+
+export function getDrivingDistance(origin, destination) {
+  const [orgLong, orgLat] = origin;
+  const [destLong, destLat] = destination;
+  return axios.put('/api/distance', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
+    .then(result => result.data.rows[0])
+    .then(distanceObj => {
+      return distanceObj.elements[0].distance;
+    });
+}
+
+export function compareByDistance(spot1, spot2){
+  return spot1.distanceFromOrigin.value - spot2.distanceFromOrigin.value;
+
 }
 
 function parseFtAndMile(str) {
@@ -300,3 +318,4 @@ export function spotValidation(coor) {
         .catch(err => console.log(err));
     })
 }
+
