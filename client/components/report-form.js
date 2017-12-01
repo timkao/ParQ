@@ -10,8 +10,6 @@ export class ReportForm extends Component {
     this.state = {
       sizeValue: 'full-size car',
       isUpload: false,
-      data_uri: '',
-      filename: '',
       processing: false,
       pictures: []
     }
@@ -20,6 +18,19 @@ export class ReportForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleOnDrop = this.handleOnDrop.bind(this);
     this.showUpload = this.showUpload.bind(this);
+  }
+
+  componentDidMount() {
+    const mapElement = document.getElementById("map");
+    const reportFormElement = document.getElementById("report-form");
+    const offset = 7;
+    const ctrlTop = document.getElementsByClassName("mapboxgl-ctrl-top-left")[0].offsetHeight;
+    const formLeft = mapElement.offsetLeft + offset;
+    const formTop = mapElement.offsetTop + ctrlTop + offset;
+    const maxWidth = mapElement.offsetWidth - offset - 5;
+    reportFormElement.style.top = `${formTop}px`;
+    reportFormElement.style.left = `${formLeft}px`;
+    reportFormElement.style.maxWidth = `${maxWidth}px`;
   }
 
   handleChange(ev) {
@@ -81,7 +92,7 @@ export class ReportForm extends Component {
     let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
     let sideB = '';
     signs.forEach(sign => {
-      sign.description = sign.description.replace(/ *\([^)]*\) */g, "")
+      sign.description = sign.description.replace(/ *\([^)]*\) */g, "");
 
       if (sideGroup[sign.side]) {
         sideGroup[sign.side].push(sign);
@@ -103,25 +114,28 @@ export class ReportForm extends Component {
       gotoStreetB = sideGroup[sideB][0].gotoStreet;
     }
 
+    // handle side undefined situation
+    if (sideA === undefined) { sideA = 'Both'}
+    if (sideB === undefined) { sideB = 'Both'}
 
     return (
       <div id="report-form">
         {reportspot.mainStreet &&
           <div id="spot-description" className="spot-location">
             <div className="text-center">
-              The Spot is on <strong>{reportspot.mainStreet}</strong>
+              on <strong>{reportspot.mainStreet}</strong>
             </div>
             <div className="text-center">
-              Between <strong>{reportspot.crossStreet1}</strong> and <strong>{reportspot.crossStreet2}</strong>
+              between <strong>{reportspot.crossStreet1}</strong> and <strong>{reportspot.crossStreet2}</strong>
             </div>
           </div>
         }
         {
           sideA !== '' &&
           <div className="spot-location">
-              <div>{`Rules Around the Spot - from ${fromStreetA} to ${gotoStreetA}`}
+              <div>Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
               {
-                sideA ? <span className="pull-right">{sideA} SIDE</span> : null
+                sideA ? <strong className="pull-right">{sideA}</strong> : null
               }
             </div>
             <ul className="list-group">
@@ -140,9 +154,9 @@ export class ReportForm extends Component {
         {
           sideB !== '' &&
           <div className="spot-location">
-            <div>{`Rules Around the Spot - from ${fromStreetB} to ${gotoStreetB}`}
+              <div>Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
               {
-                sideB ? <span className="pull-right">{sideB} SIDE</span> : null
+                sideB ? <strong className="pull-right">{sideB}</strong> : null
               }
             </div>
             <ul className="list-group">
@@ -171,7 +185,7 @@ export class ReportForm extends Component {
             }
           </div>
           <div className="form-group">
-            <label htmlFor="size-choice">Space Size</label>
+            <div>Space Size</div>
             <select name="size" onChange={handleChange} id="size-choice" className="form-control" value={this.state.sizeValue}>
               <option value='full-size SUV'>Full-Size (SUV)</option>
               <option value='full-size car'>Full-Size (CAR)</option>
