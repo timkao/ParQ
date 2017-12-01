@@ -30,6 +30,26 @@ const User = db.define('user', {
   spotsTaken: {
     type: Sequelize.INTEGER,
     defaultValue: 0
+  },
+  points: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  }
+}, {
+  getterMethods: {
+    rankCar: function(){
+      if (this.points < 1000) {
+        return '/public/images/babycar.png';
+      } else if (this.points < 2000) {
+        return '/public/images/bumpercar.png';
+      } else if (this.points < 3000) {
+        return '/public/images/gokart.png';
+      } else if (this.points < 4000) {
+        return '/public/images/wagon.png';
+      } else {
+        return '/public/images/bigbar.png';
+      }
+    }
   }
 });
 

@@ -173,7 +173,7 @@ export const fetchMap = (component) => {
 
         component.map = new mapboxgl.Map({
           container: 'map',
-          style: 'mapbox://styles/mapbox/streets-v9',
+          style: 'mapbox://styles/mapbox/light-v9',
           center: [longitude, latitude],
           zoom: 15
         });

@@ -23,7 +23,9 @@ export class UserHome extends Component {
     this.setMapView = this.setMapView.bind(this);
     this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
     this.triggerHandleAddSpotMarker = this.triggerHandleAddSpotMarker.bind(this);
+    this.handleTest = this.handleTest.bind(this);
   }
+
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
     this.map.handleAddSpotGeo()
@@ -66,18 +68,25 @@ export class UserHome extends Component {
     this.setState({mapView: bool});
   }
 
+  handleTest() {
+    console.log('-----testing only-----');
+    this.setState({showNotification: {isShow: true, message: 'test'}});
+
+  }
+
   render() {
     const { email } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker} = this;
+    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest} = this;
     const { showNotification, mapView } = this.state;
     return (
       <div className="container">
-        <h3>Welcome, {email}</h3>
+        <h3 id="welcome">Welcome, {email}</h3>
         <div className="row">
           <div className="col-md-4">
             <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
             <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
             <button className="btn btn-default" onClick={triggerHandleAddSpotMarker}>Open Spot at Marker</button>
+            <button className="btn btn-default" onClick={handleTest}>Test only</button>
             {
               showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
             }

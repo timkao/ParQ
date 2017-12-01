@@ -21,6 +21,7 @@ export class ReportForm extends Component {
   }
 
   componentDidMount() {
+    // position popup base on Map element
     const mapElement = document.getElementById("map");
     const reportFormElement = document.getElementById("report-form");
     const offset = 7;
@@ -85,38 +86,9 @@ export class ReportForm extends Component {
   render() {
     const { handleChange, handleCancel, handleSubmit, showUpload, handleOnDrop } = this;
     const { isUpload, processing } = this.state;
-    const { signs, reportspot } = this.props;
+    const { signs, reportspot, createRulesList } = this.props;
     const uploadButton = isUpload ? 'Go Back' : 'Upload Picture (Optional)';
-    const sideGroup = {};
-    let sideA = '';
-    let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
-    let sideB = '';
-    signs.forEach(sign => {
-      sign.description = sign.description.replace(/ *\([^)]*\) */g, "");
-
-      if (sideGroup[sign.side]) {
-        sideGroup[sign.side].push(sign);
-      } else {
-        sideGroup[sign.side] = [sign];
-      }
-    })
-    const groupkey = Object.keys(sideGroup);
-    if (groupkey.length === 1) {
-      sideA = groupkey[0];
-      fromStreetA = sideGroup[sideA][0].fromStreet;
-      gotoStreetA = sideGroup[sideA][0].gotoStreet;
-    } else if (groupkey.length === 2) {
-      sideA = groupkey[0];
-      fromStreetA = sideGroup[sideA][0].fromStreet;
-      gotoStreetA = sideGroup[sideA][0].gotoStreet;
-      sideB = groupkey[1];
-      fromStreetB = sideGroup[sideB][0].fromStreet;
-      gotoStreetB = sideGroup[sideB][0].gotoStreet;
-    }
-
-    // handle side undefined situation
-    if (sideA === undefined) { sideA = 'Both'}
-    if (sideB === undefined) { sideB = 'Both'}
+    const { sideGroup, sideA, sideB, fromStreetA, gotoStreetA, fromStreetB, gotoStreetB } = createRulesList(signs);
 
     return (
       <div id="report-form">
@@ -133,9 +105,11 @@ export class ReportForm extends Component {
         {
           sideA !== '' &&
           <div className="spot-location">
-              <div>Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
+            <div className="row">
+              <div className="col-xs-10">Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
+              </div>
               {
-                sideA ? <strong className="pull-right">{sideA}</strong> : null
+                sideA !== undefined ? <div className="col-xs-2">{sideA}</div> : null
               }
             </div>
             <ul className="list-group">
@@ -143,7 +117,7 @@ export class ReportForm extends Component {
                 sideGroup[sideA].map(sign => {
                   return (
                     <li key={sign.id} className="list-group-item">
-                      <div>{sign.description} <span className="pull-right">{`${sign.distance}ft`}</span></div>
+                      <div>{sign.description} <span className="pull-right" style={{ color: `${sign.color}` }}>{`${sign.distance}ft`}</span></div>
                     </li>
                   )
                 })
@@ -154,9 +128,11 @@ export class ReportForm extends Component {
         {
           sideB !== '' &&
           <div className="spot-location">
-              <div>Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
+            <div className="row">
+              <div className="col-xs-10">Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
+              </div>
               {
-                sideB ? <strong className="pull-right">{sideB}</strong> : null
+                sideB !== undefined ? <div className="col-xs-2">{sideB}</div> : null
               }
             </div>
             <ul className="list-group">
@@ -164,7 +140,7 @@ export class ReportForm extends Component {
                 sideGroup[sideB].map(sign => {
                   return (
                     <li key={sign.id} className="list-group-item">
-                      <div>{sign.description} <span className="pull-right">{`${sign.distance}ft`}</span></div>
+                      <div>{sign.description} <span className="pull-right" style={{ color: `${sign.color}` }}>{`${sign.distance}ft`}</span></div>
                     </li>
                   )
                 })
@@ -223,6 +199,53 @@ const mapDispatch = (dispatch, ownProps) => {
         .then(() => {
           ownProps.history.push('/home');
         })
+    },
+    createRulesList(signs) {
+      const sideGroup = {};
+      const colorArray = ['#C50041', '#83A700', '#B60B2D',
+        '#592F30', '#794371', '#5CD841', '#5B739C'];
+      let colorIndex = 0;
+      let sideA = '';
+      let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
+      let sideB = '';
+      signs.forEach((sign, index) => {
+        // make the description more readable
+        sign.description = sign.description
+          .replace(/ *\([^)]*\) */g, "")
+          .replace(/>/g, " ")
+          .replace(/</g, " ")
+          .replace(/-/g, " ")
+
+        // grouping the signs with same distance by colors
+        if (index === 0) {
+          sign.color = colorArray[colorIndex];
+        } else if (signs[index - 1].distance !== sign.distance) {
+          colorIndex++
+          sign.color = colorArray[colorIndex];
+        } else {
+          sign.color = colorArray[colorIndex];
+        }
+
+        if (sideGroup[sign.side]) {
+          sideGroup[sign.side].push(sign);
+        } else {
+          sideGroup[sign.side] = [sign];
+        }
+      })
+      const groupkey = Object.keys(sideGroup);
+      if (groupkey.length === 1) {
+        sideA = groupkey[0];
+        fromStreetA = sideGroup[sideA][0].fromStreet;
+        gotoStreetA = sideGroup[sideA][0].gotoStreet;
+      } else if (groupkey.length === 2) {
+        sideA = groupkey[0];
+        fromStreetA = sideGroup[sideA][0].fromStreet;
+        gotoStreetA = sideGroup[sideA][0].gotoStreet;
+        sideB = groupkey[1];
+        fromStreetB = sideGroup[sideB][0].fromStreet;
+        gotoStreetB = sideGroup[sideB][0].gotoStreet;
+      }
+      return { sideGroup, sideA, sideB, fromStreetA, gotoStreetA, fromStreetB, gotoStreetB };
     }
   }
 }
