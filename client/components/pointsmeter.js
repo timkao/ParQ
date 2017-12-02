@@ -41,9 +41,9 @@ class PointMeter extends Component {
       <div id="meter">
       <svg height={height} width={maxWidth}>
         <rect x="0" y={verticalOffset} height={height - verticalOffset} width={maxWidth} fill="rgba(51, 51, 51, 0.81)" rx="10" ry="10"></rect>
-        <text x={rectX} y="50px" fill="#00A0B0" fontSize="20px">You earned 100 points!</text>
-        <image xlinkHref="/public/images/Parq_Logo.png" x={maxWidth - 110} y="20px" width="100px"/>
-        <image onClick={handleGoBack} x="0" y="70px" width="50px" xlinkHref="/public/images/arrows.png"/>
+        <text id="meter-message" x={rectX} y="95px" fill="#00A0B0" fontSize="20px">This is where our messages sit</text>
+        <image xlinkHref="/public/images/Parq_Logo.png" x={rectX} y="20px" width="100px"/>
+        <image onClick={handleGoBack} x={maxWidth - 60} y="20px" width="50px" xlinkHref="/public/images/arrows.png"/>
         <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth} fill="white" ></rect>
         <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth * positionRatio} fill="#EDC951" ></rect>
         <image xlinkHref={image} x={ positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth}/>
