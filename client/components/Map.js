@@ -105,6 +105,7 @@ export class Map extends Component {
             .addTo(map);
           });
       }
+
       if (filter.type.includes('Lot') || filter.type.length < 1 ){
         lots.features && filteredLots.forEach(function(lot) {
           // create the marker element

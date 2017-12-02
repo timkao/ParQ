@@ -85,7 +85,7 @@ const pairs = [];
 
 const seedIntersection = function () {
 
-  Interseciton.sync({ force: true })
+  return Interseciton.sync({ force: true })
     .then(() => {
       fs.createReadStream('./server/locations.CSV')
         .pipe(csv())
@@ -134,7 +134,7 @@ const Rule = db.models.rule;
 const rules = [];
 
 const seedRule = function () {
-  Rule.sync({ force: true })
+  return Rule.sync({ force: true })
     .then(() => {
       fs.createReadStream('./server/locations.CSV')
         .pipe(csv())
@@ -170,7 +170,7 @@ const Sign = db.models.sign;
 const signs = [];
 
 const seedSign = function () {
-  Sign.sync({ force: true })
+  return Sign.sync({ force: true })
     .then(() => {
       fs.createReadStream('./server/signs.CSV')
         .pipe(csv())
