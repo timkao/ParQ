@@ -54,7 +54,7 @@ export class List extends Component{
 
     return (
 
-      <div id="list">
+      <div id="list" className="animated slideInUp">
         <ul className="list-group">
           {filteredSpotAndLotsWithDistance.map(spot => {
             return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name}
