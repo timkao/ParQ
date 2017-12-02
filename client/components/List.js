@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {filterSpots, getDrivingDistance, compareByDistance} from '../helpers';
 import {longitude, latitude} from '../store';
+import Moment from 'react-moment';
 
 export class List extends Component{
   constructor(){
@@ -52,13 +53,14 @@ export class List extends Component{
   render(){
     const {filteredSpotAndLotsWithDistance} = this.state;
 
+
     return (
 
       <div id="list" className="animated slideInUp">
         <ul className="list-group">
           {filteredSpotAndLotsWithDistance.map(spot => {
             return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name}
-             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: less than a minute ago</li>;
+             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: <Moment fromNow>{spot.properties.createdAt}</Moment></li>;
           })}
         </ul>
       </div>
