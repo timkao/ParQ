@@ -409,6 +409,9 @@ form ul li {
   padding:0px;
   border-radius: 10px;
 }
+.mapboxgl-popup-tip {
+  border-right-color: #333;
+}
 .fresh {
   background-color: #00A0B0;
 }
@@ -454,5 +457,5 @@ form ul li {
   float: right;
 }
 .directions-btn-exit:hover {
-  background-color: #e2e2e2;
+  background-color: #e2e2e2!important;
 }

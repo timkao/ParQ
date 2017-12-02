@@ -184,11 +184,6 @@ export class Map extends Component {
     document.body.classList.toggle('login-body', true)
   }
 
-  componentWillUnmount(){
-    //Brings back our full-page login background image
-    document.body.classList.toggle('login-body', true)
-  }
-
   handleAddSpotGeo() {
     return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
     // this.props.getMap(this);
