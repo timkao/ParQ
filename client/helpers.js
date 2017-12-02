@@ -16,9 +16,6 @@ export function timeSince(createdAt, type) {
   if (type === 'sec') return now.diff(created)/1000
   if (type === 'min') return (now.diff(created)/1000)/60
   return now.diff(created)
-  //Add an hour
-  // let createdPlusAnHour = moment(createdAt).hour(1)
-  // return now.isAfter(createdPlusAnHour)
 }
 
 export function getUserLocation(options) {
@@ -43,7 +40,6 @@ export function filterSpots(filter, spots) {
 //Uses the Haversine Formula. More info: https://en.wikipedia.org/wiki/Haversine_formula
 //As well as this stack: https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
 //We may consider switching this to Google's API
-//----------------------------------------------------------------
 export function getDistanceFromLatLng(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2 - lat1);  // deg2rad below
@@ -332,3 +328,33 @@ export function spotValidation(coor) {
     })
 }
 
+/* Button creators ================================================ */
+//....Exit Button
+export function exitBtnCreator(){
+    //Create Exit Navigation button for navigation
+  var exitBtn = document.createElement('button')
+  exitBtn.innerHTML = '<span class="glyphicon glyphicon-remove"></span>'
+  exitBtn.className = 'btn btn-default directions-btn-exit hidden'
+  //function to remove routes for navigation
+  exitBtn.onclick = function() {
+    mapDirection.removeRoutes()
+    this.classList.toggle('hidden');
+  }
+  // Grabs directions ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-directions mapboxgl-ctrl')[0]
+  controls.prepend(exitBtn);
+}
+//....Exit Button
+export function geoMarkerBtnCreator(fnc){
+    //Create Exit Navigation button for navigation
+  var exitBtn = document.createElement('button')
+  exitBtn.innerHTML = 'Tag A Spot!'
+  exitBtn.className = 'btn btn-default create-btn-geo'
+  //function to remove routes for navigation
+  exitBtn.onclick = function() {
+    console.log(fnc)
+  }
+  // Grabs directions ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
+  controls.prepend(exitBtn);
+}
