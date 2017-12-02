@@ -90,6 +90,8 @@ export class Map extends Component {
             // create the marker element
             var el = document.createElement('div');
             el.className = 'marker';
+            // add picture base on car size
+            el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
 
             //create the popup element
             var pop = document.createElement('div');
@@ -97,23 +99,27 @@ export class Map extends Component {
             timeSince(spot.properties.createdAt, 'min') < 10
               ? pop.className = 'spot-popup fresh'
               : pop.className = 'spot-popup rotten'
-            // pop.className = 'spot-popup'
-            //turn our popup element into a react component
-            let props = { spot, map, handleTakeSpot: () => {occupySpot(spot.properties.id, map)} }
+
+            //Turn our popup element into a react component
+            //First we create functions for the btns to
+            //interact with map
+            //we should clean these up and move them in future
+            const handleNavigate = () => {
+              headTo(spot.properties.id);
+              mapDirection.setOrigin([longitude, latitude]);
+              mapDirection.setDestination(spot.geometry.coordinates);
+            }
+            const handleTakeSpot = () => {
+              occupySpot(spot.properties.id, map)
+            }
+            //Crreate a props object to pass into React.createElement
+            let props = { spot, map, handleTakeSpot, handleNavigate }
             ReactDOM.render(
               React.createElement(
                 SpotInfo, props//passes in spot info as props to the spont component
               ),
               pop
             );
-            // add picture base on car size
-            el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
-            // add event listener
-            el.addEventListener('click', () => {
-              headTo(spot.properties.id);
-              mapDirection.setOrigin([longitude, latitude]);
-              mapDirection.setDestination(spot.geometry.coordinates);
-            });
 
             // create the popup for mapbox
             var popup = new mapboxgl.Popup()

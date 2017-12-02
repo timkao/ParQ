@@ -402,17 +402,32 @@ form ul li {
 .spot-actions {
   text-align: center;
 }
-.spot-actions button {
+.spot-actions button:first-child {
+  margin-right: 10px;
+}
+.spot-btn-take {
   background-color: #EDC951;
   border-color: #EDC951;
   padding: 10px;
   color: #6A4A3C;
 }
-.spot-actions button:hover {
+.spot-btn-take:hover {
   background-color: #f9db77;
   border-color: #f9db77;
   color: #000;
 }
+.spot-btn-nav {
+  background-color: #6A4A3C;
+  border-color: #6A4A3C;
+  padding: 10px;
+  color: #fff;
+}
+.spot-btn-nav:hover {
+  background-color: #7b665c;
+  border-color: #7b665c;
+  color: #909090;
+}
+
 #meter {
   display: none;
 }
