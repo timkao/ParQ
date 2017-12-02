@@ -33,7 +33,7 @@ const User = db.define('user', {
   },
   points: {
     type: Sequelize.INTEGER,
-    defaultValue: 50
+    defaultValue: 100
   }
 }, {
   getterMethods: {

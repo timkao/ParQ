@@ -55,6 +55,7 @@ export class UserHome extends Component {
   componentDidUpdate() {
     const spotsTaken = this.props.spotsTaken;
     if (spotsTaken > 0) {
+      //console.log('-------------------------------');
       this.props.updateUserSpotsTaken(this, spotsTaken)
     }
   }

@@ -142,7 +142,7 @@ const GET_MAP = 'GET_MAP';
 /**
  * ACTION CREATORS
  */
-const getMap = map => ({ type: GET_MAP, map });
+export const getMap = map => ({ type: GET_MAP, map });
 
 /**
  * THUNK CREATORS
@@ -169,7 +169,6 @@ export const fetchMap = (component) => {
       .then(position => {
         longitude = position.coords.longitude;
         latitude = position.coords.latitude;
-        // component.setState({ currentLat: longitude, currentLong: latitude });
 
         component.map = new mapboxgl.Map({
           container: 'map',
