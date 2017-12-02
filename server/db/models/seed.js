@@ -3,7 +3,8 @@ const chalk = require('chalk');
 // Seed data
 const users = [
     {name: 'Test', password: '123', email: 'test@test.com', points: 900},
-    {name: 'Queen', password: '123', email: 'queen@test.com', points: 500}
+    {name: 'Queen', password: '123', email: 'queen@test.com', points: 500},
+    {name: 'Tim', password: '123', email: 'tim@test.com', points: 1500}
 ];
 
 const streetspots = [

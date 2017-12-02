@@ -58,6 +58,16 @@ export const updateSpotsTaken = () =>
     })
     .catch(err => console.log(err));
 
+export const updateUserPoints = () => {
+  return (dispatch) => {
+    return axios.put(`/api/users/updatePoints`)
+    .then(result => result.data )
+    .then( user => {
+      dispatch(getUser(user));
+    })
+    .catch(err => console.log(err));
+  }
+}
 
 /**
  * REDUCER

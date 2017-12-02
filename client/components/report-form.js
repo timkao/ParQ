@@ -11,7 +11,8 @@ export class ReportForm extends Component {
       sizeValue: 'full-size car',
       isUpload: false,
       processing: false,
-      pictures: []
+      pictures: [],
+      meterWidth: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);

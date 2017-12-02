@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { takeSpot, updateSpotsTaken, addSpotOnServer } from '../store';
+import { takeSpot, updateSpotsTaken, addSpotOnServer, getIsShow, updateUserPoints } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
-import reportForm from './report-form';
+import ReportForm from './report-form';
+import PointsMeter from './pointsmeter';
 
 export class UserHome extends Component {
 
   constructor() {
     super();
     this.state = {
-      // currentLong: 0,  // this two might not be neccessary
-      // currentLat: 0,   // this might not be neccessary
-      showNotification: {isShow: false, message: ''},
       mapView: true
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
@@ -44,10 +42,15 @@ export class UserHome extends Component {
 
   componentDidMount() {
     socket.on('notifications', message => {
-      this.setState({showNotification: {isShow: true, message: message}});
-      setTimeout(() => {
-        this.setState({ showNotification: {isShow: false, message: ''}});
-      }, 4000);
+    //this.props.showMeter();
+    document.getElementById("meter").className = "animated slideInRight";
+    document.getElementById("meter").style.display = "block";
+      // update point
+
+      // this.setState({showNotification: {isShow: true, message: message}});
+      // setTimeout(() => {
+      //   this.setState({ showNotification: {isShow: false, message: ''}});
+      // }, 4000);
     });
   }
 
@@ -70,14 +73,17 @@ export class UserHome extends Component {
 
   handleTest() {
     console.log('-----testing only-----');
-    this.setState({showNotification: {isShow: true, message: 'test'}});
-
+    //this.props.showMeter();
+    const meter = document.getElementById("meter");
+    meter.className = "animated slideInRight";
+    meter.style.display = "block";
+    this.props.gainedPoints();
   }
 
   render() {
-    const { email } = this.props;
+    const { email, points, isShow, map } = this.props;
     const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest} = this;
-    const { showNotification, mapView } = this.state;
+    const { mapView } = this.state;
     return (
       <div className="container">
         <h3 id="welcome">Welcome, {email}</h3>
@@ -88,7 +94,7 @@ export class UserHome extends Component {
             <button className="btn btn-default" onClick={triggerHandleAddSpotMarker}>Open Spot at Marker</button>
             <button className="btn btn-default" onClick={handleTest}>Test only</button>
             {
-              showNotification.isShow && <p className="alert alert-warning">{showNotification.message}</p>
+              Object.keys(map).length > 0 ? <PointsMeter points={points} /> : null
             }
           </div>
           <div className="col-md-4 col-md-offset-4 pull-right">
@@ -100,7 +106,7 @@ export class UserHome extends Component {
           </div>
         </div>
         {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
-        <Route exact path='/home/reportForm' component={reportForm} />
+        <Route exact path='/home/reportForm' component={ReportForm} />
       </div>
     );
   }
@@ -112,7 +118,9 @@ const mapState = (state) => {
     email: state.user.email,
     spotsTaken: state.user.spotsTaken,
     headingTo: state.headingTo,
-    map: state.map
+    map: state.map,
+    points: state.user.points,
+    isShow: state.isShow
   };
 };
 
@@ -138,6 +146,12 @@ const mapDispatch = (dispatch, ownProps) => {
     },
     toReportForm() {
       ownProps.history.push('/home/reportForm');
+    },
+    showMeter() {
+      dispatch(getIsShow(true));
+    },
+    gainedPoints() {
+      dispatch(updateUserPoints());
     }
   };
 };

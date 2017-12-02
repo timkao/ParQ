@@ -22,3 +22,13 @@ router.put('/updateSpotsTaken', (req, res, next) => {
     .then(user => res.send(user))
     .catch(err => console.log(err));
 })
+
+router.put('/updatePoints', (req, res, next) => {
+  User.findById(req.user.id)
+    .then(user => {
+      user.points += 100;
+      return user.save();
+    })
+    .then(user => res.send(user))
+    .catch(err => console.log(err));
+})

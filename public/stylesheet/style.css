@@ -371,3 +371,7 @@ form ul li {
   background: #E74B37;
   text-decoration: none;
 }
+
+#meter {
+  display: none;
+}
