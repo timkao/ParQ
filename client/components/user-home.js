@@ -7,7 +7,7 @@ import Map from './Map';
 import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
-import ReportForm from './report-form';
+import reportForm from './report-form';
 import PointsMeter from './pointsmeter';
 
 export class UserHome extends Component {
@@ -15,10 +15,13 @@ export class UserHome extends Component {
   constructor() {
     super();
     this.state = {
-      mapView: true
+      // currentLong: 0,  // this two might not be neccessary
+      // currentLat: 0,   // this might not be neccessary
+      showNotification: {isShow: false, message: ''},
+      listView: false
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
-    this.setMapView = this.setMapView.bind(this);
+    this.setListView = this.setListView.bind(this);
     this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
     this.triggerHandleAddSpotMarker = this.triggerHandleAddSpotMarker.bind(this);
     this.handleTest = this.handleTest.bind(this);
@@ -70,9 +73,9 @@ export class UserHome extends Component {
     }
   }
 
-  setMapView(bool) {
-    this.setState({ mapView: bool });
-  }
+  setListView(bool){
+    this.setState({listView: bool});
+}
 
   handleTest() {
     console.log('-----testing only-----');
@@ -85,8 +88,8 @@ export class UserHome extends Component {
 
   render() {
     const { email, points, isShow, map } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
-    const { mapView } = this.state;
+    const { handleSpotTaken, setListView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
+    const { listView } = this.state;
     return (
       <div className="container">
         <h3 id="welcome">Welcome, {email}</h3>
@@ -103,13 +106,17 @@ export class UserHome extends Component {
           <div className="col-md-4 col-md-offset-4 pull-right">
             <div className="pull-right">
               <Filter />
-              <button onClick={() => setMapView(true)} className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
-              <button onClick={() => setMapView(false)} className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
+              <button onClick={() => setListView(false) } className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
+              <button onClick={() => setListView(true) } className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
             </div>
           </div>
         </div>
-        {mapView === true ? <Map onRef={(ref) => { this.map = ref; }} /> : <List />}
-        <Route exact path='/home/reportForm' component={ReportForm} />
+        <div>
+          {listView === true ? <Map height={'40vh'} onRef={(ref) => {this.map = ref;}} /> : <Map onRef={(ref) => {this.map = ref;}} />}
+
+          {listView === true ? <List /> : null}
+        </div>
+        <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );
   }

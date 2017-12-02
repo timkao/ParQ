@@ -25,7 +25,8 @@
 
 /* Map  ========================================= */
 #map {
-  height: 100vh;
+  height: 65vh;
+
 }
 .loader {
   position: inherit;
@@ -59,6 +60,19 @@
 .mapboxgl-popup {
     max-width: 400px;
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+/* List View */
+.cREHHl {
+  background: none !important
+}
+
+
+#list {
+  list-style-position: inside;
+  height: 30vh;
+  position: inherit;
+  overflow: scroll
 }
 
 /* Report Form =================================== */
