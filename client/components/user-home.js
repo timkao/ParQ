@@ -9,19 +9,27 @@ import Filter from './Filter';
 import { Route } from 'react-router-dom';
 import ReportForm from './report-form';
 import PointsMeter from './pointsmeter';
+import Profile from './profile';
 
 export class UserHome extends Component {
 
   constructor() {
     super();
     this.state = {
-      mapView: true
+      mapView: true,
+      profileVisible: false
     };
+    this.handleProfileVisibility = this.handleProfileVisibility.bind(this);
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
     this.setMapView = this.setMapView.bind(this);
     this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
     this.triggerHandleAddSpotMarker = this.triggerHandleAddSpotMarker.bind(this);
     this.handleTest = this.handleTest.bind(this);
+  }
+
+  handleProfileVisibility(){
+    console.log(" 8916598465 _________Clicked_______9869561459");
+    this.setState({profileVisible: !this.state.profileVisible});
   }
 
   triggerHandleAddSpotGeo() {
@@ -84,12 +92,22 @@ export class UserHome extends Component {
   }
 
   render() {
-    const { email, points, isShow, map } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
+    const { id, email, points, isShow, map } = this.props;
+    const { handleProfileVisibility, handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
     const { mapView } = this.state;
+    const { profileVisible } = this.state;
     return (
       <div className="container">
         <h3 id="welcome">Welcome, {email}</h3>
+        <div onClick={handleProfileVisibility}> 
+          <img style={{ width: "10%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
+        </div>
+        <div>{
+          profileVisible
+            ? <Profile />
+            : null
+          }
+        </div>
         <div className="row">
           <div className="col-md-4">
             <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
@@ -159,7 +177,7 @@ const mapDispatch = (dispatch, ownProps) => {
     },
     gainedPoints(num) {
       dispatch(updateUserPoints(num));
-    }
+    },
   };
 };
 

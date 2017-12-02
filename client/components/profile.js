@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 const _Profile = (props) => {
   console.log("Checking user on profile component: ", props.user);
   return (
-    <div style = {{
+    <div className="animated lightSpeedIn" style = {{
       position: "absolute",
       top: "50%",
       left: "50%",
@@ -45,7 +45,3 @@ const mapDispatch = (dispatch, ownProps) => {
 }
 
 export default connect(mapState, mapDispatch)(_Profile);
-// 
-// src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432"
-// src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png"
-// src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432"

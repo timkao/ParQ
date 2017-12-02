@@ -7,27 +7,41 @@ module.exports = router
 
 //GET all spots
 router.get('/', (req, res, next) => {
+  // let spots = [];
+  // // Longitude: -74.00906637487267
+  // const lng = -74.00906637487267
+  // // Latitude: 40.70502433805882
+  // const lat = 40.70502433805882
+  // const api = process.env.AUNG_GOOGLE_API_KEY;
+  // const queryString = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=50000&types=parking&key=${api}`;
+  // axios.get(queryString)
+  //     .then( result=> {
+  //         const status = result.data.status;
+  //         const results = result.data.results;
+  //         const next_page_token = result.data.next_page_token;
+  //         console.log(status, "results:", results.length);
+  //         console.log(next_page_token);
+  //         results.forEach( each => {
+  //           console.log(Object.keys(each));
+  //         })
+  //         // let nextQuery = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=${next_page_token}&key=${api}`;
+  //         // axios.get(nextQuery)
+  //         //    .then( result=> {
+  //         //       const status = result.data.status;
+  //         //       const results = result.data.results;
+  //         //       const nextPageToken = result.data.next_page_token;
+  //         //       console.log(status, "results:", results.length);
+  //         //       console.log(nextPageToken);
+  //         //       results.forEach( each => {
+  //         //         console.log(Object.keys(each));
+  //         //       })
+  //         //    })
+  //     })
+  //     .catch(err => console.log(err))
 
-  // Longitude: -74.00906637487267
-  const lng = -74.00906637487267
-  // Latitude: 40.70502433805882
-  const lat = 40.70502433805882
-  const api = process.env.AUNG_GOOGLE_API_KEY;
-  const queryString = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=10000&types=parking&key=${api}`;
-  axios.get(queryString)
-      .then( result=> {
-          const status = result.data.status;
-          const results = result.data.results;
-          console.log(status, "results:", results.length);
-          results.forEach( each => {
-            console.log(Object.keys(each));
-          }
-      })
-      .catch(err => console.log(err))
-
-  // Streetspots.findAll({ where: { status: 'open' } })
-  //   .then((spots) => res.send(spots))
-  //   .catch(next);
+  Streetspots.findAll({ where: { status: 'open' } })
+    .then((spots) => res.send(spots))
+    .catch(next);
 })
 
 //GET spot by ID
