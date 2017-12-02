@@ -4,7 +4,7 @@ import 'moment-timezone';
 
 class SpotInfo extends Component {
   render(){
-  const { spot, handleTakeSpot } = this.props;
+  const { spot, handleTakeSpot, handleNavigate } = this.props;
   const { createdAt } = spot.properties
 
   return (
@@ -14,7 +14,7 @@ class SpotInfo extends Component {
           <span className="time"><Moment fromNow>{createdAt}</Moment></span>
           </div>
           <div className="spot-actions">
-          <button className="spot-btn-nav" onClick={handleTakeSpot}>NAVIGATE TO</button>
+          <button className="spot-btn-nav" onClick={handleNavigate}>NAVIGATE TO</button>
           <button className="spot-btn-take" onClick={handleTakeSpot}>TAKE SPOT</button>
           </div>
        </div>
