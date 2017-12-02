@@ -50,8 +50,8 @@ class PointMeter extends Component {
           <image onClick={handleGoBack} x={maxWidth - 60} y="20px" width="50px" xlinkHref="/public/images/arrows.png" />
           <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth} fill="white" ></rect>
           <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth * positionRatio} fill="#EDC951" ></rect>
-          <image xlinkHref={image} x={positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth} />
-          <text x={positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 + 20} fill="white" fontSize="15px">{currentPoints}
+          <image xlinkHref={image} x={positionRatio > 0.1 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth} />
+          <text x={positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 + 20} fill="white" fontSize="15px">{ positionRatio > 0.1 ? currentPoints : null}
           </text>
         </svg>
       </div>
