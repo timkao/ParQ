@@ -1,4 +1,4 @@
-import {moment} from 'moment';
+import moment from 'moment';
 import mapboxgl from 'mapbox-gl';
 import { mapDirection } from './store/index';
 mapboxgl.accessToken = process.env.mapboxKey;
@@ -6,6 +6,19 @@ import axios from 'axios';
 
 export function timer(createdAt) {
   return moment().startOf(createdAt).fromNow()
+}
+
+export function timeSince(createdAt, type) {
+  //Returns time since now and the item created
+  //Default is milliseconds
+  let now = moment();
+  let created = moment(createdAt);
+  if (type === 'sec') return now.diff(created)/1000
+  if (type === 'min') return (now.diff(created)/1000)/60
+  return now.diff(created)
+  //Add an hour
+  // let createdPlusAnHour = moment(createdAt).hour(1)
+  // return now.isAfter(createdPlusAnHour)
 }
 
 export function getUserLocation(options) {
