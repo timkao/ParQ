@@ -36,7 +36,7 @@ export class Map extends Component {
 
     //Removes class from body node (outside of our React app)
     //to remove body defined background image
-    document.body.classList.toggle('login-body', false)
+    document.getElementById('background-image').classList.toggle('blur', true)
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -181,12 +181,7 @@ export class Map extends Component {
 
   componentWillUnmount(){
     //Brings back our full-page login background image
-    document.body.classList.toggle('login-body', true)
-  }
-
-  componentWillUnmount(){
-    //Brings back our full-page login background image
-    document.body.classList.toggle('login-body', true)
+    document.getElementById('background-image').classList.toggle('blur', false)
   }
 
   handleAddSpotGeo() {

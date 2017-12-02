@@ -225,7 +225,6 @@ export const fetchMap = (component) => {
         // add draggable point
         // used for creating spots on demand
         // see helper function above
-        var firstClick = true;
         component.map.on('click', function (e) {
           // if (firstClick) {
             createDraggablePoint(component.map, e)
