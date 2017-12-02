@@ -14,7 +14,8 @@ class SpotInfo extends Component {
           <span className="time"><Moment fromNow>{createdAt}</Moment></span>
           </div>
           <div className="spot-actions">
-          <button onClick={handleTakeSpot}>TAKE SPOT</button>
+          <button className="spot-btn-nav" onClick={handleTakeSpot}>NAVIGATE TO</button>
+          <button className="spot-btn-take" onClick={handleTakeSpot}>TAKE SPOT</button>
           </div>
        </div>
     )
