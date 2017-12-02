@@ -1,14 +1,27 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:100);
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,400,700);
 
-/* Login Page ================================== */
-.login-body {
+#app {
+  position: relative;
+}
+/* Background ================================== */
+#background-image {
   background: url(/public/images/streets-background-min.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  display: block;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 0;
 }
-
+.blur{
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+}
 /* Signup/Login Logo Box ======================= */
 .logo-box{
   width: 100%;
@@ -409,6 +422,9 @@ form ul li {
   padding:0px;
   border-radius: 10px;
 }
+.mapboxgl-popup-tip {
+  border-right-color: #333;
+}
 .fresh {
   background-color: #00A0B0;
 }
@@ -428,9 +444,9 @@ form ul li {
   color: #6A4A3C;
 }
 .spot-btn-take:hover {
-  background-color: #f9db77;
-  border-color: #f9db77;
-  color: #000;
+  background-color: #EB6841;
+  border-color: #EB6841;
+  color: #fff;
 }
 .spot-btn-nav {
   background-color: #6A4A3C;
@@ -454,5 +470,5 @@ form ul li {
   float: right;
 }
 .directions-btn-exit:hover {
-  background-color: #e2e2e2;
+  background-color: #e2e2e2!important;
 }
