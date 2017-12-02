@@ -538,3 +538,9 @@ form ul li {
     background-color: #ffe387;
   }
 }
+
+/* Filter, Map View and List View Buttons ======================= */
+#map-view-settings button{
+  color: #ffffff;
+  background-color: #CC333F;
+}
