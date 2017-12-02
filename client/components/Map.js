@@ -6,7 +6,7 @@ import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHea
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator} from '../helpers';
+import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
 import SpotInfo from './spot-info';
 
 
@@ -86,6 +86,7 @@ export class Map extends Component {
         exitBtnCreator();
         //Create marker creator buttons. See helpers file for more detail
         geoMarkerBtnCreator(this.handleAddSpotGeo);
+        customMarkerBtnCreator(this.handleAddSpotMarker);
       }
 
       /* Streetspot Marker + Popup ================= */
@@ -232,6 +233,7 @@ const mapDispatch = (dispatch) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
+      console.log('bout to dispatch')
       // add return for promise chain
       return dispatch(addSpotOnServerGeo(component, id));
     },

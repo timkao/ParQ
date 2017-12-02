@@ -344,17 +344,38 @@ export function exitBtnCreator(){
   var controls = document.getElementsByClassName('mapboxgl-ctrl-directions mapboxgl-ctrl')[0]
   controls.prepend(exitBtn);
 }
-//....Exit Button
+//....Geo Marker Add Spot Button
 export function geoMarkerBtnCreator(fnc){
-    //Create Exit Navigation button for navigation
-  var exitBtn = document.createElement('button')
-  exitBtn.innerHTML = 'Tag A Spot!'
-  exitBtn.className = 'btn btn-default create-btn-geo'
-  //function to remove routes for navigation
-  exitBtn.onclick = function() {
-    console.log(fnc)
+  //first check if btn exists to stop multiple instaces
+  if (document.getElementById('geo-marker-btn')) return
+
+  var geoBtn = document.createElement('button')
+  geoBtn.id = 'geo-marker-btn'
+  geoBtn.innerHTML = 'Open Spot Here'
+  geoBtn.className = 'btn btn-default create-btn-geo'
+  geoBtn.onclick = function() {
+    console.log('calling onclick')
+    return fnc() //fires the create spot at geo function via handleAddSpotGeo passed in
   }
-  // Grabs directions ui and prepends btn
+  // Grabs map controls ui and prepends btn
   var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
-  controls.prepend(exitBtn);
+  controls.prepend(geoBtn);
+}
+
+//....Custom Marker Add Spot Button
+export function customMarkerBtnCreator(fnc){
+  //first check if btn exists to stop multiple instaces
+  if (document.getElementById('custom-marker-btn')) return
+
+  var customBtn = document.createElement('button')
+  customBtn.id = 'custom-marker-btn'
+  customBtn.innerHTML = 'Open Spot Point'
+  customBtn.className = 'btn btn-default create-btn-custom'
+  customBtn.onclick = function() {
+    console.log('calling onclick')
+    return fnc() //fires the create spot at clicked marker function via handleAddSpotMarker passed in
+  }
+  // Grabs map controls ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
+  controls.prepend(customBtn);
 }

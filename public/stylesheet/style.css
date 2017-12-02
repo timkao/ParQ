@@ -480,4 +480,9 @@ form ul li {
   padding: 10px;
   pointer-events: all;
 }
-
+.create-btn-custom {
+  margin: 15px 0px 15px 15px;
+  width: 25%;
+  padding: 10px;
+  pointer-events: all;
+}
