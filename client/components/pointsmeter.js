@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getIsShow } from '../store';
 import * as d3 from 'd3';
 
 class PointMeter extends Component {
@@ -27,8 +26,8 @@ class PointMeter extends Component {
 
 
   render() {
-    const { image, handleGoBack } = this.props;
-    const {currentPoints} = this.state;
+    const { image, handleGoBack, notification } = this.props;
+    const { currentPoints } = this.state;
     const maxWidth = document.getElementById("map").offsetWidth;
     const rectX = document.getElementById("map").offsetLeft;
     const meterWidth = maxWidth - rectX * 2;
@@ -39,16 +38,22 @@ class PointMeter extends Component {
 
     return (
       <div id="meter">
-      <svg height={height} width={maxWidth}>
-        <rect x="0" y={verticalOffset} height={height - verticalOffset} width={maxWidth} fill="rgba(51, 51, 51, 0.81)" rx="10" ry="10"></rect>
-        <text id="meter-message" x={rectX} y="95px" fill="#00A0B0" fontSize="20px">This is where our messages sit</text>
-        <image xlinkHref="/public/images/Parq_Logo.png" x={rectX} y="20px" width="100px"/>
-        <image onClick={handleGoBack} x={maxWidth - 60} y="20px" width="50px" xlinkHref="/public/images/arrows.png"/>
-        <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth} fill="white" ></rect>
-        <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth * positionRatio} fill="#EDC951" ></rect>
-        <image xlinkHref={image} x={ positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth}/>
-        <text x={ positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 + 20} fill="white" fontSize="15px">{currentPoints}</text>
-      </svg>
+        <svg height={height} width={maxWidth}>
+          <rect x="0" y={verticalOffset} height={height - verticalOffset} width={maxWidth} fill="rgba(51, 51, 51, 0.81)" rx="10" ry="10"></rect>
+          <text x={rectX * 2} y="90px" fill="#00A0B0" fontSize="20px">
+            {notification.length > 0 ? notification.split('!')[0] + '!' : ''}
+          </text>
+          <text x={rectX * 2} y="110px" fill="#00A0B0" fontSize="20px">
+            {notification.length > 0 ? notification.split('!')[1].trim() + '!' : ''}
+          </text>
+          <image xlinkHref="/public/images/Parq_Logo.png" x={rectX} y="20px" width="100px" />
+          <image onClick={handleGoBack} x={maxWidth - 60} y="20px" width="50px" xlinkHref="/public/images/arrows.png" />
+          <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth} fill="white" ></rect>
+          <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth * positionRatio} fill="#EDC951" ></rect>
+          <image xlinkHref={image} x={positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth} />
+          <text x={positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 + 20} fill="white" fontSize="15px">{currentPoints}
+          </text>
+        </svg>
       </div>
     );
   }
@@ -56,7 +61,8 @@ class PointMeter extends Component {
 
 const mapState = (state) => {
   return {
-    image: state.user.rankCar
+    image: state.user.rankCar,
+    notification: state.notification
   };
 };
 
@@ -64,9 +70,7 @@ const mapDispatch = (dispatch) => {
   return {
     handleGoBack() {
       document.getElementById("meter").className = "animated slideOutLeft";
-      //setTimeout(function(){dispatch(getIsShow(false))}, 1000);
-      setTimeout(function(){document.getElementById("meter").style.display = "none"}, 1000);
-
+      setTimeout(function () { document.getElementById("meter").style.display = "none" }, 1000);
     }
   }
 }

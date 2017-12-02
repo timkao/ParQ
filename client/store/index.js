@@ -11,7 +11,7 @@ import lots from './lots';
 import {loadState} from './localStorage';
 import signs from './signs';
 import reportspot from './report-spot';
-import isShow from './showNotification';
+import notification from './notificationMessage';
 
 const persistedState = loadState();
 const reducer = combineReducers(
@@ -24,7 +24,7 @@ const reducer = combineReducers(
     lots,
     signs,
     reportspot,
-    isShow
+    notification
 	}
 );
 
@@ -47,4 +47,4 @@ export * from './localStorage';
 export * from './lots';
 export * from './signs';
 export * from './report-spot';
-export * from './showNotification';
+export * from './notificationMessage';

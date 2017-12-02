@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteSpotOnServer, updateSpotSizeAndPic } from '../store';
+import { deleteSpotOnServer, updateSpotSizeAndPic, updateUserPoints, getNotification } from '../store';
 import Dropzone from 'react-dropzone';
 
 export class ReportForm extends Component {
@@ -199,6 +199,14 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(updateSpotSizeAndPic(id, size, pictures))
         .then(() => {
           ownProps.history.push('/home');
+        })
+        .then(() => {
+          const meter = document.getElementById("meter");
+          meter.className = "animated slideInRight";
+          meter.style.display = "block";
+          dispatch(getNotification('Thanks for Reporting a Space! You got 50 points!'))
+          setTimeout(function () {dispatch(updateUserPoints(0.5))}, 1000);
+
         })
     },
     createRulesList(signs) {

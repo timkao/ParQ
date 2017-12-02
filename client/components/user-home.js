@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { takeSpot, updateSpotsTaken, addSpotOnServer, getIsShow, updateUserPoints } from '../store';
+import { takeSpot, updateSpotsTaken, addSpotOnServer, updateUserPoints } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
