@@ -27,24 +27,27 @@ export class UserHome extends Component {
   triggerHandleAddSpotGeo() {
     //to trigger function in child component from parent using ref
     this.map.handleAddSpotGeo()
-    .then( () => {
-      this.props.toReportForm();
-    });
+      .then(() => {
+        this.props.toReportForm();
+      });
   }
 
-  triggerHandleAddSpotMarker(){
+  triggerHandleAddSpotMarker() {
     //same as above
     this.map.handleAddSpotMarker()
-    .then( () => {
-      this.props.toReportForm();
-    });
+      .then(() => {
+        this.props.toReportForm();
+      });
   }
 
   componentDidMount() {
     socket.on('notifications', message => {
-    //this.props.showMeter();
-    document.getElementById("meter").className = "animated slideInRight";
-    document.getElementById("meter").style.display = "block";
+      //this.props.showMeter();
+      const meter = document.getElementById("meter");
+      meter.className = "animated slideInRight";
+      meter.style.display = "block";
+      setTimeout(function () { this.props.gainedPoints() }.bind(this), 1000);
+
       // update point
 
       // this.setState({showNotification: {isShow: true, message: message}});
@@ -67,8 +70,8 @@ export class UserHome extends Component {
     }
   }
 
-  setMapView(bool){
-    this.setState({mapView: bool});
+  setMapView(bool) {
+    this.setState({ mapView: bool });
   }
 
   handleTest() {
@@ -77,12 +80,12 @@ export class UserHome extends Component {
     const meter = document.getElementById("meter");
     meter.className = "animated slideInRight";
     meter.style.display = "block";
-    this.props.gainedPoints();
+    setTimeout(function () { this.props.gainedPoints(1) }.bind(this), 1000);
   }
 
   render() {
     const { email, points, isShow, map } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest} = this;
+    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
     const { mapView } = this.state;
     return (
       <div className="container">
@@ -100,12 +103,12 @@ export class UserHome extends Component {
           <div className="col-md-4 col-md-offset-4 pull-right">
             <div className="pull-right">
               <Filter />
-              <button onClick={() => setMapView(true) } className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
-              <button onClick={() => setMapView(false) } className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
+              <button onClick={() => setMapView(true)} className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
+              <button onClick={() => setMapView(false)} className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
             </div>
           </div>
         </div>
-        {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
+        {mapView === true ? <Map onRef={(ref) => { this.map = ref; }} /> : <List />}
         <Route exact path='/home/reportForm' component={ReportForm} />
       </div>
     );
@@ -133,15 +136,19 @@ const mapDispatch = (dispatch, ownProps) => {
     updateUserSpotsTaken(comp, spots) {
       dispatch(updateSpotsTaken())
         .then(() => {
-          comp.setState({
-            showNotification: { isShow: true, message: `${spots} spot${spots > 1 ? 's' : ''} you reported ${spots > 1 ? 'are' : 'is'} taken! You earned ${spots * 100} points` }
-          });
-          setTimeout(() => {
-            comp.setState({ showNotification: { isShow: false, message: '' } });
-          }, 4000);
+          // comp.setState({
+          //   showNotification: { isShow: true, message: `${spots} spot${spots > 1 ? 's' : ''} you reported ${spots > 1 ? 'are' : 'is'} taken! You earned ${spots * 100} points` }
+          // });
+          // setTimeout(() => {
+          //   comp.setState({ showNotification: { isShow: false, message: '' } });
+          // }, 4000);
+          const meter = document.getElementById("meter");
+          meter.className = "animated slideInRight";
+          meter.style.display = "block";
+          setTimeout(function () {dispatch(updateUserPoints(spots))}, 1000);
         })
     },
-    createSpot(component, id){
+    createSpot(component, id) {
       dispatch(addSpotOnServer(component, id));
     },
     toReportForm() {
@@ -150,8 +157,8 @@ const mapDispatch = (dispatch, ownProps) => {
     showMeter() {
       dispatch(getIsShow(true));
     },
-    gainedPoints() {
-      dispatch(updateUserPoints());
+    gainedPoints(num) {
+      dispatch(updateUserPoints(num));
     }
   };
 };

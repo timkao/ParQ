@@ -26,7 +26,7 @@ router.put('/updateSpotsTaken', (req, res, next) => {
 router.put('/updatePoints', (req, res, next) => {
   User.findById(req.user.id)
     .then(user => {
-      user.points += 100;
+      user.points += 100 * req.body.num;
       return user.save();
     })
     .then(user => res.send(user))
