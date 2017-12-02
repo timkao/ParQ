@@ -109,9 +109,9 @@ export class ReportForm extends Component {
             <div className="row">
               <div className="col-xs-10">Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
               </div>
-              {
-                sideA !== undefined ? <div className="col-xs-2">{sideA}</div> : null
-              }
+
+                <div className="col-xs-2">{sideA == 'undefined' ? '' : sideA}</div>
+
             </div>
             <ul className="list-group">
               {
@@ -132,9 +132,9 @@ export class ReportForm extends Component {
             <div className="row">
               <div className="col-xs-10">Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
               </div>
-              {
-                sideB !== undefined ? <div className="col-xs-2">{sideB}</div> : null
-              }
+
+                <div className="col-xs-2">{sideB == 'undefined' ? '' : sideB}</div>
+
             </div>
             <ul className="list-group">
               {
@@ -211,8 +211,8 @@ const mapDispatch = (dispatch, ownProps) => {
     },
     createRulesList(signs) {
       const sideGroup = {};
-      const colorArray = ['#C50041', '#83A700', '#B60B2D',
-        '#592F30', '#794371', '#5CD841', '#5B739C'];
+      const colorArray = ['#00A0B0', '#6A4A3C', '#EB6841',
+        '#EDC951', '#794371', '#5CD841', '#5B739C'];
       let colorIndex = 0;
       let sideA = '';
       let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
