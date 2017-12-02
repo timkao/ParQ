@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { takeSpot, updateSpotsTaken, addSpotOnServer } from '../store';
 import socket from '../socket';
 import Map from './Map';
-import List from './List';
+// import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
 import reportForm from './Report-form';
+import { BottomSheetComponent } from './BottomSheet';
 
 export class UserHome extends Component {
 
@@ -17,10 +18,10 @@ export class UserHome extends Component {
       // currentLong: 0,  // this two might not be neccessary
       // currentLat: 0,   // this might not be neccessary
       showNotification: {isShow: false, message: ''},
-      mapView: true
+      listView: false
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
-    this.setMapView = this.setMapView.bind(this);
+    this.setListView = this.setListView.bind(this);
     this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
     this.triggerHandleAddSpotMarker = this.triggerHandleAddSpotMarker.bind(this);
   }
@@ -62,14 +63,14 @@ export class UserHome extends Component {
     }
   }
 
-  setMapView(bool){
-    this.setState({mapView: bool});
+  setListView(bool){
+    this.setState({listView: bool});
   }
 
   render() {
     const { email } = this.props;
-    const { handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker} = this;
-    const { showNotification, mapView } = this.state;
+    const { handleSpotTaken, setListView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker} = this;
+    const { showNotification, listView } = this.state;
     return (
       <div className="container">
         <h3>Welcome, {email}</h3>
@@ -85,12 +86,13 @@ export class UserHome extends Component {
           <div className="col-md-4 col-md-offset-4 pull-right">
             <div className="pull-right">
               <Filter />
-              <button onClick={() => setMapView(true) } className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
-              <button onClick={() => setMapView(false) } className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
+              <button onClick={() => setListView(false) } className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>
+              <button onClick={() => setListView(true) } className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
             </div>
           </div>
         </div>
-        {mapView === true ? <Map onRef={(ref) => {this.map = ref;}} /> : <List />}
+        <Map onRef={(ref) => {this.map = ref;}} />
+        {listView === true ? <BottomSheetComponent showSheet={this.state.listView} /> : null}
         <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );
