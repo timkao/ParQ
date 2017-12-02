@@ -11,6 +11,7 @@ const _Profile = (props) => {
       transform: "translate(-50%, -50%)",
       textAlign: "center"
     }}>
+      {/* profile image goes here */}
       <img
         src="../../public/images/free-cute-puppy-pictures.jpg"
         alt= "Profile Photo"
@@ -19,6 +20,7 @@ const _Profile = (props) => {
         className="img-circle"
       />
       <h3 className="media-heading" style={{color: "white"}}>Abraham</h3>
+      {/* reward car imgage goes here */}
       <img src = "../../public/images/bigcar.png" />
       <span className="label label-primary"><strong>Rewards: </strong></span>
       <span className="label label-success">20</span>
