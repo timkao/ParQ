@@ -2,8 +2,9 @@ const chalk = require('chalk');
 
 // Seed data
 const users = [
-    {name: 'Test', password: '123', email: 'test@test.com'},
-    {name: 'Queen', password: '123', email: 'queen@test.com'}
+    {name: 'Test', password: '123', email: 'test@test.com', points: 900},
+    {name: 'Queen', password: '123', email: 'queen@test.com', points: 500},
+    {name: 'Tim', password: '123', email: 'tim@test.com', points: 1500}
 ];
 
 const streetspots = [
@@ -31,7 +32,7 @@ const parkingLots = [
 ];
 
 //Export
-module.exports = (User, Streetspots, Lots) => {
+module.exports = (User, Streetspots, Reward, Lots) => {
   let user1, user2;
     //user creation
   return Promise.all(
@@ -60,14 +61,14 @@ module.exports = (User, Streetspots, Lots) => {
       _lot12.setUser(user2),
       _lot13.setUser(user2),
       _lot14.setUser(user1)
-    ])
+    ]);
+  })
   .then(() => {
     Promise.all(
       parkingLots.map((location) => Lots.create(location))
     );
   })
-  .then(() => console.log(chalk.green('DB is synced and seeded')));
-  })
+  .then(() => console.log(chalk.green('DB is synced and seeded')))
   .catch((err) => {
     console.log('seed error:');
     console.log(err);

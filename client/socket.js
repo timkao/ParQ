@@ -6,4 +6,5 @@ socket.on('connect', () => {
   console.log('Socket.io Connected!')
 })
 
+
 export default socket

@@ -1,12 +1,12 @@
 import mapboxgl from 'mapbox-gl';
-import '../../secrets';
+//import '../../secrets';
 import store, { fetchLots, fetchSpots } from './';
 import { getDistanceFromLatLng, getUserLocation} from '../helpers';
 
 /**
  * API ACCESS
  */
-mapboxgl.accessToken = process.env.mapboxKey;
+mapboxgl.accessToken = mapboxKey;
 
 // This function is not fully implemented
 const createDraggablePoint = (map, event) => {
@@ -169,11 +169,11 @@ export const fetchMap = (component) => {
       .then(position => {
         longitude = position.coords.longitude;
         latitude = position.coords.latitude;
-        component.setState({ currentLat: longitude, currentLong: latitude });
+        // component.setState({ currentLat: longitude, currentLong: latitude });
 
         component.map = new mapboxgl.Map({
           container: 'map',
-          style: 'mapbox://styles/mapbox/streets-v9',
+          style: 'mapbox://styles/mapbox/light-v9',
           center: [longitude, latitude],
           zoom: 15
         });
@@ -200,7 +200,6 @@ export const fetchMap = (component) => {
 
         // add mapDirection
         component.map.addControl(mapDirection, 'top-right');
-
         component.map.on('load', function () {
           // source of search marker
           component.map.addSource('single-point', {

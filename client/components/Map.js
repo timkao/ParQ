@@ -9,6 +9,7 @@ import mapboxgl from 'mapbox-gl';
 import {filterSpots, timeSince} from '../helpers';
 import SpotInfo from './spot-info';
 
+
 export class Map extends Component {
 
   constructor() {
@@ -89,6 +90,7 @@ export class Map extends Component {
             // create the marker element
             var el = document.createElement('div');
             el.className = 'marker';
+
             //create the popup element
             var pop = document.createElement('div');
             //Find out how fresh the spot is and apply appropriate background color
@@ -112,6 +114,7 @@ export class Map extends Component {
               mapDirection.setOrigin([longitude, latitude]);
               mapDirection.setDestination(spot.geometry.coordinates);
             });
+
             // create the popup for mapbox
             var popup = new mapboxgl.Popup()
             .setDOMContent(pop);

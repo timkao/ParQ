@@ -64,17 +64,17 @@
 /* Report Form =================================== */
 
 #report-form{
-  position: fixed;
-  top: 30%;
-  left: 30%;
-  width: 60em;
-  background-color: #887C64;
+  position: absolute;
+  background-color: rgba(51, 51, 51, 0.81);
   border-radius: 1em;
+  z-index: 2;
+  font-family: 'Righteous', sans-serif
 }
 
 #report-form .spot-location {
-  color: #DCE1CB;
+  color: #00A0B0;
   margin: 1em 1em 1em 1em;
+  font-size: 12px;
 }
 
 #report-form .spot-location li {
@@ -87,8 +87,8 @@
 
 
 #report-form #spot-description {
-  border-bottom: 0.1em solid #DCE1CB;
-  padding-bottom: 2px;
+  /* border-bottom: 0.1em solid #DCE1CB; */
+  padding-bottom: 1vh;
   font-size: 20px;
 }
 
@@ -97,16 +97,30 @@
 }
 
 #report-form .list-group-item {
-  font-size: 10px;
+  font-size: 9px;
 }
 
 #report-form .form-group .text-center {
   margin-top: 0.7em;
+  color: #DD4B39;
 }
 
 .spot-location strong {
-  color: #C7E7E6;
+  color: #DD4B39;
 }
+
+.spot-location .pull-right {
+  color: #DD4B39;
+  font-size: 10px;
+  margin-left: 1em;
+}
+
+.spot-location .col-xs-2 {
+  color: #DD4B39;
+  font-size: 20px;
+}
+
+
 
 /*#auth {
   width: 25em;
@@ -398,4 +412,7 @@ form ul li {
   background-color: #f9db77;
   border-color: #f9db77;
   color: #000;
+}
+#meter {
+  display: none;
 }

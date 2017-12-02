@@ -10,16 +10,29 @@ export class ReportForm extends Component {
     this.state = {
       sizeValue: 'full-size car',
       isUpload: false,
-      data_uri: '',
-      filename: '',
       processing: false,
-      pictures: []
+      pictures: [],
+      meterWidth: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleOnDrop = this.handleOnDrop.bind(this);
     this.showUpload = this.showUpload.bind(this);
+  }
+
+  componentDidMount() {
+    // position popup base on Map element
+    const mapElement = document.getElementById("map");
+    const reportFormElement = document.getElementById("report-form");
+    const offset = 7;
+    const ctrlTop = document.getElementsByClassName("mapboxgl-ctrl-top-left")[0].offsetHeight;
+    const formLeft = mapElement.offsetLeft + offset;
+    const formTop = mapElement.offsetTop + ctrlTop + offset;
+    const maxWidth = mapElement.offsetWidth - offset - 5;
+    reportFormElement.style.top = `${formTop}px`;
+    reportFormElement.style.left = `${formLeft}px`;
+    reportFormElement.style.maxWidth = `${maxWidth}px`;
   }
 
   handleChange(ev) {
@@ -74,52 +87,30 @@ export class ReportForm extends Component {
   render() {
     const { handleChange, handleCancel, handleSubmit, showUpload, handleOnDrop } = this;
     const { isUpload, processing } = this.state;
-    const { signs, reportspot } = this.props;
+    const { signs, reportspot, createRulesList } = this.props;
     const uploadButton = isUpload ? 'Go Back' : 'Upload Picture (Optional)';
-    const sideGroup = {};
-    let sideA = '';
-    let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
-    let sideB = '';
-    signs.forEach(sign => {
-      if (sideGroup[sign.side]) {
-        sideGroup[sign.side].push(sign);
-      } else {
-        sideGroup[sign.side] = [sign];
-      }
-    })
-    const groupkey = Object.keys(sideGroup);
-    if (groupkey.length === 1) {
-      sideA = groupkey[0];
-      fromStreetA = sideGroup[sideA][0].fromStreet;
-      gotoStreetA = sideGroup[sideA][0].gotoStreet;
-    } else if (groupkey.length === 2) {
-      sideA = groupkey[0];
-      fromStreetA = sideGroup[sideA][0].fromStreet;
-      gotoStreetA = sideGroup[sideA][0].gotoStreet;
-      sideB = groupkey[1];
-      fromStreetB = sideGroup[sideB][0].fromStreet;
-      gotoStreetB = sideGroup[sideB][0].gotoStreet;
-    }
-
+    const { sideGroup, sideA, sideB, fromStreetA, gotoStreetA, fromStreetB, gotoStreetB } = createRulesList(signs);
 
     return (
       <div id="report-form">
         {reportspot.mainStreet &&
           <div id="spot-description" className="spot-location">
             <div className="text-center">
-              The Spot is on <strong>{reportspot.mainStreet}</strong>
+              on <strong>{reportspot.mainStreet}</strong>
             </div>
             <div className="text-center">
-              Between <strong>{reportspot.crossStreet1}</strong> and <strong>{reportspot.crossStreet2}</strong>
+              between <strong>{reportspot.crossStreet1}</strong> and <strong>{reportspot.crossStreet2}</strong>
             </div>
           </div>
         }
         {
           sideA !== '' &&
           <div className="spot-location">
-              <div>{`Rules Around the Spot - from ${fromStreetA} to ${gotoStreetA}`}
+            <div className="row">
+              <div className="col-xs-10">Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
+              </div>
               {
-                sideA ? <span className="pull-right">{sideA} SIDE</span> : null
+                sideA !== undefined ? <div className="col-xs-2">{sideA}</div> : null
               }
             </div>
             <ul className="list-group">
@@ -127,7 +118,7 @@ export class ReportForm extends Component {
                 sideGroup[sideA].map(sign => {
                   return (
                     <li key={sign.id} className="list-group-item">
-                      <div>{sign.description} <span className="pull-right">{`${sign.distance}ft`}</span></div>
+                      <div>{sign.description} <span className="pull-right" style={{ color: `${sign.color}` }}>{`${sign.distance}ft`}</span></div>
                     </li>
                   )
                 })
@@ -138,9 +129,11 @@ export class ReportForm extends Component {
         {
           sideB !== '' &&
           <div className="spot-location">
-            <div>{`Rules Around the Spot - from ${fromStreetB} to ${gotoStreetB}`}
+            <div className="row">
+              <div className="col-xs-10">Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
+              </div>
               {
-                sideB ? <span className="pull-right">{sideB} SIDE</span> : null
+                sideB !== undefined ? <div className="col-xs-2">{sideB}</div> : null
               }
             </div>
             <ul className="list-group">
@@ -148,7 +141,7 @@ export class ReportForm extends Component {
                 sideGroup[sideB].map(sign => {
                   return (
                     <li key={sign.id} className="list-group-item">
-                      <div>{sign.description} <span className="pull-right">{`${sign.distance}ft`}</span></div>
+                      <div>{sign.description} <span className="pull-right" style={{ color: `${sign.color}` }}>{`${sign.distance}ft`}</span></div>
                     </li>
                   )
                 })
@@ -169,7 +162,7 @@ export class ReportForm extends Component {
             }
           </div>
           <div className="form-group">
-            <label htmlFor="size-choice">Space Size</label>
+            <div>Space Size</div>
             <select name="size" onChange={handleChange} id="size-choice" className="form-control" value={this.state.sizeValue}>
               <option value='full-size SUV'>Full-Size (SUV)</option>
               <option value='full-size car'>Full-Size (CAR)</option>
@@ -207,6 +200,53 @@ const mapDispatch = (dispatch, ownProps) => {
         .then(() => {
           ownProps.history.push('/home');
         })
+    },
+    createRulesList(signs) {
+      const sideGroup = {};
+      const colorArray = ['#C50041', '#83A700', '#B60B2D',
+        '#592F30', '#794371', '#5CD841', '#5B739C'];
+      let colorIndex = 0;
+      let sideA = '';
+      let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
+      let sideB = '';
+      signs.forEach((sign, index) => {
+        // make the description more readable
+        sign.description = sign.description
+          .replace(/ *\([^)]*\) */g, "")
+          .replace(/>/g, " ")
+          .replace(/</g, " ")
+          .replace(/-/g, " ")
+
+        // grouping the signs with same distance by colors
+        if (index === 0) {
+          sign.color = colorArray[colorIndex];
+        } else if (signs[index - 1].distance !== sign.distance) {
+          colorIndex++
+          sign.color = colorArray[colorIndex];
+        } else {
+          sign.color = colorArray[colorIndex];
+        }
+
+        if (sideGroup[sign.side]) {
+          sideGroup[sign.side].push(sign);
+        } else {
+          sideGroup[sign.side] = [sign];
+        }
+      })
+      const groupkey = Object.keys(sideGroup);
+      if (groupkey.length === 1) {
+        sideA = groupkey[0];
+        fromStreetA = sideGroup[sideA][0].fromStreet;
+        gotoStreetA = sideGroup[sideA][0].gotoStreet;
+      } else if (groupkey.length === 2) {
+        sideA = groupkey[0];
+        fromStreetA = sideGroup[sideA][0].fromStreet;
+        gotoStreetA = sideGroup[sideA][0].gotoStreet;
+        sideB = groupkey[1];
+        fromStreetB = sideGroup[sideB][0].fromStreet;
+        gotoStreetB = sideGroup[sideB][0].gotoStreet;
+      }
+      return { sideGroup, sideA, sideB, fromStreetA, gotoStreetA, fromStreetB, gotoStreetB };
     }
   }
 }

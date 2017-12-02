@@ -4,23 +4,32 @@ import { connect } from 'react-redux';
 const _Profile = (props) => {
   console.log("Checking user on profile component: ", props.user);
   return (
-    <center>
+    <div style = {{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      textAlign: "center"
+    }}>
+      {/* profile image goes here */}
       <img
-        src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432"
+        src="../../public/images/free-cute-puppy-pictures.jpg"
         alt= "Profile Photo"
         name="aboutme"
-        style={{ width: "40%", border: "1px solid" }}
-        className="img-circle image-responsive"
+        style={{ width: "95%", borderRadius: "50%"}}
+        className="img-circle"
       />
-      <h3 className="media-heading">Abraham</h3>
-      <span><strong>Rewards: </strong></span>
+      <h3 className="media-heading" style={{color: "white"}}>Abraham</h3>
+      {/* reward car imgage goes here */}
+      <img src = "../../public/images/bigcar.png" />
+      <span className="label label-primary"><strong>Rewards: </strong></span>
       <span className="label label-success">20</span>
       <span className="label label-info">Helped 20 persons find parkings</span>
       <br />
-      <span><strong>Recieved Help: </strong></span>
+      <span className="label label-primary"><strong>Recieved Help: </strong></span>
       <span className="label label-warning">5</span>
       <span className="label label-info">5 persons helped Abraham find parking spot</span>
-    </center>
+    </div>
   )
 }
 
@@ -36,3 +45,7 @@ const mapDispatch = (dispatch, ownProps) => {
 }
 
 export default connect(mapState, mapDispatch)(_Profile);
+// 
+// src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432"
+// src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png"
+// src="https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/7/71/B18831f96720e907c4769168687d7fd1--cat-lovers-adorable-animals.jpg/revision/latest?cb=20170803164432"
