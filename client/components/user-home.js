@@ -93,6 +93,7 @@ export class UserHome extends Component {
     const { listView } = this.state;
     return (
       <Grid>
+      {this.map ?
         <Row id="map-view-settings" >
           <Col xs={4} sm={4}>
             {/*<button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>*/}
@@ -111,6 +112,7 @@ export class UserHome extends Component {
             </div>
           </Col>
         </Row>
+        : null }
         <div>
           {listView === true ? <Map height={'40vh'} onRef={(ref) => {this.map = ref;}} /> : <Map onRef={(ref) => {this.map = ref;}} />}
 
