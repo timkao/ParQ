@@ -25,7 +25,8 @@
 
 /* Map  ========================================= */
 #map {
-  height: 100vh;
+  height: 65vh;
+
 }
 .loader {
   position: inherit;
@@ -59,6 +60,19 @@
 .mapboxgl-popup {
     max-width: 400px;
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+/* List View */
+.cREHHl {
+  background: none !important
+}
+
+
+#list {
+  list-style-position: inside;
+  height: 30vh;
+  position: inherit;
+  overflow: scroll
 }
 
 /* Report Form =================================== */
@@ -378,6 +392,7 @@ form ul li {
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
   color: #fff;
+  border-radius: 10px;
 }
 .spot-popup div {
   margin-bottom: 10px;
@@ -392,6 +407,7 @@ form ul li {
 /* Overrides default popup padding */
 .mapboxgl-popup-content {
   padding:0px;
+  border-radius: 10px;
 }
 .fresh {
   background-color: #00A0B0;
@@ -425,9 +441,18 @@ form ul li {
 .spot-btn-nav:hover {
   background-color: #7b665c;
   border-color: #7b665c;
-  color: #909090;
+  color: #000;
 }
 
 #meter {
   display: none;
+}
+
+/* Directions =================================== */
+.directions-btn-exit {
+  margin-bottom: 10px;
+  float: right;
+}
+.directions-btn-exit:hover {
+  background-color: #e2e2e2;
 }
