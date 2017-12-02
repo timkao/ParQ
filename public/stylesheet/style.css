@@ -38,7 +38,7 @@
 
 /* Map  ========================================= */
 #map {
-  height: 65vh;
+  height: 80vh;
 
 }
 .loader {
@@ -556,9 +556,17 @@ form ul li {
 }
 
 /* Filter, Map View and List View Buttons ======================= */
-#map-view-settings button{
+#map-view-settings{
+  padding-bottom: 2vh;
+}
+.map-view-settings-button{
   color: #ffffff;
   background-color: #CC333F;
+  border-color: #CC333F
+}
+
+
+
 .directions-btn-exit {
   margin-bottom: 10px;
   float: right;

@@ -93,7 +93,7 @@ export class UserHome extends Component {
     const { listView } = this.state;
     return (
       <Grid>
-        <Row id="map-view-settings">
+        <Row id="map-view-settings" >
           <Col xs={4} sm={4}>
             {/*<button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>*/}
             {/*<button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>*/}
@@ -105,9 +105,9 @@ export class UserHome extends Component {
             <Filter />
           </Col>
           <Col xs={5} sm={4} className="pull-right">
-            <div className="btn-group btn-group-sm">
-              <button onClick={() => setListView(false) } className="btn btn-default"><span className="glyphicon glyphicon-map-marker" /> Map</button>{" "}
-              <button onClick={() => setListView(true) } className="btn btn-default"><span className="glyphicon glyphicon-list" /> List</button>
+            <div className="btn-toolbar">
+              <button onClick={() => setListView(false) } className="btn btn-default map-view-settings-button btn-sm"><span className="glyphicon glyphicon-map-marker" /> Map</button>
+              <button onClick={() => setListView(true) } className="btn btn-default map-view-settings-button btn-sm"><span className="glyphicon glyphicon-list" /> List</button>
             </div>
           </Col>
         </Row>
