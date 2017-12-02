@@ -93,7 +93,7 @@ export class Map extends Component {
             : pop.className = 'spot-popup'
           // pop.className = 'spot-popup'
           //turn our popup element into a react component
-          let props = { spot, handleTakeSpot: () => {occupySpot(spot.id, map)} }
+          let props = { spot, map, handleTakeSpot: () => {occupySpot(spot.properties.id, map)} }
           ReactDOM.render(
             React.createElement(
               SpotInfo, props//passes in spot info as props to the spont component

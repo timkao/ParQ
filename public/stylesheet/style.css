@@ -363,6 +363,11 @@ form ul li {
   background-color: #eeeeee;
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
+  color: #fff;
+  margin-top: 10px;
+}
+.spot-popup div {
+  margin-bottom: 10px;
 }
 .spot-popup strong {
   font-size: 1.5em;
@@ -376,5 +381,21 @@ form ul li {
   padding:0px;
 }
 .fresh {
-  background-color: #0ee872;
+  background-color: #00A0B0;
+}
+.rotten {
+  background-color: #CA3543;
+}
+.spot-actions {
+  text-align: center;
+}
+.spot-actions button {
+  background-color: #EDC951;
+  border-color: #EDC951;
+  padding: 10px;
+  color: #00A0B0;
+}
+.spot-actions button:hover {
+  background-color: #f9db77;
+  border-color: #f9db77;
 }
