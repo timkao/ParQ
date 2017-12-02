@@ -559,14 +559,55 @@ form ul li {
 #map-view-settings{
   padding-bottom: 2vh;
 }
-.map-view-settings-button{
+.map-view-settings-button {
   color: #ffffff;
   background-color: #CC333F;
-  border-color: #CC333F
+  border-color: #CC333F;
+}
+
+.map-view-settings-button:hover,
+.map-view-settings-button:focus,
+.map-view-settings-button:active,
+.map-view-settings-button.active,
+.open .dropdown-toggle.map-view-settings-button {
+  color: #ffffff;
+  background-color: #ED3948 !important;
+  border-color: #CC333F;
+}
+
+.map-view-settings-button:active,
+.map-view-settings-button.active,
+.open .dropdown-toggle.map-view-settings-button {
+  background-image: none;
+}
+
+.map-view-settings-button.disabled,
+.map-view-settings-button[disabled],
+fieldset[disabled] .map-view-settings-button,
+.map-view-settings-button.disabled:hover,
+.map-view-settings-button[disabled]:hover,
+fieldset[disabled] .map-view-settings-button:hover,
+.map-view-settings-button.disabled:focus,
+.map-view-settings-button[disabled]:focus,
+fieldset[disabled] .map-view-settings-button:focus,
+.map-view-settings-button.disabled:active,
+.map-view-settings-button[disabled]:active,
+fieldset[disabled] .map-view-settings-button:active,
+.map-view-settings-button.disabled.active,
+.map-view-settings-button[disabled].active,
+fieldset[disabled] .map-view-settings-button.active {
+  background-color: #CC333F;
+  border-color: #CC333F;
+}
+
+.map-view-settings-button .badge {
+  color: #CC333F;
+  background-color: #ffffff;
 }
 
 
 
+/* ============== */
 .directions-btn-exit {
   margin-bottom: 10px;
   float: right;
