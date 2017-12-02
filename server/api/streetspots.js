@@ -1,14 +1,33 @@
 const router = require('express').Router()
 const { Streetspots, User } = require('../db/models')
 const AWS = require('aws-sdk');
+const axios = require('axios');
 
 module.exports = router
 
 //GET all spots
 router.get('/', (req, res, next) => {
-  Streetspots.findAll({ where: { status: 'open' } })
-    .then((spots) => res.send(spots))
-    .catch(next)
+
+  // Longitude: -74.00906637487267
+  const lng = -74.00906637487267
+  // Latitude: 40.70502433805882
+  const lat = 40.70502433805882
+  const api = process.env.AUNG_GOOGLE_API_KEY;
+  const queryString = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=10000&types=parking&key=${api}`;
+  axios.get(queryString)
+      .then( result=> {
+          const status = result.data.status;
+          const results = result.data.results;
+          console.log(status, "results:", results.length);
+          results.forEach( each => {
+            console.log(Object.keys(each));
+          }
+      })
+      .catch(err => console.log(err))
+
+  // Streetspots.findAll({ where: { status: 'open' } })
+  //   .then((spots) => res.send(spots))
+  //   .catch(next);
 })
 
 //GET spot by ID
@@ -83,3 +102,4 @@ router.put('/:spotId/pictures', (req, res, next) => {
   .then(() => res.sendStatus(204))
   .catch(next);
 })
+
