@@ -70,14 +70,14 @@ function round(value, decimals) {
 // helper functions for spot validation
 function fetchGoogleAddress(coor) {
   const [lng, lat] = coor;
-  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
+  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_DISTANCE_SECRET}`;
   return axios.get(queryString)
     .then(result => result.data.results[0])
 }
 
 function reverseGoogleAddress(current, cross) {
   const queryAddress = `${current} and ${cross}, new york, new york`.split(' ').join('+');
-  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?address=${queryAddress}&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
+  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?address=${queryAddress}&key=${GOOGLE_DISTANCE_SECRET}`;
   return axios.get(queryString)
     .then(result => result.data.results[0])
     .then(results => {
