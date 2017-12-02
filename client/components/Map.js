@@ -191,7 +191,6 @@ export class Map extends Component {
 
   handleAddSpotGeo() {
     return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
-    // this.props.getMap(this);
   }
 
   handleAddSpotMarker(){
@@ -210,7 +209,6 @@ export class Map extends Component {
       //Update state
       this.setState({loaded: true});
     }) //eventually pass in users default vehicle size
-    // this.props.getMap(this);
   }
 
   renewSpotsWithMap() {
