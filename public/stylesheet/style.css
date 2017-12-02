@@ -386,6 +386,62 @@ form ul li {
   text-decoration: none;
 }
 
+/* Spot Popup =================================== */
+.spot-popup {
+  background-color: #eeeeee;
+  font-family: "Roboto", Roboto, arial, sans-serif;
+  padding: 15px;
+  color: #fff;
+}
+.spot-popup div {
+  margin-bottom: 10px;
+}
+.spot-popup strong {
+  font-size: 1.5em;
+  margin: 10px 0px;
+}
+.spot-popup span {
+  font-size: 2.5em;
+}
+/* Overrides default popup padding */
+.mapboxgl-popup-content {
+  padding:0px;
+}
+.fresh {
+  background-color: #00A0B0;
+}
+.rotten {
+  background-color: #CA3543;
+}
+.spot-actions {
+  text-align: center;
+}
+.spot-actions button:first-child {
+  margin-right: 10px;
+}
+.spot-btn-take {
+  background-color: #EDC951;
+  border-color: #EDC951;
+  padding: 10px;
+  color: #6A4A3C;
+}
+.spot-btn-take:hover {
+  background-color: #f9db77;
+  border-color: #f9db77;
+  color: #000;
+}
+.spot-btn-nav {
+  background-color: #6A4A3C;
+  border-color: #6A4A3C;
+  padding: 10px;
+  color: #fff;
+}
+.spot-btn-nav:hover {
+  background-color: #7b665c;
+  border-color: #7b665c;
+  color: #909090;
+}
+
 #meter {
   display: none;
 }

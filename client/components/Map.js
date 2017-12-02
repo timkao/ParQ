@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude } from '../store';
+import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude, takeSpot } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots} from '../helpers';
+import {filterSpots, timeSince} from '../helpers';
+import SpotInfo from './spot-info';
 
 
 export class Map extends Component {
@@ -38,7 +40,7 @@ export class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    const { spots, map, headTo, lots, filter } = this.props;
+    const { spots, map, headTo, lots, filter, occupySpot} = this.props;
     // remove existing marker (we can optimize it later)
     if (this.state.loaded === true && spots.features){
       const currentMarkers = document.getElementsByClassName('marker');
@@ -81,6 +83,7 @@ export class Map extends Component {
         }
       })
 
+      /* Streetspot Marker + Popup ================= */
       if (filter.type.includes('Street') || filter.type.length < 1 ){
         spots.features &&
         filteredSpots.forEach(function(spot) {
@@ -89,16 +92,39 @@ export class Map extends Component {
             el.className = 'marker';
             // add picture base on car size
             el.style.backgroundImage = `url(${spot.properties.sizeUrl})`;
-            // add event listener
-            el.addEventListener('click', () => {
+
+            //create the popup element
+            var pop = document.createElement('div');
+            //Find out how fresh the spot is and apply appropriate background color
+            timeSince(spot.properties.createdAt, 'min') < 10
+              ? pop.className = 'spot-popup fresh'
+              : pop.className = 'spot-popup rotten'
+
+            //Turn our popup element into a react component
+            //First we create functions for the btns to
+            //interact with map
+            //we should clean these up and move them in future
+            const handleNavigate = () => {
               headTo(spot.properties.id);
               mapDirection.setOrigin([longitude, latitude]);
               mapDirection.setDestination(spot.geometry.coordinates);
-            });
-            // create the popup
+            }
+            const handleTakeSpot = () => {
+              occupySpot(spot.properties.id, map)
+            }
+            //Crreate a props object to pass into React.createElement
+            let props = { spot, map, handleTakeSpot, handleNavigate }
+            ReactDOM.render(
+              React.createElement(
+                SpotInfo, props//passes in spot info as props to the spont component
+              ),
+              pop
+            );
+
+            // create the popup for mapbox
             var popup = new mapboxgl.Popup()
-            .setHTML('<button onClick=(console.log(`hi`))>hello</button>');
-            // create the marker
+            .setDOMContent(pop);
+            // create the marker for mapbox and set out popup on it
             new mapboxgl.Marker(el)
             .setLngLat(spot.geometry.coordinates)
             .setPopup(popup) // sets a popup on this marker
@@ -214,6 +240,10 @@ const mapDispatch = (dispatch) => {
     },
     headTo(spotId){
       dispatch(getHeadingTo(spotId));
+    },
+    occupySpot(id, map) {
+      const thunk = takeSpot(id, map);
+      dispatch(thunk);
     }
   };
 };
