@@ -6,7 +6,7 @@ import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHea
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots, timeSince} from '../helpers';
+import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
 import SpotInfo from './spot-info';
 
 
@@ -33,7 +33,6 @@ export class Map extends Component {
     socket.on('Update Spots', ()=> {
       this.renewSpotsWithMap();
     })
-
     //Removes class from body node (outside of our React app)
     //to remove body defined background image
     document.getElementById('background-image').classList.toggle('blur', true)
@@ -81,20 +80,14 @@ export class Map extends Component {
               source: "streetspots"
             });
         }
-
-        //Create Exit Navigation button for navigation
-        var exitBtn = document.createElement('button')
-        exitBtn.innerHTML = '<span class="glyphicon glyphicon-remove"></span>'
-        exitBtn.className = 'btn btn-default directions-btn-exit hidden'
-        //function to remove routes for navigation
-        exitBtn.onclick = function() {
-          mapDirection.removeRoutes()
-          this.classList.toggle('hidden');
-        }
-        // Grabs directions ui and prepends btn
-        var controls = document.getElementsByClassName('mapboxgl-ctrl-directions mapboxgl-ctrl')[0]
-        controls.prepend(exitBtn);
       })
+      if (this.state.loaded){
+        //Create exit directions button. See helpers file for more detail
+        exitBtnCreator();
+        //Create marker creator buttons. See helpers file for more detail
+        geoMarkerBtnCreator(this.handleAddSpotGeo);
+        customMarkerBtnCreator(this.handleAddSpotMarker);
+      }
 
       /* Streetspot Marker + Popup ================= */
       if (filter.type.includes('Street') || filter.type.length < 1 ){
@@ -240,6 +233,7 @@ const mapDispatch = (dispatch) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
+      console.log('bout to dispatch')
       // add return for promise chain
       return dispatch(addSpotOnServerGeo(component, id));
     },
