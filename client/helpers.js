@@ -16,9 +16,6 @@ export function timeSince(createdAt, type) {
   if (type === 'sec') return now.diff(created)/1000
   if (type === 'min') return (now.diff(created)/1000)/60
   return now.diff(created)
-  //Add an hour
-  // let createdPlusAnHour = moment(createdAt).hour(1)
-  // return now.isAfter(createdPlusAnHour)
 }
 
 export function getUserLocation(options) {
@@ -43,7 +40,6 @@ export function filterSpots(filter, spots) {
 //Uses the Haversine Formula. More info: https://en.wikipedia.org/wiki/Haversine_formula
 //As well as this stack: https://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
 //We may consider switching this to Google's API
-//----------------------------------------------------------------
 export function getDistanceFromLatLng(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
   var dLat = deg2rad(lat2 - lat1);  // deg2rad below
@@ -332,3 +328,54 @@ export function spotValidation(coor) {
     })
 }
 
+/* Button creators ================================================ */
+//....Exit Button
+export function exitBtnCreator(){
+    //Create Exit Navigation button for navigation
+  var exitBtn = document.createElement('button')
+  exitBtn.innerHTML = '<span class="glyphicon glyphicon-remove"></span>'
+  exitBtn.className = 'btn btn-default directions-btn-exit hidden'
+  //function to remove routes for navigation
+  exitBtn.onclick = function() {
+    mapDirection.removeRoutes()
+    this.classList.toggle('hidden');
+  }
+  // Grabs directions ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-directions mapboxgl-ctrl')[0]
+  controls.prepend(exitBtn);
+}
+//....Geo Marker Add Spot Button
+export function geoMarkerBtnCreator(fnc){
+  //first check if btn exists to stop multiple instaces
+  if (document.getElementById('geo-marker-btn')) return
+
+  var geoBtn = document.createElement('button')
+  geoBtn.id = 'geo-marker-btn'
+  geoBtn.innerHTML = 'Open Spot Here'
+  geoBtn.className = 'btn btn-default create-btn-geo'
+  geoBtn.onclick = function() {
+    console.log('calling onclick')
+    return fnc() //fires the create spot at geo function via handleAddSpotGeo passed in
+  }
+  // Grabs map controls ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
+  controls.prepend(geoBtn);
+}
+
+//....Custom Marker Add Spot Button
+export function customMarkerBtnCreator(fnc){
+  //first check if btn exists to stop multiple instaces
+  if (document.getElementById('custom-marker-btn')) return
+
+  var customBtn = document.createElement('button')
+  customBtn.id = 'custom-marker-btn'
+  customBtn.innerHTML = 'Open Spot Point'
+  customBtn.className = 'btn btn-default create-btn-custom'
+  customBtn.onclick = function() {
+    console.log('calling onclick')
+    return fnc() //fires the create spot at clicked marker function via handleAddSpotMarker passed in
+  }
+  // Grabs map controls ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
+  controls.prepend(customBtn);
+}

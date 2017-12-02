@@ -477,3 +477,17 @@ form ul li {
 .directions-btn-exit:hover {
   background-color: #e2e2e2!important;
 }
+
+/* Map Buttons =================================== */
+.create-btn-geo {
+  margin: 15px;
+  width: 25%;
+  padding: 10px;
+  pointer-events: all;
+}
+.create-btn-custom {
+  margin: 15px 0px 15px 15px;
+  width: 25%;
+  padding: 10px;
+  pointer-events: all;
+}
