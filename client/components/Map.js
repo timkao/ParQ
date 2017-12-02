@@ -19,6 +19,7 @@ export class Map extends Component {
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
+    this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
   }
 
   componentDidMount() {
