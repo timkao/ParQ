@@ -219,9 +219,9 @@ export class Map extends Component {
   }
 
   render() {
-
+    const {height} = this.props;
     return (
-      <div id="map">
+      <div id="map" style={ height ? {height: height} : null}>
         <Loader loaded={this.state.loaded} className="loader" />
       </div>
     );
