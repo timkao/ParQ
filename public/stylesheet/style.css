@@ -378,6 +378,7 @@ form ul li {
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
   color: #fff;
+  border-radius: 10px;
 }
 .spot-popup div {
   margin-bottom: 10px;
@@ -425,9 +426,15 @@ form ul li {
 .spot-btn-nav:hover {
   background-color: #7b665c;
   border-color: #7b665c;
-  color: #909090;
+  color: #000;
 }
 
 #meter {
   display: none;
+}
+
+/* Directions =================================== */
+.directions-btn-exit:hover {
+  background-color: #e2e2e2;
+  margin-bottom: 10px;
 }

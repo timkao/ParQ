@@ -95,6 +95,8 @@ export class Map extends Component {
 
             //create the popup element
             var pop = document.createElement('div');
+            // create the popup for mapbox
+            var popup = new mapboxgl.Popup()
             //Find out how fresh the spot is and apply appropriate background color
             timeSince(spot.properties.createdAt, 'min') < 10
               ? pop.className = 'spot-popup fresh'
@@ -108,6 +110,15 @@ export class Map extends Component {
               headTo(spot.properties.id);
               mapDirection.setOrigin([longitude, latitude]);
               mapDirection.setDestination(spot.geometry.coordinates);
+              popup.remove();
+              var exitBtn = document.createElement('button')
+              // Grabs directions ul
+              exitBtn.innerHTML = '<span class="glyphicon glyphicon-remove"></span>'  // Create exit directions btn
+              exitBtn.className = 'btn btn-default directions-btn-exit'
+              exitBtn.onclick = () => map.removeRoutes()
+              var controls = document.getElementsByClassName("mapboxgl-ctrl-directions mapboxgl-ctrl")[0]
+              controls.prepend(exitBtn);//Appends the btn
+
             }
             const handleTakeSpot = () => {
               occupySpot(spot.properties.id, map)
@@ -121,10 +132,9 @@ export class Map extends Component {
               pop
             );
 
-            // create the popup for mapbox
-            var popup = new mapboxgl.Popup()
-            .setDOMContent(pop);
-            // create the marker for mapbox and set out popup on it
+            //Set react component on/as popup
+            popup.setDOMContent(pop);
+            //create the marker for mapbox and set out popup on it
             new mapboxgl.Marker(el)
             .setLngLat(spot.geometry.coordinates)
             .setPopup(popup) // sets a popup on this marker
