@@ -78,7 +78,7 @@ export class Map extends Component {
         }
       })
 
-
+    /* Streetspot Marker + Popup ================= */
     if (filter.type.includes('Street') || filter.type.length < 1 ){
       spots.features &&
       filteredSpots.forEach(function(spot) {
@@ -118,6 +118,8 @@ export class Map extends Component {
           .addTo(map);
         });
     }
+
+    /* Lot Marker + Popup ======================== */
     if (filter.type.includes('Lot') || filter.type.length < 1 ){
       lots.features && filteredLots.forEach(function(lot) {
         // create the marker element
