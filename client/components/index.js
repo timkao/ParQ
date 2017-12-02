@@ -5,7 +5,7 @@
  */
 export {default as Profile} from './profile'
 export {default as Main} from './main';
-export {default as UserHome} from './User-home';
+export {default as UserHome} from './user-home';
 export {Login, Signup} from './auth-form';
 export {SpotInfo} from './spot-info';
-export {default as ReportForm} from './Report-form';
+export {default as ReportForm} from './report-form';
