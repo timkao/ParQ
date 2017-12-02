@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:100);
+@import url(https://fonts.googleapis.com/css?family=Roboto:100,400,700);
 
 #app {
   position: relative;
@@ -444,9 +444,9 @@ form ul li {
   color: #6A4A3C;
 }
 .spot-btn-take:hover {
-  background-color: #f9db77;
-  border-color: #f9db77;
-  color: #000;
+  background-color: #EB6841;
+  border-color: #EB6841;
+  color: #fff;
 }
 .spot-btn-nav {
   background-color: #6A4A3C;
