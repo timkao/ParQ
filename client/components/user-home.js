@@ -7,7 +7,7 @@ import Map from './Map';
 import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
-import reportForm from './Report-form';
+import reportForm from './report-form';
 import PointsMeter from './pointsmeter';
 
 export class UserHome extends Component {
