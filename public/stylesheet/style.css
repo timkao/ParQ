@@ -393,6 +393,7 @@ form ul li {
 /* Overrides default popup padding */
 .mapboxgl-popup-content {
   padding:0px;
+  border-radius: 10px;
 }
 .fresh {
   background-color: #00A0B0;
@@ -434,7 +435,10 @@ form ul li {
 }
 
 /* Directions =================================== */
+.directions-btn-exit {
+  margin-bottom: 10px;
+  float: right;
+}
 .directions-btn-exit:hover {
   background-color: #e2e2e2;
-  margin-bottom: 10px;
 }

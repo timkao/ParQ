@@ -81,6 +81,19 @@ export class Map extends Component {
               source: "streetspots"
             });
         }
+
+        //Create Exit Navigation button for navigation
+        var exitBtn = document.createElement('button')
+        exitBtn.innerHTML = '<span class="glyphicon glyphicon-remove"></span>'
+        exitBtn.className = 'btn btn-default directions-btn-exit hidden'
+        //function to remove routes for navigation
+        exitBtn.onclick = function() {
+          mapDirection.removeRoutes()
+          this.classList.toggle('hidden');
+        }
+        // Grabs directions ui and prepends btn
+        var controls = document.getElementsByClassName('mapboxgl-ctrl-directions mapboxgl-ctrl')[0]
+        controls.prepend(exitBtn);
       })
 
       /* Streetspot Marker + Popup ================= */
@@ -111,14 +124,8 @@ export class Map extends Component {
               mapDirection.setOrigin([longitude, latitude]);
               mapDirection.setDestination(spot.geometry.coordinates);
               popup.remove();
-              var exitBtn = document.createElement('button')
-              // Grabs directions ul
-              exitBtn.innerHTML = '<span class="glyphicon glyphicon-remove"></span>'  // Create exit directions btn
-              exitBtn.className = 'btn btn-default directions-btn-exit'
-              exitBtn.onclick = () => map.removeRoutes()
-              var controls = document.getElementsByClassName("mapboxgl-ctrl-directions mapboxgl-ctrl")[0]
-              controls.prepend(exitBtn);//Appends the btn
-
+               //shows exit button by toggling hidden class
+              document.querySelector('.directions-btn-exit').classList.toggle('hidden');
             }
             const handleTakeSpot = () => {
               occupySpot(spot.properties.id, map)
