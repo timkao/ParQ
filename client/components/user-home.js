@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { takeSpot, updateSpotsTaken, addSpotOnServer, getIsShow, updateUserPoints } from '../store';
 import socket from '../socket';
 import Map from './Map';
-// import List from './List';
+import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
 import reportForm from './Report-form';
-import { BottomSheetComponent } from './BottomSheet';
 import PointsMeter from './pointsmeter';
 
 export class UserHome extends Component {
@@ -112,8 +111,11 @@ export class UserHome extends Component {
             </div>
           </div>
         </div>
-        <Map onRef={(ref) => {this.map = ref;}} />
-        {listView === true ? <BottomSheetComponent showSheet={this.state.listView} /> : null}
+        <div>
+          {listView === true ? <Map height={'40vh'} onRef={(ref) => {this.map = ref;}} /> : <Map onRef={(ref) => {this.map = ref;}} />}
+
+          {listView === true ? <List /> : null}
+        </div>
         <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );

@@ -25,7 +25,8 @@
 
 /* Map  ========================================= */
 #map {
-  height: 100vh;
+  height: 65vh;
+
 }
 .loader {
   position: inherit;
@@ -64,6 +65,14 @@
 /* List View */
 .cREHHl {
   background: none !important
+}
+
+
+#list {
+  list-style-position: inside;
+  height: 30vh;
+  position: inherit;
+  overflow: scroll
 }
 
 /* Report Form =================================== */

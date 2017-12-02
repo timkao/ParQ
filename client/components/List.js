@@ -61,7 +61,6 @@ export class List extends Component{
              <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: less than a minute ago</li>;
           })}
         </ul>
-        <div id="distance"></div>
       </div>
 
     );
