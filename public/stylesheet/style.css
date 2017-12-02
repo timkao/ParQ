@@ -364,14 +364,13 @@ form ul li {
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
   color: #fff;
-  margin-top: 10px;
 }
 .spot-popup div {
   margin-bottom: 10px;
 }
 .spot-popup strong {
   font-size: 1.5em;
-  margin-bottom: 10px;
+  margin: 10px 0px;
 }
 .spot-popup span {
   font-size: 2.5em;
@@ -393,9 +392,10 @@ form ul li {
   background-color: #EDC951;
   border-color: #EDC951;
   padding: 10px;
-  color: #00A0B0;
+  color: #6A4A3C;
 }
 .spot-actions button:hover {
   background-color: #f9db77;
   border-color: #f9db77;
+  color: #000;
 }

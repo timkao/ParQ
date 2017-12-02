@@ -90,7 +90,7 @@ export class Map extends Component {
           //Find out how fresh the spot is and apply appropriate background color
           timeSince(spot.properties.createdAt, 'min') < 10
             ? pop.className = 'spot-popup fresh'
-            : pop.className = 'spot-popup'
+            : pop.className = 'spot-popup rotten'
           // pop.className = 'spot-popup'
           //turn our popup element into a react component
           let props = { spot, map, handleTakeSpot: () => {occupySpot(spot.properties.id, map)} }
