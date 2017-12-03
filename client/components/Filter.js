@@ -61,7 +61,7 @@ export class Filter extends Component {
     const { handleClickClear, onChange, handleClickReset, handleFilter, toggleDropdown } = this;
     const {distance, timeAvailable, size, type, openDropdown, dirty} = this.state;
     return (
-      <DropdownButton active={dirty} id="filter" rootCloseEvent="click" onToggle={toggleDropdown} open={openDropdown} title={<span className="glyphicon glyphicon-filter" />}>
+      <DropdownButton className={'map-view-settings-button'} bsSize="small" active={dirty} id="filter" rootCloseEvent="click" onToggle={toggleDropdown} open={openDropdown} title={<span className="glyphicon glyphicon-filter" />}>
         <MenuItem header>
           <h5>Distance <small onClick={() => handleClickClear('distance') }><a>clear</a></small></h5>
           <ToggleButtonGroup value={distance} onChange={(value) => onChange('distance', value)} type="checkbox" className="btn-group-sm">

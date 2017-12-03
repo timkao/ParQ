@@ -27,7 +27,18 @@ export function getUserLocation(options) {
 export function filterSpots(filter, spots) {
   return Object.keys(filter).length < 1 ? spots : spots.filter(spot => {
     for (var key in filter) {
+      console.log(spot.distanceFromOrigin, timeSince(spot.properties.createdAt, 'min'))
       //when time left is a property then include something like spot.properties[key] < filter[key][0]
+      if (key === 'timeAvailable'){
+        if (timeSince(spot.properties.createdAt, 'min') <= filter[key]){
+          return true;
+        }
+      }
+      if (key === 'distance'){
+        if (spot.distanceFromOrigin <= filter[key]){
+          return true;
+        }
+      }
       if (filter[key].includes(spot.properties[key])) {
         return true;
       }
