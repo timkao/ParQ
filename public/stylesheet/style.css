@@ -593,6 +593,7 @@ form ul li {
   color: #ffffff;
   background-color: #CC333F;
   border-color: #CC333F;
+  border-radius: 10px;
 }
 
 .map-view-settings-button:hover,
@@ -603,6 +604,8 @@ form ul li {
   color: #ffffff;
   background-color: #ED3948 !important;
   border-color: #CC333F;
+  border-radius: 10px;
+
 }
 
 .map-view-settings-button:active,
@@ -647,16 +650,16 @@ fieldset[disabled] .map-view-settings-button.active {
 }
 
 /* Map Buttons =================================== */
-.create-btn-geo {
+/* .create-btn-geo {
   margin: 15px;
   width: 13.5em;;
   padding: 10px;
   pointer-events: all;
-}
-.create-btn-custom {
-  margin: 15px 0px 15px 15px;
+} */
+.create-btn {
+  /* margin: 15px 0px 15px 15px;
   width: 13.5em;;
-  padding: 10px;
+  padding: 10px; */
   pointer-events: all;
 }
 
