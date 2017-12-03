@@ -28,7 +28,7 @@ export class ReportForm extends Component {
     const offset = 7;
     const ctrlTop = document.getElementsByClassName("mapboxgl-ctrl-top-left")[0].offsetHeight;
     const formLeft = mapElement.offsetLeft + offset;
-    const formTop = mapElement.offsetTop + ctrlTop + offset;
+    const formTop = mapElement.offsetTop + offset;
     const maxWidth = mapElement.offsetWidth - offset - 5;
     reportFormElement.style.top = `${formTop}px`;
     reportFormElement.style.left = `${formLeft}px`;
@@ -104,7 +104,7 @@ export class ReportForm extends Component {
           </div>
         }
         {
-          sideA !== '' &&
+          !isUpload && sideA !== '' &&
           <div className="spot-location">
             <div className="row">
               <div className="col-xs-10">Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
@@ -113,7 +113,7 @@ export class ReportForm extends Component {
                 <div className="col-xs-2">{sideA == 'undefined' ? '' : sideA}</div>
 
             </div>
-            <ul className="list-group">
+            <ul className="list-group rule-list">
               {
                 sideGroup[sideA].map(sign => {
                   return (
@@ -127,7 +127,7 @@ export class ReportForm extends Component {
           </div>
         }
         {
-          sideB !== '' &&
+          !isUpload && sideB !== '' &&
           <div className="spot-location">
             <div className="row">
               <div className="col-xs-10">Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
@@ -136,7 +136,7 @@ export class ReportForm extends Component {
                 <div className="col-xs-2">{sideB == 'undefined' ? '' : sideB}</div>
 
             </div>
-            <ul className="list-group">
+            <ul className="list-group rule-list">
               {
                 sideGroup[sideB].map(sign => {
                   return (
@@ -154,8 +154,8 @@ export class ReportForm extends Component {
             <button id="upload-button" className="form-control" onClick={showUpload} type="button">{uploadButton}</button>
             {
               isUpload &&
-              <div>
-                <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "300px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "contain", backgroundImage: "url(/public/images/noimage.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
+              <div className="animated flipInY">
+                <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "350px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "contain", backgroundImage: "url(/public/images/noimage.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
                 </Dropzone>
                 <div className="text-center">Drop Picture in the box, or click to select pictures to upload.</div>
               </div>

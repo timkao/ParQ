@@ -30,6 +30,7 @@ class PointMeter extends Component {
     const { currentPoints } = this.state;
     const maxWidth = document.getElementById("map").offsetWidth;
     const rectX = document.getElementById("map").offsetLeft;
+    const boxY = document.getElementById("map").offsetTop;
     const meterWidth = maxWidth - rectX * 2;
     const height = 200;
     const verticalOffset = 10;
@@ -37,7 +38,7 @@ class PointMeter extends Component {
     const rankCarWidth = 40;
 
     return (
-      <div id="meter">
+      <div id="meter" style={{top: boxY}}>
         <svg height={height} width={maxWidth}>
           <rect x="0" y={verticalOffset} height={height - verticalOffset} width={maxWidth} fill="rgba(51, 51, 51, 0.81)" rx="10" ry="10"></rect>
           <text x={rectX * 2} y="90px" fill="#00A0B0" fontSize="20px">
