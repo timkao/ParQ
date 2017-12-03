@@ -50,8 +50,14 @@ export class List extends Component{
   componentWillMount(){
     this.createSpotsArray();
   }
-  componentDidUpdate(){
-    this.createSpotsArray();
+  componentDidUpdate(prevProps, prevState){
+    console.log(prevProps.filter, this.props.filter)
+    for (var key in this.props.filter) {
+      console.log('!prevProps.filter[key]', !prevProps.filter[key])
+      if (!prevProps.filter[key]){
+      this.createSpotsArray();
+      }
+    }
   }
   flyToSpot(coor){
     this.props.map.flyTo({

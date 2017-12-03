@@ -114,7 +114,7 @@ export class UserHome extends Component {
         </Row>
         : null }
         <div>
-          {listView === true ? <Map height={'40vh'} onRef={(ref) => {this.map = ref;}} /> : <Map onRef={(ref) => {this.map = ref;}} />}
+          {listView === true ? <Map height={'50vh'} onRef={(ref) => {this.map = ref;}} /> : <Map onRef={(ref) => {this.map = ref;}} />}
 
           {listView === true ? <List /> : null}
         </div>

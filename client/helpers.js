@@ -30,7 +30,18 @@ export function getUserLocation(options) {
 export function filterSpots(filter, spots) {
   return Object.keys(filter).length < 1 ? spots : spots.filter(spot => {
     for (var key in filter) {
+      console.log(spot.distanceFromOrigin, timeSince(spot.properties.createdAt, 'min'))
       //when time left is a property then include something like spot.properties[key] < filter[key][0]
+      if (key === 'timeAvailable'){
+        if (timeSince(spot.properties.createdAt, 'min') <= filter[key]){
+          return true;
+        }
+      }
+      if (key === 'distance'){
+        if (spot.distanceFromOrigin <= filter[key]){
+          return true;
+        }
+      }
       if (filter[key].includes(spot.properties[key])) {
         return true;
       }
@@ -70,14 +81,14 @@ function round(value, decimals) {
 // helper functions for spot validation
 function fetchGoogleAddress(coor) {
   const [lng, lat] = coor;
-  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
+  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyBH_cnsaqmKXVPYfANLq_sfPqrQqBS0j9o`;
   return axios.get(queryString)
     .then(result => result.data.results[0])
 }
 
 function reverseGoogleAddress(current, cross) {
   const queryAddress = `${current} and ${cross}, new york, new york`.split(' ').join('+');
-  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?address=${queryAddress}&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
+  const queryString = `https://maps.googleapis.com/maps/api/geocode/json?address=${queryAddress}&key=AIzaSyBH_cnsaqmKXVPYfANLq_sfPqrQqBS0j9o`;
   return axios.get(queryString)
     .then(result => result.data.results[0])
     .then(results => {
