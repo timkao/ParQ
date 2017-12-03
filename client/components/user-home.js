@@ -56,7 +56,6 @@ export class UserHome extends Component {
   componentDidUpdate() {
     const spotsTaken = this.props.spotsTaken;
     if (spotsTaken > 0) {
-      //console.log('-------------------------------');
       this.props.updateUserSpotsTaken(this, spotsTaken)
     }
   }
@@ -88,10 +87,10 @@ export class UserHome extends Component {
       {this.map ?
         <Row id="map-view-settings" >
           <Col xs={4} sm={4}>
-            <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
+            {/*<button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
             <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
             <button className="btn btn-default" onClick={triggerHandleAddSpotMarker}>Open Spot at Marker</button>
-            <button className="btn btn-default" onClick={handleTest}>Test only</button>
+      <button className="btn btn-default" onClick={handleTest}>Test only</button>*/}
             {
               Object.keys(map).length > 0 ? <PointsMeter points={points} /> : null
             }

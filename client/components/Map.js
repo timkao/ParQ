@@ -7,7 +7,7 @@ import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHea
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
+import {filterSpots, timeSince, exitBtnCreator, reportSpotBtnCreator, setClasses} from '../helpers';
 import SpotInfo from './spot-info';
 import reportForm from './report-form';
 
@@ -18,10 +18,12 @@ export class Map extends Component {
     super();
     this.state = {
       loaded: false,
+      menuToggle: false
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
     this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   componentDidMount() {
@@ -84,15 +86,10 @@ export class Map extends Component {
             });
         }
       })
-      if (this.state.loaded){
         //Create exit directions button. See helpers file for more detail
         exitBtnCreator();
         //Create marker creator buttons. See helpers file for more detail
-        geoMarkerBtnCreator(this.handleAddSpotGeo);
-        customMarkerBtnCreator(this.handleAddSpotMarker);
-        console.log(this.props.history)
-      }
-
+        reportSpotBtnCreator(this.toggleMenu, this.handleAddSpotGeo, this.handleAddSpotMarker);
       /* Streetspot Marker + Popup ================= */
       if (filter.type.includes('Street') || filter.type.length < 1 ){
         spots.features &&
@@ -210,13 +207,19 @@ export class Map extends Component {
     const { renewSpots, map } = this.props;
     renewSpots(map);
   }
+  toggleMenu(){
+    this.setState({menuToggle: !this.state.menuToggle}, function(){
+    });
+    setClasses(this.state.menuToggle);
+
+  }
 
   render() {
     const {height} = this.props;
     return (
       <div id="map" style={ height ? {height: height} : null}>
         <Loader loaded={this.state.loaded} className="loader" />
-        <Route exact path='/home/reportForm' component={reportForm} />
+        {/*<Route exact path='/home/reportForm' component={reportForm} />*/}
       </div>
     );
   }
