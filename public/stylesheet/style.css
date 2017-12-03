@@ -343,7 +343,6 @@ form ul li {
 }
 .flat-form form input.button:active {
   background: #136899;
-  @inclue box-shadow( 0 3px 1px #0f608c );
 }
 .flat-form form input::-webkit-input-placeholder {
   color: #333333;
