@@ -105,7 +105,7 @@ body {
 
 #report-form .spot-location {
   color: #00A0B0;
-  margin: 1em 1em 1em 1em;
+  margin: 0.4em 1em 0.4em 1em;
   font-size: 12px;
 }
 
@@ -137,6 +137,11 @@ body {
   color: #DD4B39;
 }
 
+#report-form .rule-list {
+  max-height: 150px;
+  overflow: scroll;
+}
+
 .spot-location strong {
   color: #DD4B39;
 }
@@ -149,7 +154,7 @@ body {
 
 .spot-location .col-xs-2 {
   color: #DD4B39;
-  font-size: 20px;
+  font-size: 15px;
 }
 
 
@@ -467,7 +472,11 @@ form ul li {
 
 #meter {
   display: none;
+  position: absolute;
+  z-index: 5;
 }
+
+
 
 /* Directions =================================== */
 .navbar-default {
@@ -634,3 +643,4 @@ fieldset[disabled] .map-view-settings-button.active {
   padding: 10px;
   pointer-events: all;
 }
+
