@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude, takeSpot } from '../store';
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots, timeSince} from '../helpers';
+import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
 import SpotInfo from './spot-info';
+import reportForm from './report-form';
 
 
 export class Map extends Component {
@@ -18,6 +20,7 @@ export class Map extends Component {
       loaded: false,
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
+    this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
   }
 
@@ -33,10 +36,9 @@ export class Map extends Component {
     socket.on('Update Spots', ()=> {
       this.renewSpotsWithMap();
     })
-
     //Removes class from body node (outside of our React app)
     //to remove body defined background image
-    document.body.classList.toggle('login-body', false)
+    document.getElementById('background-image').classList.toggle('blur', true)
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -82,6 +84,14 @@ export class Map extends Component {
             });
         }
       })
+      if (this.state.loaded){
+        //Create exit directions button. See helpers file for more detail
+        exitBtnCreator();
+        //Create marker creator buttons. See helpers file for more detail
+        geoMarkerBtnCreator(this.handleAddSpotGeo);
+        customMarkerBtnCreator(this.handleAddSpotMarker);
+        console.log(this.props.history)
+      }
 
       /* Streetspot Marker + Popup ================= */
       if (filter.type.includes('Street') || filter.type.length < 1 ){
@@ -95,6 +105,8 @@ export class Map extends Component {
 
             //create the popup element
             var pop = document.createElement('div');
+            // create the popup for mapbox
+            var popup = new mapboxgl.Popup()
             //Find out how fresh the spot is and apply appropriate background color
             timeSince(spot.properties.createdAt, 'min') < 10
               ? pop.className = 'spot-popup fresh'
@@ -108,6 +120,9 @@ export class Map extends Component {
               headTo(spot.properties.id);
               mapDirection.setOrigin([longitude, latitude]);
               mapDirection.setDestination(spot.geometry.coordinates);
+              popup.remove();
+               //shows exit button by toggling hidden class
+              document.querySelector('.directions-btn-exit').classList.toggle('hidden');
             }
             const handleTakeSpot = () => {
               occupySpot(spot.properties.id, map)
@@ -121,10 +136,9 @@ export class Map extends Component {
               pop
             );
 
-            // create the popup for mapbox
-            var popup = new mapboxgl.Popup()
-            .setDOMContent(pop);
-            // create the marker for mapbox and set out popup on it
+            //Set react component on/as popup
+            popup.setDOMContent(pop);
+            //create the marker for mapbox and set out popup on it
             new mapboxgl.Marker(el)
             .setLngLat(spot.geometry.coordinates)
             .setPopup(popup) // sets a popup on this marker
@@ -164,17 +178,12 @@ export class Map extends Component {
 
   componentWillUnmount(){
     //Brings back our full-page login background image
-    document.body.classList.toggle('login-body', true)
-  }
-
-  componentWillUnmount(){
-    //Brings back our full-page login background image
-    document.body.classList.toggle('login-body', true)
+    document.getElementById('background-image').classList.toggle('blur', false)
   }
 
   handleAddSpotGeo() {
-    return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
-    // this.props.getMap(this);
+    return this.props.addSpotGeo(this.map, this.props.id, null)
+    .then( () => this.props.toReportForm()) //eventually pass in users default vehicle size
   }
 
   handleAddSpotMarker(){
@@ -193,6 +202,7 @@ export class Map extends Component {
       //Update state
       this.setState({loaded: true});
     }) //eventually pass in users default vehicle size
+    .then( () => this.props.toReportForm())
     // this.props.getMap(this);
   }
 
@@ -202,10 +212,11 @@ export class Map extends Component {
   }
 
   render() {
-
+    const {height} = this.props;
     return (
-      <div id="map">
+      <div id="map" style={ height ? {height: height} : null}>
         <Loader loaded={this.state.loaded} className="loader" />
+        {/* <Route exact path='/home/reportForm' component={reportForm} /> */}
       </div>
     );
   }
@@ -221,13 +232,14 @@ const mapState = (state) => {
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, ownProps) => {
   return {
     getMap(component) {
       const thunk = fetchMap(component);
       dispatch(thunk);
     },
     addSpotGeo(component, id){
+      console.log('bout to dispatch')
       // add return for promise chain
       return dispatch(addSpotOnServerGeo(component, id));
     },
@@ -244,11 +256,14 @@ const mapDispatch = (dispatch) => {
     occupySpot(id, map) {
       const thunk = takeSpot(id, map);
       dispatch(thunk);
+    },
+    toReportForm() {
+      ownProps.history.push('/home/reportForm');
     }
   };
 };
 
-export default connect(mapState, mapDispatch)(Map);
+export default withRouter(connect(mapState, mapDispatch)(Map));
 
 /**
  * PROP TYPES

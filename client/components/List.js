@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {filterSpots, getDrivingDistance, compareByDistance} from '../helpers';
 import {longitude, latitude} from '../store';
+import Moment from 'react-moment';
 
 export class List extends Component{
   constructor(){
@@ -10,6 +11,7 @@ export class List extends Component{
       filteredSpotAndLotsWithDistance: []
     }
     this.createSpotsArray = this.createSpotsArray.bind(this);
+    this.flyToSpot = this.flyToSpot.bind(this);
   }
   createSpotsArray(){
     const {spots, lots, filter} = this.props;
@@ -19,7 +21,6 @@ export class List extends Component{
         currentFilter[key] = filter[key];
       }
     }
-
     let filteredSpots = filterSpots(currentFilter, spots.features);
     let filteredLots = filterSpots(currentFilter, lots.features);
     let filteredSpotsAndLots = [];
@@ -49,20 +50,33 @@ export class List extends Component{
   componentWillMount(){
     this.createSpotsArray();
   }
-
+  componentDidUpdate(prevProps, prevState){
+    console.log(prevProps.filter, this.props.filter)
+    for (var key in this.props.filter) {
+      console.log('!prevProps.filter[key]', !prevProps.filter[key])
+      if (!prevProps.filter[key]){
+      this.createSpotsArray();
+      }
+    }
+  }
+  flyToSpot(coor){
+    this.props.map.flyTo({
+      center: coor
+    });
+  }
   render(){
     const {filteredSpotAndLotsWithDistance} = this.state;
+    const {flyToSpot} = this;
 
     return (
 
-      <div id="list">
+      <div id="list" className="animated slideInUp">
         <ul className="list-group">
           {filteredSpotAndLotsWithDistance.map(spot => {
-            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">{spot.place_name}
-             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: less than a minute ago</li>;
+            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item"><a onClick={() => {flyToSpot(spot.geometry.coordinates)}}>{spot.place_name}</a>
+             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: <Moment fromNow>{spot.properties.createdAt}</Moment></li>;
           })}
         </ul>
-        <div id="distance"></div>
       </div>
 
     );
@@ -73,7 +87,8 @@ const mapState = (state) => {
   return {
     spots: state.streetspots,
     filter: state.filter,
-    lots: state.lots
+    lots: state.lots,
+    map: state.map
   };
 };
 

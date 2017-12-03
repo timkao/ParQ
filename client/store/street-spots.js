@@ -18,7 +18,7 @@ const defaultSpots = [];
 /**
  * ACTION CREATORS
  */
-const getSpots = spots => ({ type: GET_SPOTS, spots });
+export const getSpots = spots => ({ type: GET_SPOTS, spots });
 
 /**
  * THUNK CREATORS

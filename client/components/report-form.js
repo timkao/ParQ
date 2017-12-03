@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteSpotOnServer, updateSpotSizeAndPic } from '../store';
+import { deleteSpotOnServer, updateSpotSizeAndPic, updateUserPoints, getNotification } from '../store';
 import Dropzone from 'react-dropzone';
 
 export class ReportForm extends Component {
@@ -28,7 +28,7 @@ export class ReportForm extends Component {
     const offset = 7;
     const ctrlTop = document.getElementsByClassName("mapboxgl-ctrl-top-left")[0].offsetHeight;
     const formLeft = mapElement.offsetLeft + offset;
-    const formTop = mapElement.offsetTop + ctrlTop + offset;
+    const formTop = mapElement.offsetTop + offset;
     const maxWidth = mapElement.offsetWidth - offset - 5;
     reportFormElement.style.top = `${formTop}px`;
     reportFormElement.style.left = `${formLeft}px`;
@@ -104,16 +104,16 @@ export class ReportForm extends Component {
           </div>
         }
         {
-          sideA !== '' &&
+          !isUpload && sideA !== '' &&
           <div className="spot-location">
             <div className="row">
               <div className="col-xs-10">Rules from <strong>{fromStreetA}</strong> to <strong>{gotoStreetA}</strong>
               </div>
-              {
-                sideA !== undefined ? <div className="col-xs-2">{sideA}</div> : null
-              }
+
+                <div className="col-xs-2">{sideA == 'undefined' ? '' : sideA}</div>
+
             </div>
-            <ul className="list-group">
+            <ul className="list-group rule-list">
               {
                 sideGroup[sideA].map(sign => {
                   return (
@@ -127,16 +127,16 @@ export class ReportForm extends Component {
           </div>
         }
         {
-          sideB !== '' &&
+          !isUpload && sideB !== '' &&
           <div className="spot-location">
             <div className="row">
               <div className="col-xs-10">Rules from <strong>{fromStreetB}</strong> to <strong>{gotoStreetB}</strong>
               </div>
-              {
-                sideB !== undefined ? <div className="col-xs-2">{sideB}</div> : null
-              }
+
+                <div className="col-xs-2">{sideB == 'undefined' ? '' : sideB}</div>
+
             </div>
-            <ul className="list-group">
+            <ul className="list-group rule-list">
               {
                 sideGroup[sideB].map(sign => {
                   return (
@@ -154,8 +154,8 @@ export class ReportForm extends Component {
             <button id="upload-button" className="form-control" onClick={showUpload} type="button">{uploadButton}</button>
             {
               isUpload &&
-              <div>
-                <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "300px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "contain", backgroundImage: "url(/public/images/noimage.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
+              <div className="animated flipInY">
+                <Dropzone id="drop-zone" disabled={processing} onDrop={handleOnDrop} style={{ width: "350px", height: "200px", borderWidth: "2px", borderColor: "rgb(102, 102, 102)", borderStyle: "dashed", borderRadius: "5px", margin: "auto", backgroundSize: "contain", backgroundImage: "url(/public/images/noimage.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} activeStyle={{ width: "200px", height: "200px", borderWidth: "2px", borderColor: "#6c6", borderStyle: "solid", borderRadius: "5px", margin: "auto", backgroundColor: "#eee" }} >
                 </Dropzone>
                 <div className="text-center">Drop Picture in the box, or click to select pictures to upload.</div>
               </div>
@@ -200,11 +200,19 @@ const mapDispatch = (dispatch, ownProps) => {
         .then(() => {
           ownProps.history.push('/home');
         })
+        .then(() => {
+          const meter = document.getElementById("meter");
+          meter.className = "animated slideInRight";
+          meter.style.display = "block";
+          dispatch(getNotification('Thanks for Reporting a Space! You got 50 points!'))
+          setTimeout(function () {dispatch(updateUserPoints(0.5))}, 1000);
+
+        })
     },
     createRulesList(signs) {
       const sideGroup = {};
-      const colorArray = ['#C50041', '#83A700', '#B60B2D',
-        '#592F30', '#794371', '#5CD841', '#5B739C'];
+      const colorArray = ['#00A0B0', '#6A4A3C', '#EB6841',
+        '#EDC951', '#794371', '#5CD841', '#5B739C'];
       let colorIndex = 0;
       let sideA = '';
       let fromStreetA, gotoStreetA, fromStreetB, gotoStreetB;
