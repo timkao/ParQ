@@ -257,6 +257,7 @@ form ul li {
   font-size: 16px;
   float: left;
   padding: 12px 22px;
+  font-weight: 100;
 }
 .flat-form .tabs li a.active {
   background: rgba(51, 51, 51, 0.87);
@@ -410,22 +411,25 @@ form ul li {
 }
 
 /* Spot Popup =================================== */
-.spot-popup {
+.spot-popup, .lot-popup {
   background-color: #eeeeee;
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
   color: #fff;
   border-radius: 10px;
 }
-.spot-popup div {
+.spot-popup div, .lot-popup div {
   margin-bottom: 10px;
 }
-.spot-popup strong {
+.spot-popup strong, .lot-popup strong {
   font-size: 1.5em;
   margin: 10px 0px;
 }
-.spot-popup span {
+.spot-popup time, .lot-popup span {
   font-size: 2.5em;
+}
+.spot-popup span, .lot-popup span {
+  padding-right:4px;
 }
 /* Overrides default popup padding */
 .mapboxgl-popup-content {
@@ -441,35 +445,46 @@ form ul li {
 .rotten {
   background-color: #CA3543;
 }
-.spot-actions {
+.spot-actions, .lot-actions {
   text-align: center;
 }
 .spot-actions button:first-child {
   margin-right: 10px;
 }
 .spot-btn-take {
-  background-color: #EDC951;
-  border-color: #EDC951;
-  padding: 10px;
-  color: #6A4A3C;
-}
-.spot-btn-take:hover {
   background-color: #EB6841;
   border-color: #EB6841;
+  padding: 10px;
   color: #fff;
+  width: 100%;
 }
-.spot-btn-nav {
+.spot-btn-take:hover {
+  background-color: #EDC951;
+  border-color: #EDC951;
+  color: #6A4A3C;
+}
+.spot-btn-nav, .lot-btn-nav {
   background-color: #6A4A3C;
   border-color: #6A4A3C;
   padding: 10px;
   color: #fff;
 }
-.spot-btn-nav:hover {
+.spot-btn-nav:hover, .lot-btn-nav:hover {
   background-color: #7b665c;
   border-color: #7b665c;
   color: #000;
 }
-
+.spot-btn-img {
+  background-color: #333;
+  border-color: #333;
+  padding: 10px;
+  color: #fff;
+}
+.spot-btn-img:hover{
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #000;
+}
 #meter {
   display: none;
   position: absolute;
@@ -485,6 +500,7 @@ form ul li {
 }
 .navbar-default .navbar-brand {
   color: #04a1b0;
+  padding: 8px 15px;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
@@ -644,3 +660,69 @@ fieldset[disabled] .map-view-settings-button.active {
   pointer-events: all;
 }
 
+/* Spot Img Modal ================================ */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+/* Add Animation */
+.modal-content, #caption {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)}
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 30px;
+    font-weight: 100;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
