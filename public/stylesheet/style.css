@@ -257,6 +257,7 @@ form ul li {
   font-size: 16px;
   float: left;
   padding: 12px 22px;
+  font-weight: 100;
 }
 .flat-form .tabs li a.active {
   background: rgba(51, 51, 51, 0.87);
@@ -410,21 +411,21 @@ form ul li {
 }
 
 /* Spot Popup =================================== */
-.spot-popup {
+.spot-popup, .lot-popup {
   background-color: #eeeeee;
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
   color: #fff;
   border-radius: 10px;
 }
-.spot-popup div {
+.spot-popup div, .lot-popup div {
   margin-bottom: 10px;
 }
-.spot-popup strong {
+.spot-popup strong, .lot-popup strong {
   font-size: 1.5em;
   margin: 10px 0px;
 }
-.spot-popup span {
+.spot-popup span, .lot-popup span {
   font-size: 2.5em;
 }
 /* Overrides default popup padding */
@@ -441,7 +442,7 @@ form ul li {
 .rotten {
   background-color: #CA3543;
 }
-.spot-actions {
+.spot-actions, .lot-actions {
   text-align: center;
 }
 .spot-actions button:first-child {
@@ -453,18 +454,18 @@ form ul li {
   padding: 10px;
   color: #6A4A3C;
 }
-.spot-btn-take:hover {
+.spot-btn-take:hover{
   background-color: #EB6841;
   border-color: #EB6841;
   color: #fff;
 }
-.spot-btn-nav {
+.spot-btn-nav, .lot-btn-nav {
   background-color: #6A4A3C;
   border-color: #6A4A3C;
   padding: 10px;
   color: #fff;
 }
-.spot-btn-nav:hover {
+.spot-btn-nav:hover, .lot-btn-nav:hover {
   background-color: #7b665c;
   border-color: #7b665c;
   color: #000;
@@ -485,6 +486,7 @@ form ul li {
 }
 .navbar-default .navbar-brand {
   color: #04a1b0;
+  padding: 8px 15px;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {

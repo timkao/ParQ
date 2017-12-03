@@ -10,6 +10,7 @@ import mapboxgl from 'mapbox-gl';
 import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
 import SpotInfo from './spot-info';
 import reportForm from './report-form';
+import LotInfo from './lot-info';
 
 
 export class Map extends Component {
@@ -146,21 +147,46 @@ export class Map extends Component {
           });
       }
 
+      /* Lot Marker + Popup ================================= */
       if (filter.type.includes('Lot') || filter.type.length < 1 ){
         lots.features && filteredLots.forEach(function(lot) {
           // create the marker element
           var el = document.createElement('div');
           el.className = 'lot';
-          // add event listener
-          el.addEventListener('click', () => {
+
+          // create the popup element
+          var pop = document.createElement('div');
+          // create the popup for mapbox
+          var popup = new mapboxgl.Popup()
+          //Find out if lot has open spots or not
+          lot.properties.spotsAvailable
+            ? pop.className = 'lot-popup fresh'
+            : pop.className = 'lot-popup rotten'
+
+          //Turn our popup element into a react component
+          //First we create functions for the btns to
+          //interact with map
+          //we should clean these up and move them in future
+          const handleNavigate = () => {
             headTo(lot.properties.id);
             mapDirection.setOrigin([longitude, latitude]);
             mapDirection.setDestination(lot.geometry.coordinates);
-          });
-          // create the popup
-          var popup = new mapboxgl.Popup()
-          .setHTML(`<div>${lot.place_name}</div>`);
-          //create the marker
+            popup.remove();
+             //shows exit button by toggling hidden class
+            document.querySelector('.directions-btn-exit').classList.toggle('hidden');
+          }
+            //Create a props object to pass into React.createElement
+            let props = { lot, map, handleNavigate }
+            ReactDOM.render(
+              React.createElement(
+                LotInfo, props//passes in spot info as props to the spont component
+              ),
+              pop
+            );
+
+          //Set react component on/as popup
+          popup.setDOMContent(pop);
+          //create the marker for mapbox and set out popup on it
           new mapboxgl.Marker(el)
           .setLngLat(lot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
