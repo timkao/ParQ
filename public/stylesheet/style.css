@@ -593,7 +593,7 @@ form ul li {
   color: #ffffff;
   background-color: #CC333F;
   border-color: #CC333F;
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
 
 .map-view-settings-button:hover,
@@ -729,3 +729,31 @@ fieldset[disabled] .map-view-settings-button.active {
         width: 100%;
     }
 }
+
+/* List group styling for list view */
+
+
+#custom-list-group-styles li{
+  border-radius: 0px;
+  color: #00A0B0;
+  border-width: 1px 0px 1px 0px;
+}
+
+#custom-list-group-styles li a{
+  color: #00A0B0;
+}
+
+#custom-list-group-styles .list-group-item-text .badge{
+  float: none;
+}
+#photo-badge {
+  background-color: #ffd64f;
+  color: #00A0B0;
+  float: right;
+}
+
+#custom-list-group-styles img {
+  width: 40px;
+  height: 30px;
+}
+
