@@ -6,7 +6,7 @@ module.exports = router;
 // should change to restful route later
 router.put('/', (req, res, next) => {
   console.log(req.body);
-  const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=${req.body.mode}&units=imperial&key=AIzaSyAKes1UhLWBK_QTUmxMiS0q1WIeWUQWkgI`;
+  const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=${req.body.mode}&units=imperial&key=AIzaSyBH_cnsaqmKXVPYfANLq_sfPqrQqBS0j9o`;
 
   axios.get(queryString)
   .then( result => result.data )

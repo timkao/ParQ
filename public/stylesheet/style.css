@@ -38,7 +38,7 @@
 
 /* Map  ========================================= */
 #map {
-  height: 65vh;
+  height: 80vh;
 
 }
 .loader {
@@ -465,6 +465,149 @@ form ul li {
 }
 
 /* Directions =================================== */
+.navbar-default {
+  background-color: #ffd64f;
+  border-color: #ffe387;
+}
+.navbar-default .navbar-brand {
+  color: #04a1b0;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #01bfd2;
+}
+.navbar-default .navbar-text {
+  color: #04a1b0;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #04a1b0;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #01bfd2;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background-color: #ffd64f;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #04a1b0;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #01bfd2;
+  background-color: #ffe387;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li.divider {
+  background-color: #ffe387;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #01bfd2;
+  background-color: #ffe387;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #01bfd2;
+  background-color: #ffe387;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #01bfd2;
+  background-color: #ffe387;
+}
+.navbar-default .navbar-toggle {
+  border-color: #ffe387;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #ffe387;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #04a1b0;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #04a1b0;
+}
+.navbar-default .navbar-link {
+  color: #04a1b0;
+}
+.navbar-default .navbar-link:hover {
+  color: #01bfd2;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #04a1b0;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #01bfd2;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #01bfd2;
+    background-color: #ffe387;
+  }
+}
+
+/* Filter, Map View and List View Buttons ======================= */
+#map-view-settings{
+  padding-bottom: 2vh;
+}
+.map-view-settings-button {
+  color: #ffffff;
+  background-color: #CC333F;
+  border-color: #CC333F;
+}
+
+.map-view-settings-button:hover,
+.map-view-settings-button:focus,
+.map-view-settings-button:active,
+.map-view-settings-button.active,
+.open .dropdown-toggle.map-view-settings-button {
+  color: #ffffff;
+  background-color: #ED3948 !important;
+  border-color: #CC333F;
+}
+
+.map-view-settings-button:active,
+.map-view-settings-button.active,
+.open .dropdown-toggle.map-view-settings-button {
+  background-image: none;
+}
+
+.map-view-settings-button.disabled,
+.map-view-settings-button[disabled],
+fieldset[disabled] .map-view-settings-button,
+.map-view-settings-button.disabled:hover,
+.map-view-settings-button[disabled]:hover,
+fieldset[disabled] .map-view-settings-button:hover,
+.map-view-settings-button.disabled:focus,
+.map-view-settings-button[disabled]:focus,
+fieldset[disabled] .map-view-settings-button:focus,
+.map-view-settings-button.disabled:active,
+.map-view-settings-button[disabled]:active,
+fieldset[disabled] .map-view-settings-button:active,
+.map-view-settings-button.disabled.active,
+.map-view-settings-button[disabled].active,
+fieldset[disabled] .map-view-settings-button.active {
+  background-color: #CC333F;
+  border-color: #CC333F;
+}
+
+.map-view-settings-button .badge {
+  color: #CC333F;
+  background-color: #ffffff;
+}
+
+
+
+/* ============== */
 .directions-btn-exit {
   margin-bottom: 10px;
   float: right;
