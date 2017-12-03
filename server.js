@@ -29,6 +29,7 @@ const createApp = () => {
   app.use(morgan('dev'))
 
   // body parsing middleware
+  app.use(bodyParser({limit: '50mb'}))
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
