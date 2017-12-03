@@ -242,7 +242,7 @@ export class Map extends Component {
     return (
       <div id="map" style={ height ? {height: height} : null}>
         <Loader loaded={this.state.loaded} className="loader" />
-        <Route exact path='/home/reportForm' component={reportForm} />
+        {/* <Route exact path='/home/reportForm' component={reportForm} /> */}
       </div>
     );
   }
