@@ -26,6 +26,28 @@ body {
   filter: blur(5px);
   -webkit-filter: blur(5px);
 }
+
+/* Button Utils ================================ */
+.btn {
+  -webkit-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+}
+.dropdown .btn {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.btn-danger {
+  background-color: #ED3948;
+  border-color: #CC333F;
+}
+.btn-success{
+  background-color: #ffd64f;
+  border-color: #ffe387;
+  color: #000;
+}
+
 /* Signup/Login Logo Box ======================= */
 .logo-box{
   width: 100%;
@@ -69,11 +91,12 @@ body {
 }
 .mapboxgl-popup-content {
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  -webkit-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
 }
 .mapboxgl-popup {
-    max-width: 400px;
-    font: 12px;
+  max-width: 400px;
 }
 
 /* List View */
@@ -420,6 +443,7 @@ form ul li {
   margin-bottom: 10px;
 }
 .spot-popup strong, .lot-popup strong {
+  font-weight: 100;
   font-size: 1.5em;
   margin: 10px 0px;
 }
@@ -465,6 +489,9 @@ form ul li {
   padding: 10px;
   color: #fff;
   width: 100%;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .spot-btn-take:hover {
   background-color: #EDC951;
@@ -476,6 +503,9 @@ form ul li {
   border-color: #6A4A3C;
   padding: 10px;
   color: #fff;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .spot-btn-nav:hover, .lot-btn-nav:hover {
   background-color: #7b665c;
@@ -487,6 +517,9 @@ form ul li {
   border-color: #333;
   padding: 10px;
   color: #fff;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .spot-btn-img:hover{
   background-color: #ccc;
@@ -505,6 +538,9 @@ form ul li {
 .navbar-default {
   background-color: #ffd64f;
   border-color: #ffe387;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .navbar-default .navbar-brand {
   color: #04a1b0;
