@@ -99,10 +99,11 @@ export class UserHome extends Component {
     return (
       <div className="container">
         <h3 id="welcome">Welcome, {email}</h3>
-        <div onClick={handleProfileVisibility}> 
+        <div onClick={handleProfileVisibility} > 
           <img style={{ width: "10%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
         </div>
-        <div>{
+        <div style={{ position:"absolute", zIndex:"4"}}>
+          {
           profileVisible
             ? <Profile />
             : null
