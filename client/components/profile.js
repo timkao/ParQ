@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 const _Profile = (props) => {
   console.log("Checking user on profile component: ", props.user);
   return (
-    <div className="animated lightSpeedIn" style = {{
+    <div id = "profile" className="animated lightSpeedIn" style = {{
       position: "absolute",
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      textAlign: "center"
+      textAlign: "center",
     }}>
       {/* profile image goes here */}
       <img

@@ -12,7 +12,6 @@ import PointsMeter from './pointsmeter';
 import Profile from './profile';
 
 export class UserHome extends Component {
-
   constructor() {
     super();
     this.state = {
@@ -91,6 +90,7 @@ export class UserHome extends Component {
   }
 
   render() {
+    console.log("GOT ACTIVE", this.props.active, "END hERE");
     const { id, email, points, isShow, map } = this.props;
     const { handleProfileVisibility, handleSpotTaken, setMapView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
     const { mapView } = this.state;
