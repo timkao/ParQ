@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHeadingTo, mapDirection, longitude, latitude, takeSpot } from '../store';
 import Loader from 'react-loader';
@@ -8,6 +9,7 @@ import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
 import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
 import SpotInfo from './spot-info';
+import reportForm from './report-form';
 
 
 export class Map extends Component {
@@ -18,6 +20,7 @@ export class Map extends Component {
       loaded: false,
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
+    this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
     this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
   }
@@ -88,6 +91,7 @@ export class Map extends Component {
         //Create marker creator buttons. See helpers file for more detail
         geoMarkerBtnCreator(this.handleAddSpotGeo);
         customMarkerBtnCreator(this.handleAddSpotMarker);
+        console.log(this.props.history)
       }
 
       /* Streetspot Marker + Popup ================= */
@@ -179,7 +183,8 @@ export class Map extends Component {
   }
 
   handleAddSpotGeo() {
-    return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
+    return this.props.addSpotGeo(this.map, this.props.id, null)
+    .then( () => this.props.toReportForm()) //eventually pass in users default vehicle size
   }
 
   handleAddSpotMarker(){
@@ -198,6 +203,8 @@ export class Map extends Component {
       //Update state
       this.setState({loaded: true});
     }) //eventually pass in users default vehicle size
+    .then( () => this.props.toReportForm())
+    // this.props.getMap(this);
   }
 
   renewSpotsWithMap() {
@@ -210,6 +217,7 @@ export class Map extends Component {
     return (
       <div id="map" style={ height ? {height: height} : null}>
         <Loader loaded={this.state.loaded} className="loader" />
+        <Route exact path='/home/reportForm' component={reportForm} />
       </div>
     );
   }
@@ -225,7 +233,7 @@ const mapState = (state) => {
   };
 };
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, ownProps) => {
   return {
     getMap(component) {
       const thunk = fetchMap(component);
@@ -249,11 +257,14 @@ const mapDispatch = (dispatch) => {
     occupySpot(id, map) {
       const thunk = takeSpot(id, map);
       dispatch(thunk);
+    },
+    toReportForm() {
+      ownProps.history.push('/home/reportForm');
     }
   };
 };
 
-export default connect(mapState, mapDispatch)(Map);
+export default withRouter(connect(mapState, mapDispatch)(Map));
 
 /**
  * PROP TYPES
