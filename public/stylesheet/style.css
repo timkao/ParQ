@@ -476,13 +476,13 @@ form ul li {
 /* Map Buttons =================================== */
 .create-btn-geo {
   margin: 15px;
-  width: 25%;
+  width: 13.5em;;
   padding: 10px;
   pointer-events: all;
 }
 .create-btn-custom {
   margin: 15px 0px 15px 15px;
-  width: 25%;
+  width: 13.5em;;
   padding: 10px;
   pointer-events: all;
 }

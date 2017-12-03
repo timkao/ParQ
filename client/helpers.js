@@ -369,7 +369,7 @@ export function customMarkerBtnCreator(fnc){
 
   var customBtn = document.createElement('button')
   customBtn.id = 'custom-marker-btn'
-  customBtn.innerHTML = 'Open Spot Point'
+  customBtn.innerHTML = 'Report Spot @Marker'
   customBtn.className = 'btn btn-default create-btn-custom'
   customBtn.onclick = function() {
     console.log('calling onclick')
