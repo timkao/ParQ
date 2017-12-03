@@ -227,7 +227,8 @@ form ul li {
   background: rgba(51, 51, 51, 0.87);
   color: white;
   margin: 25px auto;
-  width: 390px;
+  max-width: 390px;
+  width: 80%;
   height: 340px;
   position: relative;
   font-family: 'Roboto';

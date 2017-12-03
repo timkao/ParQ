@@ -42,7 +42,8 @@ const AuthForm = (props) => {
             </li>
             <li>
               <input id="form-submit" className="btn btn-default" type='submit' value={displayName} />
-              <a href='/auth/google' id="auth-google" className="loginBtn loginBtn--google">Login with Google</a>
+              {displayName === 'Login' ?
+                <a href='/auth/google' id="auth-google" className="loginBtn loginBtn--google">Login with Google</a> :null}
             </li>
           {error && error.response && <div className="form-group alert alert-danger"> {error.response.data} </div>}
           </ul>
