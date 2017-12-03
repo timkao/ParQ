@@ -28,7 +28,6 @@ export class UserHome extends Component {
   }
 
   handleProfileVisibility(){
-    console.log(" 8916598465 _________Clicked_______9869561459");
     this.setState({profileVisible: !this.state.profileVisible});
   }
 
@@ -98,9 +97,9 @@ export class UserHome extends Component {
     const { profileVisible } = this.state;
     return (
       <div className="container">
-        <h3 id="welcome">Welcome, {email}</h3>
-        <div onClick={handleProfileVisibility} > 
-          <img style={{ width: "10%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
+        <div> 
+          <button className="pull-right btn btn-default" onClick={handleProfileVisibility}>Profile</button>
+          <h3 id="welcome">Welcome, {email}</h3>
         </div>
         <div style={{ position:"absolute", zIndex:"4"}}>
           {
@@ -190,3 +189,6 @@ export default connect(mapState, mapDispatch)(UserHome);
 UserHome.propTypes = {
   email: PropTypes.string
 };
+
+ //    <h3 id="welcome">Welcome, {email}</h3>
+ //  <img style={{ width: "10%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
