@@ -12,7 +12,6 @@ import LoginLogo from './LoginLogo';
 const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error, handleFocus, handleBlur, handleKeyup } = props
 
-  console.log('displayname:',displayName)
   return (
   <div>
     <LoginLogo />
