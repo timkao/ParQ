@@ -38,6 +38,7 @@ const createApp = () => {
 
   app.use((req, res, next) => {
     res.locals.mapboxKey = process.env.mapboxKey;
+    res.locals.GOOGLE_DISTANCE_SECRET = process.env.GOOGLE_DISTANCE_SECRET;
     next();
   })
 

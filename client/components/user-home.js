@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { takeSpot, updateSpotsTaken, addSpotOnServer, getIsShow, updateUserPoints } from '../store';
+import { takeSpot, updateSpotsTaken, addSpotOnServer, updateUserPoints, getNotification } from '../store';
 import socket from '../socket';
 import Map from './Map';
 import List from './List';
@@ -46,24 +46,17 @@ export class UserHome extends Component {
 
   componentDidMount() {
     socket.on('notifications', message => {
-      //this.props.showMeter();
       const meter = document.getElementById("meter");
       meter.className = "animated slideInRight";
       meter.style.display = "block";
-      setTimeout(function () { this.props.gainedPoints() }.bind(this), 1000);
-
-      // update point
-
-      // this.setState({showNotification: {isShow: true, message: message}});
-      // setTimeout(() => {
-      //   this.setState({ showNotification: {isShow: false, message: ''}});
-      // }, 4000);
+      setTimeout(function () { this.props.gainedPoints(1) }.bind(this), 1000);
     });
   }
 
   componentDidUpdate() {
     const spotsTaken = this.props.spotsTaken;
     if (spotsTaken > 0) {
+      //console.log('-------------------------------');
       this.props.updateUserSpotsTaken(this, spotsTaken)
     }
   }
@@ -80,7 +73,6 @@ export class UserHome extends Component {
 
   handleTest() {
     console.log('-----testing only-----');
-    //this.props.showMeter();
     const meter = document.getElementById("meter");
     meter.className = "animated slideInRight";
     meter.style.display = "block";
@@ -96,10 +88,10 @@ export class UserHome extends Component {
       {this.map ?
         <Row id="map-view-settings" >
           <Col xs={4} sm={4}>
-            {/*<button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>*/}
-            {/*<button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>*/}
-            {/*<button className="btn btn-default" onClick={triggerHandleAddSpotMarker}>Open Spot at Marker</button>*/}
-            {/*<button className="btn btn-default" onClick={handleTest}>Test only</button>*/}
+            <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
+            <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
+            <button className="btn btn-default" onClick={triggerHandleAddSpotMarker}>Open Spot at Marker</button>
+            <button className="btn btn-default" onClick={handleTest}>Test only</button>
             {
               Object.keys(map).length > 0 ? <PointsMeter points={points} /> : null
             }
@@ -145,15 +137,10 @@ const mapDispatch = (dispatch, ownProps) => {
     updateUserSpotsTaken(comp, spots) {
       dispatch(updateSpotsTaken())
         .then(() => {
-          // comp.setState({
-          //   showNotification: { isShow: true, message: `${spots} spot${spots > 1 ? 's' : ''} you reported ${spots > 1 ? 'are' : 'is'} taken! You earned ${spots * 100} points` }
-          // });
-          // setTimeout(() => {
-          //   comp.setState({ showNotification: { isShow: false, message: '' } });
-          // }, 4000);
           const meter = document.getElementById("meter");
           meter.className = "animated slideInRight";
           meter.style.display = "block";
+          dispatch(getNotification(`${spots} Taken! You got ${spots * 100} points`))
           setTimeout(function () {dispatch(updateUserPoints(spots))}, 1000);
         })
     },
@@ -163,10 +150,8 @@ const mapDispatch = (dispatch, ownProps) => {
     toReportForm() {
       ownProps.history.push('/home/reportForm');
     },
-    showMeter() {
-      dispatch(getIsShow(true));
-    },
     gainedPoints(num) {
+      dispatch(getNotification('A post is taken! Yout got 100 points'));
       dispatch(updateUserPoints(num));
     }
   };

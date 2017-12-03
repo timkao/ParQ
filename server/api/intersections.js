@@ -16,7 +16,7 @@ router.get('/:currentStreet', (req, res, next) => {
 // should change to restful route later
 router.put('/distance', (req, res, next) => {
   console.log(req.body);
-  const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=${req.body.mode}&units=imperial&key=AIzaSyBW_EFFCEHC3ETI49Nx6749KVUgXXHswp8`;
+  const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=${req.body.mode}&units=imperial&key=${process.env.GOOGLE_DISTANCE_SECRET}`;
 
   axios.get(queryString)
   .then( result => result.data )

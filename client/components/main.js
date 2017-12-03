@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { logout } from '../store'
+import { logout, getMap, getSpots, getLots } from '../store'
 import {Navbar, NavItem, MenuItem, NavDropdown, Nav} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
@@ -59,7 +59,10 @@ const mapState = (state) => {
 const mapDispatch = (dispatch, ownProps) => {
   return {
     handleClick() {
-      dispatch(logout(ownProps.history))
+      dispatch(getMap({}))
+      dispatch(getLots([]));
+      dispatch(getSpots([]));
+      dispatch(logout(ownProps.history));
     }
   }
 }

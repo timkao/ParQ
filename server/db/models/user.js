@@ -47,7 +47,7 @@ const User = db.define('user', {
       } else if (this.points < 4000) {
         return '/public/images/wagon.png';
       } else {
-        return '/public/images/bigbar.png';
+        return '/public/images/bigcar.png';
       }
     }
   }

@@ -182,9 +182,8 @@ export class Map extends Component {
   }
 
   handleAddSpotGeo() {
-    return this.props.addSpotGeo(this.map, this.props.id, null) //eventually pass in users default vehicle size
-        .then( () => this.props.toReportForm())
-    // this.props.getMap(this);
+    return this.props.addSpotGeo(this.map, this.props.id, null)
+    .then( () => this.props.toReportForm()) //eventually pass in users default vehicle size
   }
 
   handleAddSpotMarker(){

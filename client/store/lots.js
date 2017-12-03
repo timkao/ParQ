@@ -15,7 +15,7 @@ const defaultLots = [];
 /**
  * ACTION CREATORS
  */
-const getLots = lots => ({type: GET_LOTS, lots});
+export const getLots = lots => ({type: GET_LOTS, lots});
 
 /**
  * THUNK CREATORS
