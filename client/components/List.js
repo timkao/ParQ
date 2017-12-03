@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {filterSpots, getDrivingDistance, compareByDistance} from '../helpers';
+import {filterSpots, getDrivingDistance, compareByDistance, createImgModal} from '../helpers';
 import {longitude, latitude} from '../store';
 import Moment from 'react-moment';
 
@@ -51,12 +51,15 @@ export class List extends Component{
     this.createSpotsArray();
   }
   componentDidUpdate(prevProps, prevState){
-    console.log(prevProps.filter, this.props.filter)
+    console.log(prevProps, this.props.spots);
     for (var key in this.props.filter) {
-      console.log('!prevProps.filter[key]', !prevProps.filter[key])
       if (!prevProps.filter[key]){
       this.createSpotsArray();
       }
+    }
+    if (prevProps.spots.features.length !== this.props.spots.features.length || prevProps.lots.features.length !== this.props.lots.features.length){
+      console.log('in func***********');
+      this.createSpotsArray();
     }
   }
   flyToSpot(coor){
@@ -71,10 +74,21 @@ export class List extends Component{
     return (
 
       <div id="list" className="animated slideInUp">
-        <ul className="list-group">
+        <ul className="list-group" id="custom-list-group-styles">
           {filteredSpotAndLotsWithDistance.map(spot => {
-            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item"><a onClick={() => {flyToSpot(spot.geometry.coordinates)}}>{spot.place_name}</a>
-             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: <Moment fromNow>{spot.properties.createdAt}</Moment></li>;
+            return (
+              <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">
+                <img src={spot.properties.sizeUrl || '/public/images/parkinglot.png'}></img>      <a onClick={() => {createImgModal(spot.properties.images[0])}}><span id="photo-badge" className="badge">See Photo</span></a>
+                <h5 className="list-group-item-heading" ><a onClick={() => {flyToSpot(spot.geometry.coordinates)}}>{spot.place_name}</a></h5>
+                <br />
+                <p className="list-group-item-text">
+                  Distance: <span className="badge">{spot.distanceFromOrigin.text}</span>
+                  {'   '}
+                  Reported: <span className="badge"><Moment fromNow>{spot.properties.createdAt}</Moment></span>
+
+                </p>
+              </li>
+            );
           })}
         </ul>
       </div>

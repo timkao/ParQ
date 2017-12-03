@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { deleteSpotOnServer, updateSpotSizeAndPic, updateUserPoints, getNotification } from '../store';
 import Dropzone from 'react-dropzone';
+import {getUserLocation} from '../helpers';
+import socket from '../socket';
 
 export class ReportForm extends Component {
 
@@ -26,7 +28,7 @@ export class ReportForm extends Component {
     const mapElement = document.getElementById("map");
     const reportFormElement = document.getElementById("report-form");
     const offset = 7;
-    const ctrlTop = document.getElementsByClassName("mapboxgl-ctrl-top-left")[0].offsetHeight;
+    // const ctrlTop = document.getElementsByClassName("mapboxgl-ctrl-top-left")[0].offsetHeight;
     const formLeft = mapElement.offsetLeft + offset;
     const formTop = mapElement.offsetTop + offset;
     const maxWidth = mapElement.offsetWidth - offset - 5;
@@ -48,6 +50,11 @@ export class ReportForm extends Component {
 
   handleSubmit(ev) {
     ev.preventDefault();
+    // get user location
+    // get spot location
+    // calculate distance
+    // validate WIP
+
     this.setState({ processing: true });
     const { confirmReportSpot, reportspot } = this.props;
     const { sizeValue, pictures } = this.state;
@@ -183,7 +190,9 @@ export class ReportForm extends Component {
 const mapState = (state) => {
   return {
     signs: state.signs,
-    reportspot: state.reportspot
+    reportspot: state.reportspot,
+    spotLongitude: state.spotLngLat,
+    spotLatitude: state.spotLatitude
   }
 };
 
@@ -206,7 +215,7 @@ const mapDispatch = (dispatch, ownProps) => {
           meter.style.display = "block";
           dispatch(getNotification('Thanks for Reporting a Space! You got 50 points!'))
           setTimeout(function () {dispatch(updateUserPoints(0.5))}, 1000);
-
+          socket.emit('new-spot-reported');
         })
     },
     createRulesList(signs) {
