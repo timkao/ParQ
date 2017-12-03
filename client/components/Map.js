@@ -106,6 +106,7 @@ export class Map extends Component {
             // create the popup for mapbox
             var popup = new mapboxgl.Popup()
             //Find out how fresh the spot is and apply appropriate background color
+            console.log('timesince"',timeSince(spot.properties.createdAt, 'min'))
             timeSince(spot.properties.createdAt, 'min') < 10
               ? pop.className = 'spot-popup fresh'
               : pop.className = 'spot-popup rotten'
@@ -184,7 +185,6 @@ export class Map extends Component {
           //Set react component on/as popup
           var test = popup.setDOMContent(pop);
           test.className = 'test';
-          console.log('popup:',test)
           //create the marker for mapbox and set out popup on it
           new mapboxgl.Marker(el)
           .setLngLat(lot.geometry.coordinates)
@@ -270,7 +270,6 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
-      console.log('bout to dispatch')
       // add return for promise chain
       return dispatch(addSpotOnServerGeo(component, id));
     },

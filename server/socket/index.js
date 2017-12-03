@@ -18,7 +18,7 @@ module.exports = (io, User, Streetspots) => {
         // socket.emit('Update spots');
         return spot.save()
           .then(() => {
-            return socket.emit('Update Spots');     // return not neccessary here
+            socket.emit('Update Spots');     // return not neccessary here
           })
       });
     }
