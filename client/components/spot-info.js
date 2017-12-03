@@ -20,7 +20,7 @@ class SpotInfo extends Component {
             <button className="spot-btn-nav" onClick={handleNavigate}><span className="glyphicon glyphicon-road" aria-hidden="true" />NAVIGATE TO</button>
           </div>
           <div className="spot-actions">
-            <button className="spot-btn-take" onClick={handleTakeSpot}><span className="glyphicon glyphicon-thumbs-up" aria-hidde="true" />TAKE SPOT</button>
+            <button className="spot-btn-take" onClick={handleTakeSpot}><span className="glyphicon glyphicon-thumbs-up" aria-hidden="true" />TAKE SPOT</button>
           </div>
        </div>
     )

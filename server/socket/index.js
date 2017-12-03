@@ -9,7 +9,7 @@ module.exports = (io, User, Streetspots) => {
     });
 
     Streetspots.statusController = (spot) => {
-      const watch = new Stopwatch(60000); // A new countdown timer with 60 seconds
+      const watch = new Stopwatch(60000 * 15); // A new countdown timer with 60 seconds
       watch.start();
       // Fires when the timer is done
       return watch.onDone(function () {
@@ -18,7 +18,7 @@ module.exports = (io, User, Streetspots) => {
         // socket.emit('Update spots');
         return spot.save()
           .then(() => {
-            return socket.emit('Update Spots');     // return not neccessary here
+            socket.emit('Update Spots');     // return not neccessary here
           })
       });
     }

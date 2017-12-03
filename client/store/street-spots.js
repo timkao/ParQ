@@ -3,7 +3,7 @@ import GeoJSON from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { getUserLocation, spotValidation } from '../helpers';
 import socket from '../socket';
-import { mapDirection, getSigns, getReportSpot } from './';
+import { mapDirection, getSigns, getReportSpot, getLnglat } from './';
 
 /**
  * ACTION TYPES
@@ -76,7 +76,7 @@ export const addSpotOnServerGeo = (map, userId) =>
           .then(newSpot => dispatch(getReportSpot(newSpot.data)))
           .then(() => {
             dispatch(fetchSpots())
-            socket.emit('new-spot-reported');
+            //socket.emit('new-spot-reported');
           })
       })
       .catch(err => console.log(err));
@@ -107,7 +107,8 @@ export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
           .then(newSpot => dispatch(getReportSpot(newSpot.data)))
           .then(() => {
             dispatch(fetchSpots())
-            socket.emit('new-spot-reported');
+            //socket.emit('new-spot-reported');
+            dispatch(getLnglat({longitude, latitude}));
           })
       })
       .catch(err => console.log(err))
