@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:100,400,700);
 body {
-  font-family: 'Roboto' Roboto
+  font-family: 'Roboto', sans-serif;
 }
 
 
@@ -67,16 +67,13 @@ body {
   height: 24px;
   cursor: pointer;
 }
-.mapboxgl-popup {
-  max-width: 200px;
-}
 .mapboxgl-popup-content {
   text-align: center;
   font-family: 'Open Sans', sans-serif;
 }
 .mapboxgl-popup {
     max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font: 12px;
 }
 
 /* List View */
@@ -344,7 +341,7 @@ form ul li {
 }
 .flat-form form input.button:active {
   background: #136899;
-  @inclue box-shadow( 0 3px 1px #0f608c );
+  box-shadow( 0 3px 1px #0f608c );
 }
 .flat-form form input::-webkit-input-placeholder {
   color: #333333;
@@ -437,8 +434,18 @@ form ul li {
   padding:0px;
   border-radius: 10px;
 }
-.mapboxgl-popup-tip {
-  border-right-color: #333;
+/* Need to implement and option for rotten in future */
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: #00A0B0!important;
 }
 .fresh {
   background-color: #00A0B0;

@@ -182,7 +182,9 @@ export class Map extends Component {
             );
 
           //Set react component on/as popup
-          popup.setDOMContent(pop);
+          var test = popup.setDOMContent(pop);
+          test.className = 'test';
+          console.log('popup:',test)
           //create the marker for mapbox and set out popup on it
           new mapboxgl.Marker(el)
           .setLngLat(lot.geometry.coordinates)
