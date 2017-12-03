@@ -101,14 +101,14 @@ export class UserHome extends Component {
           <button className="pull-right btn btn-default" onClick={handleProfileVisibility}>Profile</button>
           <h3 id="welcome">Welcome, {email}</h3>
         </div>
-        <div style={{ position:"absolute", zIndex:"4"}}>
+       
           {
           profileVisible
             ? <Profile />
             : null
           }
-        </div>
-        <div className="row">
+        
+        <div id="rest" className="row">
           <div className="col-md-4">
             <button className="btn btn-default" onClick={handleSpotTaken}>Mark Spot Taken</button>
             <button className="btn btn-default" onClick={triggerHandleAddSpotGeo}>Open Spot Here</button>
@@ -190,5 +190,3 @@ UserHome.propTypes = {
   email: PropTypes.string
 };
 
- //    <h3 id="welcome">Welcome, {email}</h3>
- //  <img style={{ width: "10%"}} className="pull-right image-responsive" src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" />
