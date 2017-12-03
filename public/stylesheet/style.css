@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:100,400,700);
 body {
-  font-family: 'Roboto' Roboto
+  font-family: 'Roboto', sans-serif;
 }
 
 
@@ -26,6 +26,28 @@ body {
   filter: blur(5px);
   -webkit-filter: blur(5px);
 }
+
+/* Button Utils ================================ */
+.btn {
+  -webkit-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+}
+.dropdown .btn {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.btn-danger {
+  background-color: #ED3948;
+  border-color: #CC333F;
+}
+.btn-success{
+  background-color: #ffd64f;
+  border-color: #ffe387;
+  color: #000;
+}
+
 /* Signup/Login Logo Box ======================= */
 .logo-box{
   width: 100%;
@@ -67,16 +89,14 @@ body {
   height: 24px;
   cursor: pointer;
 }
-.mapboxgl-popup {
-  max-width: 200px;
-}
 .mapboxgl-popup-content {
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  -webkit-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
 }
 .mapboxgl-popup {
-    max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  max-width: 400px;
 }
 
 /* List View */
@@ -227,7 +247,8 @@ form ul li {
   background: rgba(51, 51, 51, 0.87);
   color: white;
   margin: 25px auto;
-  width: 390px;
+  max-width: 390px;
+  width: 80%;
   height: 340px;
   position: relative;
   font-family: 'Roboto';
@@ -343,6 +364,7 @@ form ul li {
 }
 .flat-form form input.button:active {
   background: #136899;
+  box-shadow( 0 3px 1px #0f608c );
 }
 .flat-form form input::-webkit-input-placeholder {
   color: #333333;
@@ -421,6 +443,7 @@ form ul li {
   margin-bottom: 10px;
 }
 .spot-popup strong, .lot-popup strong {
+  font-weight: 100;
   font-size: 1.5em;
   margin: 10px 0px;
 }
@@ -435,8 +458,18 @@ form ul li {
   padding:0px;
   border-radius: 10px;
 }
-.mapboxgl-popup-tip {
-  border-right-color: #333;
+/* Need to implement and option for rotten in future */
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: #00A0B0!important;
 }
 .fresh {
   background-color: #00A0B0;
@@ -456,6 +489,9 @@ form ul li {
   padding: 10px;
   color: #fff;
   width: 100%;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .spot-btn-take:hover {
   background-color: #EDC951;
@@ -467,6 +503,9 @@ form ul li {
   border-color: #6A4A3C;
   padding: 10px;
   color: #fff;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .spot-btn-nav:hover, .lot-btn-nav:hover {
   background-color: #7b665c;
@@ -478,6 +517,9 @@ form ul li {
   border-color: #333;
   padding: 10px;
   color: #fff;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .spot-btn-img:hover{
   background-color: #ccc;
@@ -496,6 +538,9 @@ form ul li {
 .navbar-default {
   background-color: #ffd64f;
   border-color: #ffe387;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .navbar-default .navbar-brand {
   color: #04a1b0;
