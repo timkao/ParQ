@@ -216,6 +216,7 @@ const mapDispatch = (dispatch, ownProps) => {
           dispatch(getNotification('Thanks for Reporting a Space! You got 50 points!'))
           setTimeout(function () {dispatch(updateUserPoints(0.5))}, 1000);
           socket.emit('new-spot-reported');
+
         })
     },
     createRulesList(signs) {

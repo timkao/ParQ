@@ -77,6 +77,10 @@ const Streetspots = db.define('streetspots', {
 Streetspots.addSpotOnServer = function (spot, id) {
   let newSpot;
   return Streetspots.create(spot)
+    .then(createdSpot => {
+      createdSpot.status = 'closed';
+      return createdSpot.save();
+    })
     .then((_spot) => {
       newSpot = _spot
       console.log("___Creating a spot AND Timer start___")
