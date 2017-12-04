@@ -8,7 +8,7 @@ export class List extends Component{
   constructor(){
     super();
     this.state = {
-      filteredSpotAndLotsWithDistance: []
+      filteredSpotsAndLots: []
     }
     this.createSpotsArray = this.createSpotsArray.bind(this);
     this.flyToSpot = this.flyToSpot.bind(this);
@@ -21,28 +21,28 @@ export class List extends Component{
         currentFilter[key] = filter[key];
       }
     }
-    let filteredSpots = filterSpots(currentFilter, spots.features);
-    let filteredLots = filterSpots(currentFilter, lots.features);
-    let filteredSpotsAndLots = [];
+    let spotsAndLots = [];
     if (filter.type.includes('Lot') || filter.type.length < 1 ){
-      filteredSpotsAndLots.push(...filteredLots);
+      spotsAndLots.push(...lots.features);
     }
     if (filter.type.includes('Street') || filter.type.length < 1 ){
-      filteredSpotsAndLots.push(...filteredSpots);
+      spotsAndLots.push(...spots.features);
     }
-    let filteredSpotAndLotsWithDistance = filteredSpotsAndLots.map(spot => {
+    let spotAndLotsWithDistance = spotsAndLots.map(spot => {
       const currentPosition = [longitude, latitude];
       return getDrivingDistance(currentPosition, spot.geometry.coordinates)
         .then(distanceObj => {
           spot.distanceFromOrigin = distanceObj;
           return spot;
 
-        })
+        });
     });
-      Promise.all(filteredSpotAndLotsWithDistance)
+    let filteredSpotsAndLots = filterSpots(currentFilter, spotAndLotsWithDistance);
+
+      Promise.all(filteredSpotsAndLots)
       .then((spotsArray) => {
         spotsArray.sort(compareByDistance);
-        this.setState({filteredSpotAndLotsWithDistance: spotsArray});
+        this.setState({filteredSpotsAndLots: spotsArray});
       });
 
 
@@ -68,14 +68,14 @@ export class List extends Component{
     });
   }
   render(){
-    const {filteredSpotAndLotsWithDistance} = this.state;
+    const {filteredSpotsAndLots} = this.state;
     const {flyToSpot} = this;
 
     return (
 
       <div id="list" className="animated slideInUp">
         <ul className="list-group" id="custom-list-group-styles">
-          {filteredSpotAndLotsWithDistance.map(spot => {
+          {filteredSpotsAndLots.map(spot => {
             return (
               <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">
                 <img src={spot.properties.sizeUrl || '/public/images/parkinglot.png'}></img>      <a onClick={() => {createImgModal(spot.properties.images[0])}}><span id="photo-badge" className="badge">See Photo</span></a>

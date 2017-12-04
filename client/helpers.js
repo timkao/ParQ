@@ -23,19 +23,17 @@ export function getUserLocation(options) {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 }
-
+/*Filter in Filter.js ==========================*/
 export function filterSpots(filter, spots) {
   return Object.keys(filter).length < 1 ? spots : spots.filter(spot => {
     for (var key in filter) {
-      console.log(spot.distanceFromOrigin, timeSince(spot.properties.createdAt, 'min'))
-      //when time left is a property then include something like spot.properties[key] < filter[key][0]
       if (key === 'timeAvailable'){
-        if (timeSince(spot.properties.createdAt, 'min') <= filter[key]){
+        if (timeSince(spot.properties.createdAt, 'min') <= filter[key][0]){
           return true;
         }
       }
       if (key === 'distance'){
-        if (spot.distanceFromOrigin <= filter[key]){
+        if (spot.distanceFromOrigin <= filter[key][0]){
           return true;
         }
       }
@@ -111,7 +109,7 @@ function getIntersectionDistance(ori, dest, currStreet, crossStreet) {
 export function getDrivingDistance(origin, destination) {
   const [orgLong, orgLat] = origin;
   const [destLong, destLat] = destination;
-  return axios.put('/api/distance', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
+  return axios.put('/api/distance/', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
     .then(result => result.data.rows[0])
     .then(distanceObj => {
       return distanceObj.elements[0].distance;

@@ -7,7 +7,6 @@ module.exports = router;
 router.put('/', (req, res, next) => {
   console.log(req.body);
   const queryString =`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${req.body.origin}&destinations=${req.body.destination}&mode=${req.body.mode}&units=imperial&key=${process.env.GOOGLE_DISTANCE_SECRET}`;
-
   axios.get(queryString)
   .then( result => result.data )
   .then( data => {
