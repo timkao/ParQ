@@ -12,6 +12,7 @@ import {loadState} from './localStorage';
 import signs from './signs';
 import reportspot from './report-spot';
 import notification from './notificationMessage';
+import showProfile from './showProfile';
 
 const persistedState = loadState();
 const reducer = combineReducers(
@@ -24,7 +25,8 @@ const reducer = combineReducers(
     lots,
     signs,
     reportspot,
-    notification
+    notification,
+    showProfile
 	}
 );
 
@@ -48,3 +50,4 @@ export * from './lots';
 export * from './signs';
 export * from './report-spot';
 export * from './notificationMessage';
+export * from './showProfile';

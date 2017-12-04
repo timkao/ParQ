@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { logout, getMap, getSpots, getLots } from '../store'
+import { logout, getMap, getSpots, getLots, getShowProfile} from '../store'
 import {Navbar, NavItem, MenuItem, NavDropdown, Nav} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
@@ -14,7 +14,7 @@ import {LinkContainer} from 'react-router-bootstrap';
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const { children, handleClick, isLoggedIn } = props;
+  const { children, handleClick, isLoggedIn, handleMyAccountClick} = props;
 
   return (
     <div>
@@ -34,8 +34,7 @@ const Main = (props) => {
               <Nav>
                 {/* The navbar will show these NavLinks after you log in */}
                 <LinkContainer to='/home'><NavItem>Home</NavItem></LinkContainer>
-                {/* <LinkContainer to={`/profile/${1}`} replace> */}
-                <NavItem>My Account</NavItem></LinkContainer>
+                <NavItem  onClick={handleMyAccountClick}>My Account</NavItem>
                 <NavItem  onClick={handleClick}>Logout</NavItem>
               </Nav>
             </Navbar.Collapse>
@@ -63,6 +62,9 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(getLots([]));
       dispatch(getSpots([]));
       dispatch(logout(ownProps.history));
+    },
+    handleMyAccountClick(){
+      dispatch(getShowProfile(true));
     }
   }
 }

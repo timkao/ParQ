@@ -18,20 +18,14 @@ export class UserHome extends Component {
     super();
     this.state = {
       mapView: true,
-      profileVisible: false,
       listView: false
 
     };
-    this.handleProfileVisibility = this.handleProfileVisibility.bind(this);
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
     this.setListView = this.setListView.bind(this);
     this.triggerHandleAddSpotGeo = this.triggerHandleAddSpotGeo.bind(this);
     this.triggerHandleAddSpotMarker = this.triggerHandleAddSpotMarker.bind(this);
     this.handleTest = this.handleTest.bind(this);
-  }
-
-  handleProfileVisibility(){
-    this.setState({profileVisible: !this.state.profileVisible});
   }
 
   triggerHandleAddSpotGeo() {
@@ -86,11 +80,12 @@ export class UserHome extends Component {
   }
 
   render() {
-    const { email, points, isShow, map } = this.props;
-    const { handleProfileVisibility, handleSpotTaken, setListView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
-    const { listView } = this.state;
+    const { email, points, isShow, map, showProfile } = this.props;
+    const { handleSpotTaken, setListView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
+    const { listView, profileVisible} = this.state;
     return (
       <Grid>
+      {/*  <button onClick={handleProfileVisibility} className="btn btn-default">Profile</button> */}
       {this.map ?
         <Row id="map-view-settings" >
           <Col xs={4} sm={4}>
@@ -102,7 +97,7 @@ export class UserHome extends Component {
               Object.keys(map).length > 0 ? <PointsMeter points={points} /> : null
             }
             {
-            profileVisible
+           showProfile
             ? <Profile />
             : null
             }
@@ -135,7 +130,9 @@ const mapState = (state) => {
     headingTo: state.headingTo,
     map: state.map,
     points: state.user.points,
-    isShow: state.isShow
+    isShow: state.isShow,
+    user: state.user,
+    showProfile: state.showProfile
   };
 };
 
