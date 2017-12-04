@@ -21,7 +21,19 @@ const streetspots = [
   { latitude: 40.748723, longitude: -74.037123, size: 'mid-size car' },
   { latitude: 40.21733690809492, longitude: -74.00885645263406, size: 'full-size SUV'},
   { latitude: 40.21892624348152, longitude: -74.01105586401843, size: 'full-size SUV'},
-  { latitude: 40.21892624348152, longitude: -74.00692526212578, size: 'full-size SUV'}
+  { latitude: 40.21892624348152, longitude: -74.00692526212578, size: 'full-size SUV'},
+  { latitude: 40.708396, longitude: -74.006802, size: 'compact car'},
+  { latitude: 40.704157, longitude: -74.007914, size: 'mid-size car'},
+  { latitude: 40.705894, longitude: -74.006324, size: 'full-size car'},
+  { latitude: 40.705389, longitude: -74.011488, size: 'full-size SUV'},
+  { latitude: 40.710004, longitude: -74.007281, size: 'full-size SUV'},
+  { latitude: 40.708552, longitude: -74.011026, size: 'full-size car'},
+  { latitude: 40.711507, longitude: -73.995242, size: 'compact car'},
+  { latitude: 40.715992, longitude: -73.997293, size: 'mid-size car'},
+  { latitude: 40.717569, longitude: -74.002067, size: 'full-size car'},
+  { latitude: 40.721277, longitude: -73.998752, size: 'full-size SUV'},
+  { latitude: 40.721277, longitude: -73.998752, size: 'full-size SUV'}
+
 ];
 
 const parkingLots = [
