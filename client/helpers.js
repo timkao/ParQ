@@ -109,7 +109,7 @@ function getIntersectionDistance(ori, dest, currStreet, crossStreet) {
 export function getDrivingDistance(origin, destination) {
   const [orgLong, orgLat] = origin;
   const [destLong, destLat] = destination;
-  return axios.put('/api/distance/', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
+  return axios.put('/api/distance', { origin: `${orgLat},${orgLong}`, destination: `${destLat},${destLong}`, mode: 'driving' })
     .then(result => result.data.rows[0])
     .then(distanceObj => {
       return distanceObj.elements[0].distance;
