@@ -645,7 +645,7 @@ fieldset[disabled] .map-view-settings-button.active {
 }
 
 #profile-all {
-  top: 1;
+  top: 0;
   left: 0;
   position: fixed;
   width: 100%;
