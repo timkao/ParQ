@@ -37,6 +37,17 @@ const createApp = () => {
   app.set('view engine', 'html');
   app.engine('html', nunjucks.render);
 
+  //http ---> https redirct in prod
+   var forceSsl = function (req, res, next) {
+      if (req.headers['x-forwarded-proto'] !== 'https') {
+          return res.redirect(['https://', req.get('Host'), req.url].join(''));
+      }
+      return next();
+   };
+   if (process.env.NODE_ENV === 'production') {
+        app.use(forceSsl);
+    }
+
   app.use((req, res, next) => {
     res.locals.mapboxKey = process.env.mapboxKey;
     res.locals.GOOGLE_DISTANCE_SECRET = process.env.GOOGLE_DISTANCE_SECRET;
