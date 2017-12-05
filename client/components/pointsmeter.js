@@ -47,11 +47,11 @@ class PointMeter extends Component {
           <text x={rectX * 2} y="110px" fill="#00A0B0" fontSize="20px">
             {notification.length > 0 ? notification.split('!')[1].trim() + '!' : ''}
           </text>
-          <image xlinkHref="/public/images/Parq_Logo.png" x={rectX} y="20px" width="100px" />
-          <image onClick={handleGoBack} x={maxWidth - 60} y="20px" width="50px" xlinkHref="/public/images/arrows.png" />
+          <image href="/public/images/Parq_Logo.png" x={rectX} y="20px" width="100px" />
+          <image onClick={handleGoBack} x={maxWidth - 60} y="20px" width="50px" href="/public/images/arrows.png" />
           <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth} fill="white" ></rect>
           <rect rx="15" ry="15" x={rectX} y={height - 40} height="30px" width={meterWidth * positionRatio} fill="#EDC951" ></rect>
-          <image xlinkHref={image} x={positionRatio > 0.1 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth} />
+          <image href={image} x={positionRatio > 0.1 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 - rankCarWidth} width={rankCarWidth} />
           <text x={positionRatio !== 0 ? rectX + meterWidth * positionRatio - rankCarWidth : rectX} y={height - 40 + 20} fill="white" fontSize="15px">{ positionRatio > 0.1 ? currentPoints : null}
           </text>
         </svg>
