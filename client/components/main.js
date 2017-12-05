@@ -14,28 +14,29 @@ import {LinkContainer} from 'react-router-bootstrap';
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const { children, handleClick, isLoggedIn, handleMyAccountClick} = props;
+  const { children, handleClick, isLoggedIn, handleMyAccountClick, controlCollapse} = props;
 
   return (
     <div>
       {/* <h1>Check</h1> */}
       {
         isLoggedIn
-        ? <Navbar>
+        ? <Navbar onSelect={controlCollapse}>
             <Navbar.Header>
               <Navbar.Brand>
                 <a href="#">
                   <img alt="Brand" style={{height: '5vh'}} src="/public/images/Parq_Logo.png" />
                 </a>
               </Navbar.Brand>
-              <Navbar.Toggle />
+              <Navbar.Toggle/>
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav>
                 {/* The navbar will show these NavLinks after you log in */}
-                <LinkContainer to='/home'><NavItem>Home</NavItem></LinkContainer>
-                <NavItem  onClick={handleMyAccountClick}>My Account</NavItem>
-                <NavItem  onClick={handleClick}>Logout</NavItem>
+                <LinkContainer to='/home'><NavItem eventKey={1}>Home</NavItem></LinkContainer>
+                <LinkContainer to='/home/profile'><NavItem eventKey={2}>My Account </NavItem></LinkContainer>
+                {/* <NavItem  eventKey={2} onClick={handleMyAccountClick}>My Account</NavItem> */}
+                <NavItem  eventKey={3} onClick={handleClick}>Logout</NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
@@ -64,7 +65,11 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(logout(ownProps.history));
     },
     handleMyAccountClick(){
-      dispatch(getShowProfile(true));
+      ownProps.history.push('/home/profile');
+      // dispatch(getShowProfile(true));
+    },
+    controlCollapse(evt){
+      console.log("eventKey number_____", evt, ".......at Main.js");
     }
   }
 }

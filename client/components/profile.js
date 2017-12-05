@@ -24,7 +24,7 @@ const _Profile = (props) => {
           {user.email.split("@")[0].toUpperCase()}
         </h3>
         {/* reward car imgage goes here */}
-        <img src = "../../public/images/bigcar.png" />
+        <img style= {{width: "10%"}} src = {user.rankCar} alt="Rank Car"/>
         <span className="label label-primary"><strong>Rewards: </strong></span>
         <span className="label label-success">20</span>
         <span className="label label-info">Helped 20 persons find parkings</span>
@@ -49,7 +49,8 @@ const mapState = (state) => {
 const mapDispatch = (dispatch, ownProps) => {
   return {
     hideProfile: ()=>{
-      dispatch(hideProfile(false));
+      ownProps.history.push('/home');
+      // dispatch(hideProfile(false));
     }
   }
 }

@@ -7,6 +7,7 @@ import Map from './Map';
 import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
+// import { withRouter, Link } from 'react-router-dom'
 import reportForm from './report-form';
 import PointsMeter from './pointsmeter';
 import Profile from './profile';
@@ -81,6 +82,7 @@ export class UserHome extends Component {
 
   render() {
     const { email, points, isShow, map, showProfile } = this.props;
+    const {history} = this.props;
     const { handleSpotTaken, setListView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
     const { listView, profileVisible} = this.state;
     return (
@@ -96,11 +98,14 @@ export class UserHome extends Component {
             {
               Object.keys(map).length > 0 ? <PointsMeter points={points} /> : null
             }
+            <Route  path='/home/profile' component={Profile} />
+            {/*
             {
            showProfile
-            ? <Profile />
+            ? <Profile history={history}/>
             : null
             }
+            */}
             <Filter />
           </Col>
           <Col xs={5} sm={4} className="pull-right">
@@ -173,4 +178,3 @@ export default connect(mapState, mapDispatch)(UserHome);
 UserHome.propTypes = {
   email: PropTypes.string
 };
-
