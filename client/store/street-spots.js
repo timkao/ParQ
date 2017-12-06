@@ -49,8 +49,8 @@ export const fetchSpots = () =>
       })
       .catch(err => console.log(err));
 
-export const addSpotOnServerGeo = (map, userId) =>
-  dispatch => {
+export const addSpotOnServerGeo = (map, userId) => {
+  return dispatch => {
     return getUserLocation()
       .then(position => {
         const { longitude, latitude } = position.coords;
@@ -81,6 +81,7 @@ export const addSpotOnServerGeo = (map, userId) =>
       })
       .catch(err => console.log(err));
   }
+}
 
 export const addSpotOnServerMarker = (map, userId, defaultVehicle, spot) =>
   dispatch => {

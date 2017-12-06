@@ -207,7 +207,11 @@ export class Map extends Component {
   }
 
   handleAddSpotGeo() {
+    this.setState({loaded: false});
     return this.props.addSpotGeo(this.map, this.props.id, null)
+    .then(() => {
+      this.setState({loaded: true});
+    })
     .then( () => this.props.toReportForm()) //eventually pass in users default vehicle size
   }
 
@@ -271,6 +275,7 @@ const mapDispatch = (dispatch, ownProps) => {
     },
     addSpotGeo(component, id){
       // add return for promise chain
+      console.log('22222222222222');
       return dispatch(addSpotOnServerGeo(component, id));
     },
     addSpotMarker(component, id, defaultVehicle, spot){
