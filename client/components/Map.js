@@ -7,9 +7,10 @@ import { fetchMap, addSpotOnServerGeo, addSpotOnServerMarker, fetchSpots, getHea
 import Loader from 'react-loader';
 import socket from '../socket';
 import mapboxgl from 'mapbox-gl';
-import {filterSpots, timeSince, exitBtnCreator, geoMarkerBtnCreator, customMarkerBtnCreator} from '../helpers';
+import {filterSpots, timeSince, exitBtnCreator, reportSpotBtnCreator, setClasses} from '../helpers';
 import SpotInfo from './spot-info';
 import reportForm from './report-form';
+import LotInfo from './lot-info';
 
 
 export class Map extends Component {
@@ -18,10 +19,12 @@ export class Map extends Component {
     super();
     this.state = {
       loaded: false,
+      menuToggle: false
     };
     this.handleAddSpotGeo = this.handleAddSpotGeo.bind(this);
     this.handleAddSpotMarker = this.handleAddSpotMarker.bind(this);
     this.renewSpotsWithMap = this.renewSpotsWithMap.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   componentDidMount() {
@@ -84,15 +87,10 @@ export class Map extends Component {
             });
         }
       })
-      if (this.state.loaded){
         //Create exit directions button. See helpers file for more detail
         exitBtnCreator();
         //Create marker creator buttons. See helpers file for more detail
-        geoMarkerBtnCreator(this.handleAddSpotGeo);
-        customMarkerBtnCreator(this.handleAddSpotMarker);
-        console.log(this.props.history)
-      }
-
+        reportSpotBtnCreator(this.toggleMenu, this.handleAddSpotGeo, this.handleAddSpotMarker);
       /* Streetspot Marker + Popup ================= */
       if (filter.type.includes('Street') || filter.type.length < 1 ){
         spots.features &&
@@ -108,6 +106,7 @@ export class Map extends Component {
             // create the popup for mapbox
             var popup = new mapboxgl.Popup()
             //Find out how fresh the spot is and apply appropriate background color
+            console.log('timesince"',timeSince(spot.properties.createdAt, 'min'))
             timeSince(spot.properties.createdAt, 'min') < 10
               ? pop.className = 'spot-popup fresh'
               : pop.className = 'spot-popup rotten'
@@ -146,21 +145,47 @@ export class Map extends Component {
           });
       }
 
+      /* Lot Marker + Popup ================================= */
       if (filter.type.includes('Lot') || filter.type.length < 1 ){
         lots.features && filteredLots.forEach(function(lot) {
           // create the marker element
           var el = document.createElement('div');
           el.className = 'lot';
-          // add event listener
-          el.addEventListener('click', () => {
+
+          // create the popup element
+          var pop = document.createElement('div');
+          // create the popup for mapbox
+          var popup = new mapboxgl.Popup()
+          //Find out if lot has open spots or not
+          lot.properties.spotsAvailable
+            ? pop.className = 'lot-popup fresh'
+            : pop.className = 'lot-popup rotten'
+
+          //Turn our popup element into a react component
+          //First we create functions for the btns to
+          //interact with map
+          //we should clean these up and move them in future
+          const handleNavigate = () => {
             headTo(lot.properties.id);
             mapDirection.setOrigin([longitude, latitude]);
             mapDirection.setDestination(lot.geometry.coordinates);
-          });
-          // create the popup
-          var popup = new mapboxgl.Popup()
-          .setHTML(`<div>${lot.place_name}</div>`);
-          //create the marker
+            popup.remove();
+             //shows exit button by toggling hidden class
+            document.querySelector('.directions-btn-exit').classList.toggle('hidden');
+          }
+            //Create a props object to pass into React.createElement
+            let props = { lot, map, handleNavigate }
+            ReactDOM.render(
+              React.createElement(
+                LotInfo, props//passes in spot info as props to the spont component
+              ),
+              pop
+            );
+
+          //Set react component on/as popup
+          var test = popup.setDOMContent(pop);
+          test.className = 'test';
+          //create the marker for mapbox and set out popup on it
           new mapboxgl.Marker(el)
           .setLngLat(lot.geometry.coordinates)
           .setPopup(popup) // sets a popup on this marker
@@ -210,6 +235,12 @@ export class Map extends Component {
     const { renewSpots, map } = this.props;
     renewSpots(map);
   }
+  toggleMenu(){
+    this.setState({menuToggle: !this.state.menuToggle}, function(){
+    });
+    setClasses(this.state.menuToggle);
+
+  }
 
   render() {
     const {height} = this.props;
@@ -239,7 +270,6 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(thunk);
     },
     addSpotGeo(component, id){
-      console.log('bout to dispatch')
       // add return for promise chain
       return dispatch(addSpotOnServerGeo(component, id));
     },

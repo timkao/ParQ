@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:100,400,700);
 body {
-  font-family: 'Roboto' Roboto
+  font-family: 'Roboto', sans-serif;
 }
 
 
@@ -26,6 +26,28 @@ body {
   filter: blur(5px);
   -webkit-filter: blur(5px);
 }
+
+/* Button Utils ================================ */
+.btn {
+  -webkit-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+}
+.dropdown .btn {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.btn-danger {
+  background-color: #ED3948;
+  border-color: #CC333F;
+}
+.btn-success{
+  background-color: #ffd64f;
+  border-color: #ffe387;
+  color: #000;
+}
+
 /* Signup/Login Logo Box ======================= */
 .logo-box{
   width: 100%;
@@ -67,16 +89,14 @@ body {
   height: 24px;
   cursor: pointer;
 }
-.mapboxgl-popup {
-  max-width: 200px;
-}
 .mapboxgl-popup-content {
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
+  -webkit-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -5px rgba(0,0,0,0.75);
 }
 .mapboxgl-popup {
-    max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  max-width: 400px;
 }
 
 /* List View */
@@ -106,7 +126,7 @@ body {
 #report-form .spot-location {
   color: #00A0B0;
   margin: 0.4em 1em 0.4em 1em;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 #report-form .spot-location li {
@@ -227,7 +247,8 @@ form ul li {
   background: rgba(51, 51, 51, 0.87);
   color: white;
   margin: 25px auto;
-  width: 390px;
+  max-width: 390px;
+  width: 80%;
   height: 340px;
   position: relative;
   font-family: 'Roboto';
@@ -257,6 +278,7 @@ form ul li {
   font-size: 16px;
   float: left;
   padding: 12px 22px;
+  font-weight: 100;
 }
 .flat-form .tabs li a.active {
   background: rgba(51, 51, 51, 0.87);
@@ -342,7 +364,7 @@ form ul li {
 }
 .flat-form form input.button:active {
   background: #136899;
-  @inclue box-shadow( 0 3px 1px #0f608c );
+  box-shadow( 0 3px 1px #0f608c );
 }
 .flat-form form input::-webkit-input-placeholder {
   color: #333333;
@@ -410,30 +432,44 @@ form ul li {
 }
 
 /* Spot Popup =================================== */
-.spot-popup {
+.spot-popup, .lot-popup {
   background-color: #eeeeee;
   font-family: "Roboto", Roboto, arial, sans-serif;
   padding: 15px;
   color: #fff;
   border-radius: 10px;
 }
-.spot-popup div {
+.spot-popup div, .lot-popup div {
   margin-bottom: 10px;
 }
-.spot-popup strong {
+.spot-popup strong, .lot-popup strong {
+  font-weight: 100;
   font-size: 1.5em;
   margin: 10px 0px;
 }
-.spot-popup span {
+.spot-popup time, .lot-popup span {
   font-size: 2.5em;
+}
+.spot-popup span, .lot-popup span {
+  padding-right:4px;
 }
 /* Overrides default popup padding */
 .mapboxgl-popup-content {
   padding:0px;
   border-radius: 10px;
 }
-.mapboxgl-popup-tip {
-  border-right-color: #333;
+/* Need to implement and option for rotten in future */
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: #00A0B0!important;
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: #00A0B0!important;
 }
 .fresh {
   background-color: #00A0B0;
@@ -441,35 +477,55 @@ form ul li {
 .rotten {
   background-color: #CA3543;
 }
-.spot-actions {
+.spot-actions, .lot-actions {
   text-align: center;
 }
 .spot-actions button:first-child {
   margin-right: 10px;
 }
 .spot-btn-take {
-  background-color: #EDC951;
-  border-color: #EDC951;
-  padding: 10px;
-  color: #6A4A3C;
-}
-.spot-btn-take:hover {
   background-color: #EB6841;
   border-color: #EB6841;
+  padding: 10px;
   color: #fff;
+  width: 100%;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
-.spot-btn-nav {
+.spot-btn-take:hover {
+  background-color: #EDC951;
+  border-color: #EDC951;
+  color: #6A4A3C;
+}
+.spot-btn-nav, .lot-btn-nav {
   background-color: #6A4A3C;
   border-color: #6A4A3C;
   padding: 10px;
   color: #fff;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
-.spot-btn-nav:hover {
+.spot-btn-nav:hover, .lot-btn-nav:hover {
   background-color: #7b665c;
   border-color: #7b665c;
   color: #000;
 }
-
+.spot-btn-img {
+  background-color: #333;
+  border-color: #333;
+  padding: 10px;
+  color: #fff;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+}
+.spot-btn-img:hover{
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #000;
+}
 #meter {
   display: none;
   position: absolute;
@@ -482,9 +538,13 @@ form ul li {
 .navbar-default {
   background-color: #ffd64f;
   border-color: #ffe387;
+  -webkit-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
+  box-shadow: 1px 10px 47px -15px rgba(0,0,0,0.75);
 }
 .navbar-default .navbar-brand {
   color: #04a1b0;
+  padding: 8px 15px;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
@@ -577,6 +637,7 @@ form ul li {
   color: #ffffff;
   background-color: #CC333F;
   border-color: #CC333F;
+  border-radius: 10px !important;
 }
 
 .map-view-settings-button:hover,
@@ -587,6 +648,8 @@ form ul li {
   color: #ffffff;
   background-color: #ED3948 !important;
   border-color: #CC333F;
+  border-radius: 10px;
+
 }
 
 .map-view-settings-button:active,
@@ -631,18 +694,19 @@ fieldset[disabled] .map-view-settings-button.active {
 }
 
 /* Map Buttons =================================== */
-.create-btn-geo {
+/* .create-btn-geo {
   margin: 15px;
   width: 13.5em;;
   padding: 10px;
   pointer-events: all;
-}
-.create-btn-custom {
-  margin: 15px 0px 15px 15px;
+} */
+.create-btn {
+  /* margin: 15px 0px 15px 15px;
   width: 13.5em;;
-  padding: 10px;
+  padding: 10px; */
   pointer-events: all;
 }
+
 
 #profile-all {
   top: 0;
@@ -656,3 +720,98 @@ fieldset[disabled] .map-view-settings-button.active {
   background-repeat:no-repeat;
   background-position:0 0;
 }
+
+/* Spot Img Modal ================================ */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+/* Add Animation */
+.modal-content, #caption {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)}
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 30px;
+    font-weight: 100;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
+
+/* List group styling for list view */
+
+
+#custom-list-group-styles li{
+  border-radius: 0px;
+  color: #00A0B0;
+  border-width: 1px 0px 1px 0px;
+}
+
+#custom-list-group-styles li a{
+  color: #00A0B0;
+}
+
+#custom-list-group-styles .list-group-item-text .badge{
+  float: none;
+}
+#photo-badge {
+  background-color: #ffd64f;
+  color: #00A0B0;
+  float: right;
+}
+
+#custom-list-group-styles img {
+  width: 40px;
+  height: 30px;
+}
+

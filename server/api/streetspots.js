@@ -85,6 +85,7 @@ router.put('/:spotId/size', (req, res, next) => {
   Streetspots.findById(req.params.spotId)
     .then(spot => {
       spot.size = req.body.size;
+      spot.status = 'open';
       return spot.save()
     })
     .then(() => res.sendStatus(204))

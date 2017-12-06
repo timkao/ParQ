@@ -181,6 +181,7 @@ export const fetchMap = (component) => {
           positionOptions: {
             enableHighAccuracy: true
           },
+          fitBoundsOptions: {maxZoom: 16},
           trackUserLocation: true
         }));
         component.map.scrollZoom.disable();

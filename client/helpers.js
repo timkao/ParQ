@@ -23,19 +23,17 @@ export function getUserLocation(options) {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 }
-
+/*Filter in Filter.js ==========================*/
 export function filterSpots(filter, spots) {
   return Object.keys(filter).length < 1 ? spots : spots.filter(spot => {
     for (var key in filter) {
-      console.log(spot.distanceFromOrigin, timeSince(spot.properties.createdAt, 'min'))
-      //when time left is a property then include something like spot.properties[key] < filter[key][0]
       if (key === 'timeAvailable'){
-        if (timeSince(spot.properties.createdAt, 'min') <= filter[key]){
+        if (timeSince(spot.properties.createdAt, 'min') <= filter[key][0]){
           return true;
         }
       }
       if (key === 'distance'){
-        if (spot.distanceFromOrigin <= filter[key]){
+        if (spot.distanceFromOrigin <= filter[key][0]){
           return true;
         }
       }
@@ -362,15 +360,14 @@ export function geoMarkerBtnCreator(fnc){
 
   var geoBtn = document.createElement('button')
   geoBtn.id = 'geo-marker-btn'
-  geoBtn.innerHTML = 'Open Spot Here'
-  geoBtn.className = 'btn btn-default create-btn-geo'
+  geoBtn.innerHTML = 'Report Spot Here'
+  geoBtn.className = 'btn btn-default btn-sm create-btn map-view-settings-button pull-right hidden'
   geoBtn.onclick = function() {
-    console.log('calling onclick')
     return fnc() //fires the create spot at geo function via handleAddSpotGeo passed in
   }
   // Grabs map controls ui and prepends btn
-  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
-  controls.prepend(geoBtn);
+  var controls = document.getElementById('report-spot-btn')
+  controls.after(geoBtn);
 }
 
 //....Custom Marker Add Spot Button
@@ -381,12 +378,82 @@ export function customMarkerBtnCreator(fnc){
   var customBtn = document.createElement('button')
   customBtn.id = 'custom-marker-btn'
   customBtn.innerHTML = 'Report Spot @Marker'
-  customBtn.className = 'btn btn-default create-btn-custom'
+  customBtn.className = 'btn btn-default btn-sm create-btn map-view-settings-button pull-right hidden'
   customBtn.onclick = function() {
-    console.log('calling onclick')
     return fnc() //fires the create spot at clicked marker function via handleAddSpotMarker passed in
   }
   // Grabs map controls ui and prepends btn
-  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0]
-  controls.prepend(customBtn);
+  var controls = document.getElementById('report-spot-btn')
+  controls.after(customBtn);
+}
+
+//....Report Spot Button
+export function reportSpotBtnCreator(toggleMenuFnc, geoFunc, markerFunc){
+  //first check if btn exists to stop multiple instances
+  if (document.getElementById('report-spot-btn')) return;
+
+  var reportSpotBtn = document.createElement('button');
+  reportSpotBtn.id = 'report-spot-btn';
+  reportSpotBtn.innerHTML = 'Report Spot';
+  reportSpotBtn.className = 'btn btn-default btn-sm create-btn map-view-settings-button pull-right';
+  reportSpotBtn.onclick = function() {
+    return toggleMenuFnc() //toggles menu
+  };
+  // Grabs map controls ui and prepends btn
+  var controls = document.getElementsByClassName('mapboxgl-ctrl-bottom-right')[0];
+  controls.prepend(reportSpotBtn);
+  geoMarkerBtnCreator(geoFunc);
+  customMarkerBtnCreator(markerFunc);
+}
+
+// set show and hidden classes on Report Spot menu button on Map and also changes innerHtml of 'Report Spot' button to 'X' when menu is open
+export function setClasses(menuToggleBool){
+  const customBtn = document.getElementById('custom-marker-btn');
+  const geoBtn = document.getElementById('geo-marker-btn');
+  const reportSpotBtn = document.getElementById('report-spot-btn');
+  let geoBtnClasses = geoBtn.className;
+  let customBtnClasses = customBtn.className;
+  let reportSpotBtnInnerHTML = reportSpotBtn.innerHTML;
+if (menuToggleBool === false) {
+  if (customBtn.className.includes('show')){
+
+    customBtnClasses = customBtnClasses.replace('show', 'hidden');
+    geoBtnClasses = geoBtnClasses.replace('show', 'hidden');
+  }
+  if (reportSpotBtn.innerHTML.includes('X')){
+    reportSpotBtnInnerHTML = reportSpotBtn.innerHTML.replace('X', 'Report Spot');
+    }
+}
+if (menuToggleBool === true){
+  if (customBtn.className.includes('hidden') ){
+    customBtnClasses = customBtnClasses.replace('hidden', 'show');
+    geoBtnClasses = geoBtnClasses.replace('hidden', 'show');
+
+  }
+
+  if (reportSpotBtn.innerHTML.includes('Report Spot')){
+    reportSpotBtnInnerHTML = reportSpotBtn.innerHTML.replace('Report Spot', 'X');
+
+  }
+}
+  customBtn.className = customBtnClasses;
+  geoBtn.className = geoBtnClasses;
+  reportSpotBtn.innerHTML = reportSpotBtnInnerHTML;
+}
+
+/* Modal creator ================================================ */
+export function createImgModal(imgSrc){
+  console.log('creating img:',imgSrc)
+  // Get the modal
+  var modal = document.getElementById('spotModal');
+  // Insert it inside the modal
+  var modalImg = document.getElementById("spotImgModal");
+  modal.style.display = "block";
+  modalImg.src = imgSrc;
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+      modal.style.display = "none";
+  }
 }

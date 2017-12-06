@@ -13,6 +13,7 @@ import signs from './signs';
 import reportspot from './report-spot';
 import notification from './notificationMessage';
 import showProfile from './showProfile';
+import spotLngLat from './lnglat';
 
 const persistedState = loadState();
 const reducer = combineReducers(
@@ -26,7 +27,8 @@ const reducer = combineReducers(
     signs,
     reportspot,
     notification,
-    showProfile
+    showProfile,
+    spotLngLat
 	}
 );
 
@@ -51,3 +53,5 @@ export * from './signs';
 export * from './report-spot';
 export * from './notificationMessage';
 export * from './showProfile';
+export * from './lnglat';
+

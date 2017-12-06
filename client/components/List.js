@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {filterSpots, getDrivingDistance, compareByDistance} from '../helpers';
+import {filterSpots, getDrivingDistance, compareByDistance, createImgModal} from '../helpers';
 import {longitude, latitude} from '../store';
 import Moment from 'react-moment';
 
@@ -8,7 +8,7 @@ export class List extends Component{
   constructor(){
     super();
     this.state = {
-      filteredSpotAndLotsWithDistance: []
+      filteredSpotsAndLots: []
     }
     this.createSpotsArray = this.createSpotsArray.bind(this);
     this.flyToSpot = this.flyToSpot.bind(this);
@@ -21,28 +21,28 @@ export class List extends Component{
         currentFilter[key] = filter[key];
       }
     }
-    let filteredSpots = filterSpots(currentFilter, spots.features);
-    let filteredLots = filterSpots(currentFilter, lots.features);
-    let filteredSpotsAndLots = [];
+    let spotsAndLots = [];
     if (filter.type.includes('Lot') || filter.type.length < 1 ){
-      filteredSpotsAndLots.push(...filteredLots);
+      spotsAndLots.push(...lots.features);
     }
     if (filter.type.includes('Street') || filter.type.length < 1 ){
-      filteredSpotsAndLots.push(...filteredSpots);
+      spotsAndLots.push(...spots.features);
     }
-    let filteredSpotAndLotsWithDistance = filteredSpotsAndLots.map(spot => {
+    let spotAndLotsWithDistance = spotsAndLots.map(spot => {
       const currentPosition = [longitude, latitude];
       return getDrivingDistance(currentPosition, spot.geometry.coordinates)
         .then(distanceObj => {
           spot.distanceFromOrigin = distanceObj;
           return spot;
 
-        })
+        });
     });
-      Promise.all(filteredSpotAndLotsWithDistance)
+    let filteredSpotsAndLots = filterSpots(currentFilter, spotAndLotsWithDistance);
+
+      Promise.all(filteredSpotsAndLots)
       .then((spotsArray) => {
         spotsArray.sort(compareByDistance);
-        this.setState({filteredSpotAndLotsWithDistance: spotsArray});
+        this.setState({filteredSpotsAndLots: spotsArray});
       });
 
 
@@ -51,12 +51,15 @@ export class List extends Component{
     this.createSpotsArray();
   }
   componentDidUpdate(prevProps, prevState){
-    console.log(prevProps.filter, this.props.filter)
+    console.log(prevProps, this.props.spots);
     for (var key in this.props.filter) {
-      console.log('!prevProps.filter[key]', !prevProps.filter[key])
       if (!prevProps.filter[key]){
       this.createSpotsArray();
       }
+    }
+    if (prevProps.spots.features.length !== this.props.spots.features.length || prevProps.lots.features.length !== this.props.lots.features.length){
+      console.log('in func***********');
+      this.createSpotsArray();
     }
   }
   flyToSpot(coor){
@@ -65,16 +68,27 @@ export class List extends Component{
     });
   }
   render(){
-    const {filteredSpotAndLotsWithDistance} = this.state;
+    const {filteredSpotsAndLots} = this.state;
     const {flyToSpot} = this;
 
     return (
 
       <div id="list" className="animated slideInUp">
-        <ul className="list-group">
-          {filteredSpotAndLotsWithDistance.map(spot => {
-            return <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item"><a onClick={() => {flyToSpot(spot.geometry.coordinates)}}>{spot.place_name}</a>
-             <br></br>Distance: {spot.distanceFromOrigin.text}{'   '}Reported: <Moment fromNow>{spot.properties.createdAt}</Moment></li>;
+        <ul className="list-group" id="custom-list-group-styles">
+          {filteredSpotsAndLots.map(spot => {
+            return (
+              <li key={`${spot.place_name}-${spot.properties.id}`} className="list-group-item">
+                <img src={spot.properties.sizeUrl || '/public/images/parkinglot.png'}></img>      <a onClick={() => {createImgModal(spot.properties.images[0])}}><span id="photo-badge" className="badge">See Photo</span></a>
+                <h5 className="list-group-item-heading" ><a onClick={() => {flyToSpot(spot.geometry.coordinates)}}>{spot.place_name}</a></h5>
+                <br />
+                <p className="list-group-item-text">
+                  Distance: <span className="badge">{spot.distanceFromOrigin.text}</span>
+                  {'   '}
+                  Reported: <span className="badge"><Moment fromNow>{spot.properties.createdAt}</Moment></span>
+
+                </p>
+              </li>
+            );
           })}
         </ul>
       </div>
