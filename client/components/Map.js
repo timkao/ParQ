@@ -207,7 +207,9 @@ export class Map extends Component {
   }
 
   handleAddSpotGeo() {
+    this.setState({loaded: false});
     return this.props.addSpotGeo(this.map, this.props.id, null)
+    .then( () => {this.setState({loaded: true})})
     .then( () => this.props.toReportForm()) //eventually pass in users default vehicle size
   }
 
