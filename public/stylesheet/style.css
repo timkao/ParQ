@@ -707,6 +707,20 @@ fieldset[disabled] .map-view-settings-button.active {
   pointer-events: all;
 }
 
+
+#profile-all {
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  height: 736px;
+  z-index: 5;
+  background-size: 100% 100% !important;
+  background-image: url("/public/images/streets-background-min.jpg");
+  background-repeat:no-repeat;
+  background-position:0 0;
+}
+
 /* Spot Img Modal ================================ */
 /* The Modal (background) */
 .modal {

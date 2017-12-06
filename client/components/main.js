@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { logout, getMap, getSpots, getLots } from '../store'
+import { logout, getMap, getSpots, getLots, getShowProfile} from '../store'
 import {Navbar, NavItem, MenuItem, NavDropdown, Nav} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
@@ -14,29 +14,29 @@ import {LinkContainer} from 'react-router-bootstrap';
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const { children, handleClick, isLoggedIn } = props;
+  const { children, handleClick, isLoggedIn, handleMyAccountClick, controlCollapse} = props;
 
   return (
     <div>
       {/* <h1>Check</h1> */}
       {
         isLoggedIn
-        ? <Navbar>
+        ? <Navbar onSelect={controlCollapse}>
             <Navbar.Header>
               <Navbar.Brand>
                 <a href="#">
                   <img alt="Brand" style={{height: '5vh'}} src="/public/images/Parq_Logo.png" />
                 </a>
               </Navbar.Brand>
-              <Navbar.Toggle />
+              <Navbar.Toggle/>
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav>
                 {/* The navbar will show these NavLinks after you log in */}
-                <LinkContainer to='/home'><NavItem>Home</NavItem></LinkContainer>
-                <LinkContainer to={`/profile/${1}`} replace>
-                <NavItem>My Account</NavItem></LinkContainer>
-                <NavItem  onClick={handleClick}>Logout</NavItem>
+                <LinkContainer to='/home'><NavItem eventKey={1}>Home</NavItem></LinkContainer>
+                <LinkContainer to='/home/profile'><NavItem eventKey={2}>My Account </NavItem></LinkContainer>
+                {/* <NavItem  eventKey={2} onClick={handleMyAccountClick}>My Account</NavItem> */}
+                <NavItem  eventKey={3} onClick={handleClick}>Logout</NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
@@ -63,6 +63,13 @@ const mapDispatch = (dispatch, ownProps) => {
       dispatch(getLots([]));
       dispatch(getSpots([]));
       dispatch(logout(ownProps.history));
+    },
+    handleMyAccountClick(){
+      ownProps.history.push('/home/profile');
+      // dispatch(getShowProfile(true));
+    },
+    controlCollapse(evt){
+      console.log("eventKey number_____", evt, ".......at Main.js");
     }
   }
 }

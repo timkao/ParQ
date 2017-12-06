@@ -7,19 +7,20 @@ import Map from './Map';
 import List from './List';
 import Filter from './Filter';
 import { Route } from 'react-router-dom';
+// import { withRouter, Link } from 'react-router-dom'
 import reportForm from './report-form';
 import PointsMeter from './pointsmeter';
+import Profile from './profile';
 import {Grid, Row, Col} from 'react-bootstrap';
 
-export class UserHome extends Component {
 
+export class UserHome extends Component {
   constructor() {
     super();
     this.state = {
-      // currentLong: 0,  // this two might not be neccessary
-      // currentLat: 0,   // this might not be neccessary
-      showNotification: {isShow: false, message: ''},
+      mapView: true,
       listView: false
+
     };
     this.handleSpotTaken = this.handleSpotTaken.bind(this);
     this.setListView = this.setListView.bind(this);
@@ -79,11 +80,13 @@ export class UserHome extends Component {
   }
 
   render() {
-    const { email, points, isShow, map } = this.props;
+    const { email, points, isShow, map, showProfile } = this.props;
+    const {history} = this.props;
     const { handleSpotTaken, setListView, triggerHandleAddSpotGeo, triggerHandleAddSpotMarker, handleTest } = this;
-    const { listView } = this.state;
+    const { listView, profileVisible} = this.state;
     return (
       <Grid>
+      {/*  <button onClick={handleProfileVisibility} className="btn btn-default">Profile</button> */}
       {this.map ?
         <Row id="map-view-settings" >
           <Col xs={4} sm={4}>
@@ -94,6 +97,14 @@ export class UserHome extends Component {
             {
               Object.keys(map).length > 0 ? <PointsMeter points={points} /> : null
             }
+            <Route  path='/home/profile' component={Profile} />
+            {/*
+            {
+           showProfile
+            ? <Profile history={history}/>
+            : null
+            }
+            */}
             <Filter />
           </Col>
           <Col xs={5} sm={4} className="pull-right">
@@ -123,7 +134,9 @@ const mapState = (state) => {
     headingTo: state.headingTo,
     map: state.map,
     points: state.user.points,
-    isShow: state.isShow
+    isShow: state.isShow,
+    user: state.user,
+    showProfile: state.showProfile
   };
 };
 
@@ -152,7 +165,7 @@ const mapDispatch = (dispatch, ownProps) => {
     gainedPoints(num) {
       dispatch(getNotification('A post is taken! Yout got 100 points'));
       dispatch(updateUserPoints(num));
-    }
+    },
   };
 };
 
