@@ -14,10 +14,10 @@ const _Profile = (props) => {
       }}>
         {/* profile image goes here */}
         <img
-          src="../../public/images/free-cute-puppy-pictures.jpg"
+          src="/public/images/free-cute-puppy-pictures.jpg"
           alt= "Profile Photo"
           name="aboutme"
-          style={{ width: "95%", borderRadius: "50%"}}
+          style={{ width: "95%", borderRadius: "50%", paddingTop: "10px"}}
           className="img-circle"
         />
         <h3 className="media-heading" style={{color: "white"}}>
@@ -32,8 +32,8 @@ const _Profile = (props) => {
         <span className="label label-primary"><strong>Recieved Help: </strong></span>
         <span className="label label-warning">5</span>
         <span className="label label-info">5 persons helped Abraham find parking spot</span>
-        <button onClick={hideProfile} className="btn btn-warning">
-          <img style={{width: "10%"}} src="https://image.flaticon.com/icons/svg/122/122631.svg" alt="Back to Map" />
+        <button onClick={hideProfile} className="btn btn-warning" style={{marginTop: "1em"}}>
+          <img style={{width: "10%"}}src="https://image.flaticon.com/icons/svg/122/122631.svg" alt="Back to Map" />
           Back to Map
         </button>
       </div>
