@@ -29,7 +29,7 @@ const _Profile = (props) => {
         <span className="label label-success">20</span>
         <span className="label label-info">Helped 20 persons find parkings</span>
         <br />
-        <span className="label label-primary"><strong>Recieved Help: </strong></span>
+        <span className="label label-primary"><strong>Received Help: </strong></span>
         <span className="label label-warning">5</span>
         <span className="label label-info">5 persons helped Abraham find parking spot</span>
         <button onClick={hideProfile} className="btn btn-warning" style={{marginTop: "1em"}}>
